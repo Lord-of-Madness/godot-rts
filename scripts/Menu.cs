@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections.Generic;
 
 public class Menu : Control
 {
@@ -8,12 +9,12 @@ public class Menu : Control
     private Button buttonExit;
     private Control MainMenu;
     private Control ChapterMenu;
-    private string[] levels=new string[]{"GameLevel"};
+    private List<string> levels = new List<string>();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        
+
         MainMenu = GetNode<Control>("MainMenu");
         ChapterMenu = GetNode<Control>("ChapterMenu");
         MainMenu.GetNode("ButtonCampaign").Connect("pressed", this, "Campaign");
@@ -23,11 +24,27 @@ public class Menu : Control
         buttonExit = GetNode<Button>("MainMenu/ButtonExit");
         buttonExit.Connect("pressed", this, "ExitGame");
 
-        
-
-        foreach(string lvl in levels)
+        var directory = new Directory();
+        directory.Open("res://scenes/Levels");
+        directory.ListDirBegin(skipNavigational: true);
+        string file = directory.GetNext();
+        while (file != "")
         {
-            GetNode($"ChapterMenu/{lvl}").Connect("pressed", this, "LevelSelector",new Godot.Collections.Array{lvl});
+            if (!directory.CurrentIsDir())
+                levels.Add(file);
+            file = directory.GetNext();
+        }
+
+        ChapterMenu.GetNode<Button>("BACK").Connect("pressed", this, "Back");
+        foreach (string lvl in levels)
+        {
+            var button = new Button();
+            string name = lvl.Split('.')[0];
+            button.Name = name;
+            button.Text = name;
+            button.RectMinSize=new Vector2(0,40);
+            ChapterMenu.GetNode<VBoxContainer>("ScrollContainer/Chapters").AddChild(button);
+            button.Connect("pressed", this, "LevelSelector", new Godot.Collections.Array { lvl });
         }
 
 
@@ -40,11 +57,10 @@ public class Menu : Control
 	}*/
     private void Campaign()
     {
-        GetTree().ChangeScene("res://scenes/Levels/GameLevel.tscn");
+        GetTree().ChangeScene("res://scenes/Levels/Level1.tscn");
     }
     private void Chapters()
     {
-        GD.Print("Chapters!");
         MainMenu.Visible = false;
         ChapterMenu.Visible = true;
     }
@@ -55,6 +71,11 @@ public class Menu : Control
     }
     private void LevelSelector(string lvl)
     {
-        GetTree().ChangeScene($"res://scenes/Levels/{lvl}.tscn");
+        GetTree().ChangeScene($"res://scenes/Levels/{lvl}");
+    }
+    private void Back()
+    {
+        MainMenu.Visible = true;
+        ChapterMenu.Visible = false;
     }
 }

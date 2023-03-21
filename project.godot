@@ -16,7 +16,6 @@ config/icon="res://resources/icon.png"
 
 [debug]
 
-settings/stdout/print_fps=true
 settings/stdout/verbose_stdout=true
 
 [mono]
