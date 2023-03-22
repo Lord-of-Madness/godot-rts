@@ -72,7 +72,7 @@ public class GameLevel : Node
                     }
                 }
             }
-        else if (mousebutton.ButtonIndex == (int)ButtonList.Right)
+        else if (mousebutton.ButtonIndex == (int)ButtonList.Right && mousebutton.Pressed)
             {
                 foreach (Unit unit in selectedUnits)
                 {

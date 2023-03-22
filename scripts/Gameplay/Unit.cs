@@ -37,9 +37,7 @@ public class Unit : KinematicBody2D
         navAgent.SetTargetLocation(location);
     }
     public override void _PhysicsProcess(float delta)
-    {
-        //base._PhysicsProcess(delta);//Don't think this is needed
-        
+    {   
         if (!navAgent.IsNavigationFinished())
         {
             Vector2 direction = Position.DirectionTo(navAgent.GetNextLocation());
