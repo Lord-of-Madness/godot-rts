@@ -1,14 +1,18 @@
-Name: "RTS game"(WIP)
-Autor: Jiří Malý
-Overview:
+# Name: "RTS game"(WIP)
+
+# Autor: Jiří Malý
+
+# Overview:
     The goal is to create a game in the RTS genre in the GODOT game engine.
-Tools:
+
+# Tools:
     Primary scripting language: C#
     High performance with C++
     GDScript for specific use cases
-Main Goal:
+# Main Goal:
     Create playable game.
-Features:
+
+# Features:
 1. Menu
     Campaign selection
     Map selection
@@ -39,7 +43,7 @@ Features:
 7. Platform:
     Primary Windows, but it shouldn't be difficult to make it multiplatform.
 
-Priorities:
+# Priorities:
 1. Gameplay and overall playability
 2. Level design and the actual content
 3. Graphic and sound design
