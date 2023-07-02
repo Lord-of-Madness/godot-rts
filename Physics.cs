@@ -3,9 +3,9 @@ using System;
 
 namespace RtsZápočťák
 {
-    public struct TilesPerSecond
+    public readonly struct TilesPerSecond
     {
-        private float value;
+        private readonly float value;
         public TilesPerSecond(float value)
         {
             this.value=value*16;

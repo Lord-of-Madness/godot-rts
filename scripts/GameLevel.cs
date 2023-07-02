@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using GDArray = Godot.Collections.Array;
 
-public class GameLevel : Node
+public partial class GameLevel : Node
 {
 
 
@@ -32,9 +32,10 @@ public class GameLevel : Node
 
     public override void _UnhandledInput(InputEvent @event)
     {
+        
         base._UnhandledInput(@event);
         if (@event is InputEventMouseButton mousebutton) 
-            if (mousebutton.ButtonIndex == (int)ButtonList.Left)
+            if (mousebutton.ButtonIndex == MouseButton.Left)
             {
                 if (mousebutton.Pressed)
                 {
@@ -54,11 +55,11 @@ public class GameLevel : Node
                     dragging = false;
                     var dragEnd = mousebutton.Position;
                     selectRectNode.UpdateStats(dragStart, dragEnd, dragging);
-                    selectRect.Extents = (dragEnd - dragStart) / 2;
+                    selectRect.Size = (dragEnd - dragStart) / 2;
 
-                    var spaceState = localLevel.GetWorld2d().DirectSpaceState;
-                    var query = new Physics2DShapeQueryParameters();
-                    query.SetShape(selectRect);
+                    var spaceState = localLevel.GetWorld2D().DirectSpaceState;
+                    PhysicsShapeQueryParameters2D query = new();
+                    query.Shape = selectRect;
                     query.Transform = new Transform2D(0, (dragEnd + dragStart) / 2);
                     var selected = spaceState.IntersectShape(query);
                     foreach (Dictionary shape in selected)
@@ -72,7 +73,7 @@ public class GameLevel : Node
                     }
                 }
             }
-        else if (mousebutton.ButtonIndex == (int)ButtonList.Right && mousebutton.Pressed)
+        else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
             {
                 foreach (Unit unit in selectedUnits)
                 {
