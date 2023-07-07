@@ -3,7 +3,7 @@ using Physics;
 using RTSGraphics;
 namespace RTSGameplay
 {
-	public partial class Unit : CharacterBody2D,ISelectable
+	public partial class Unit : CharacterBody2D
 	{
 		public bool selected;// this is more of a player to player thing. might not be a part of the units deal
 		public UnitGraphics Graphics;
