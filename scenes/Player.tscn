@@ -1,0 +1,135 @@
+[gd_scene load_steps=6 format=3 uid="uid://be7aym5fxoaaf"]
+
+[ext_resource type="Script" path="res://scripts/Camera2D.cs" id="1"]
+[ext_resource type="Script" path="res://scripts/Player.cs" id="1_l5ckk"]
+[ext_resource type="FontFile" path="res://resources/fonts/new_dynamicfont.tres" id="3"]
+[ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
+[ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
+
+[node name="Player" type="Node"]
+script = ExtResource("1_l5ckk")
+
+[node name="Selectables" type="Node" parent="."]
+
+[node name="Units" type="Node" parent="Selectables"]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="TopBar" type="ColorRect" parent="HUD"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+color = Color(0, 0, 0, 1)
+
+[node name="Resources" type="HBoxContainer" parent="HUD/TopBar"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="QuickMenu" type="HBoxContainer" parent="HUD/TopBar"]
+layout_mode = 0
+anchor_right = 0.5
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Menu" type="MenuButton" parent="HUD/TopBar/QuickMenu"]
+process_mode = 2
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "MENU"
+flat = false
+item_count = 1
+popup/item_0/text = ""
+popup/item_0/id = 0
+script = ExtResource("6")
+
+[node name="Goals" type="MenuButton" parent="HUD/TopBar/QuickMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "Goals"
+flat = false
+
+[node name="Log" type="MenuButton" parent="HUD/TopBar/QuickMenu"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "Log"
+flat = false
+
+[node name="VisualOverlay" type="TextureRect" parent="HUD/TopBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BottomBar" type="ColorRect" parent="HUD"]
+anchors_preset = -1
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.00255585
+offset_bottom = -0.0320053
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="UnitsSelected" type="GridContainer" parent="HUD/BottomBar"]
+layout_mode = 0
+anchor_left = 0.2
+anchor_right = 0.6
+anchor_bottom = 1.0
+columns = 10
+
+[node name="UnitActions" type="GridContainer" parent="HUD/BottomBar"]
+layout_mode = 0
+anchor_left = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+columns = 4
+
+[node name="UnitPortrait" type="TextureRect" parent="HUD/BottomBar"]
+layout_mode = 0
+anchor_left = 0.6
+anchor_right = 0.8
+anchor_bottom = 1.0
+
+[node name="Minimap" type="SubViewportContainer" parent="HUD/BottomBar"]
+layout_mode = 0
+anchor_right = 0.2
+anchor_bottom = 1.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HUD/BottomBar/Minimap"]
+handle_input_locally = false
+size = Vector2i(256, 215)
+render_target_update_mode = 4
+
+[node name="VisualOverlay" type="TextureRect" parent="HUD/BottomBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Camera2D" type="Camera2D" parent="HUD"]
+offset = Vector2(280, 0)
+anchor_mode = 0
+limit_left = 0
+limit_top = 0
+limit_right = 1000
+limit_bottom = 600
+position_smoothing_enabled = true
+editor_draw_limits = true
+script = ExtResource("1")
+
+[node name="SelectRect" type="Node2D" parent="."]
+script = ExtResource("5")
+
+[connection signal="toggled" from="HUD/TopBar/QuickMenu/Menu" to="HUD/TopBar/QuickMenu/Menu" method="_on_Menu_toggled"]
