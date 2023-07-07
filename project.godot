@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Rts Zápočťák"
 run/main_scene="res://scenes/Menu.tscn"
-config/features=PackedStringArray("4.0", "C#")
+config/features=PackedStringArray("4.1", "C#")
 config/icon="res://resources/icon.png"
 
 [debug]
@@ -21,11 +21,18 @@ settings/stdout/verbose_stdout=true
 
 [display]
 
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="viewport"
 
 [dotnet]
 
 project/assembly_name="Rts Zápočťák"
+
+[layer_names]
+
+2d_navigation/layer_1="Ground"
+2d_navigation/layer_2="Water"
 
 [mono]
 

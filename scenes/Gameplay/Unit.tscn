@@ -143,19 +143,12 @@ vframes = 4
 region_enabled = true
 region_rect = Rect2(3, 12, 225, 429)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Graphics"]
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics"]
 libraries = {
 "": SubResource("AnimationLibrary_ibn7o")
 }
 
-[node name="Path3D" type="Line2D" parent="Graphics"]
-visible = false
-width = 5.0
-default_color = Color(0, 1, 0, 0.396078)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
+[node name="PathLine" type="Line2D" parent="Graphics"]
+width = 3.0
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]

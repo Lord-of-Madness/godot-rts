@@ -1,15 +1,15 @@
 using Godot;
-using System;
-
-public partial class MenuUI : MenuButton
+using RTSmainspace;
+namespace RTSUI
 {
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable IDE1006 // Naming Styles
-    private void _on_Menu_toggled(bool toggleOn)
-#pragma warning restore IDE1006 // Naming Styles
-#pragma warning restore IDE0051 // Remove unused private members
+    public partial class MenuUI : MenuButton
     {
-        ((GameLevel)Owner).TogglePause(toggleOn);
+#pragma warning disable IDE1006 // Naming Styles
+        private void _on_Menu_toggled(bool toggleOn)
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            ((Player)Owner).TogglePause(toggleOn);//This is pausing the player not the actual game.
+        }
+
     }
-    
 }

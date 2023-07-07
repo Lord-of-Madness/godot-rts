@@ -1,24 +1,24 @@
 using Godot;
-using System;
-
-public partial class SelectRect : Node2D
+namespace RTSUI
 {
-
-    private Vector2 start;
-    private Vector2 end;
-    private bool dragging;
-    public override void _Draw()
+    public partial class SelectRect : Node2D
     {
-        if (dragging)
+        public Color color = new(0, 1, 0, 0.3f);//Probably alterable in settings eventually
+        public Vector2 start;
+        private Vector2 end;
+        public bool dragging =false;
+        public Vector2 Size { get => (end - start).Abs(); }
+        public override void _Draw()
         {
-            DrawRect(new Rect2(start,end-start),new Color(0,1,0,0.3f));
+            if (dragging)
+            {
+                DrawRect(new Rect2(start, end - start).Abs(), color);
+            }
         }
-    }
-    public void UpdateStats(Vector2 start,Vector2 end,bool dragging)
-    {
-        this.start=start;
-        this.end=end;
-        this.dragging=dragging;
-        Update();
+        public void UpdateStats( Vector2 end)
+        {
+            this.end = end;
+            QueueRedraw();
+        }
     }
 }
