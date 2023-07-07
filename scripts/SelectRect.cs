@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class SelectRect : Node2D
+public partial class SelectRect : Node2D
 {
 
     private Vector2 start;

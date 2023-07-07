@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class UnitGraphics : Node
+public partial class UnitGraphics : Node
 {
     private Node2D SelectionVisual;
     private AnimationPlayer anim;
@@ -15,8 +15,8 @@ public class UnitGraphics : Node
     {
         SelectionVisual=GetNode<Node2D>("Selected");
         anim=GetNode<AnimationPlayer>("AnimationPlayer");
-        path=GetNode<Line2D>("Path");
-        GetNode<Sprite>("Sprite").Frame=1;//This might be removed later
+        path=GetNode<Line2D>("Path3D");
+        GetNode<Sprite2D>("Sprite2D").Frame=1;//This might be removed later
         parent=GetParent<Unit>();
         navAgent=parent.GetNode<NavigationAgent2D>("NavAgent");
     }
@@ -43,8 +43,8 @@ public class UnitGraphics : Node
         else anim.Play("Forward");
         
         //Path:
-        Vector2[] points=navAgent.GetNavPath();
-        int from = navAgent.GetNavPathIndex();
+        Vector2[] points=navAgent.GetCurrentNavigationPath();
+        int from = navAgent.GetCurrentNavigationPathIndex();
         Vector2[] pts= new Vector2[points.Length-from];
         for(int i = 0;i<pts.Length;i++)pts[i]=points[i+from];
         path.GlobalPosition=Vector2.Zero;//So path doesn't move with player

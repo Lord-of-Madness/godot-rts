@@ -6,17 +6,26 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
 [application]
 
 config/name="Rts Zápočťák"
 run/main_scene="res://scenes/Menu.tscn"
+config/features=PackedStringArray("4.0", "C#")
 config/icon="res://resources/icon.png"
 
 [debug]
 
 settings/stdout/verbose_stdout=true
+
+[display]
+
+window/stretch/mode="viewport"
+
+[dotnet]
+
+project/assembly_name="Rts Zápočťák"
 
 [mono]
 
@@ -28,4 +37,4 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/defaults/default_environment="res://default_env.tres"

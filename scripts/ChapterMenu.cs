@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class ChapterMenu : Container
+public partial class ChapterMenu : Container
 {
     // Declare member variables here. Examples:
     // private int a = 2;
