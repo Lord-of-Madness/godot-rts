@@ -10,9 +10,6 @@ namespace RTSmainspace
 {
     public partial class Player : Node
     {
-
-
-        // Called when the node enters the scene tree for the first time.
         private List<Unit> selectedUnits;
         private SelectRect selectRectNode;
         private Node2D localLevel;
@@ -56,7 +53,7 @@ namespace RTSmainspace
                         selectRectNode.UpdateStats(dragEnd);
                         PhysicsShapeQueryParameters2D query = new()
                         {
-                            Shape = new RectangleShape2D() { Size = selectRectNode.Size },
+                            Shape = new RectangleShape2D() { Size = selectRectNode.Size.Abs() },
                             Transform = new Transform2D(0, (dragEnd + selectRectNode.start) / 2)
                         };
                         foreach (Dictionary shape in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query,MAX_SELECTED_THINGS))

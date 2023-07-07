@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://m7w7mijwfyp4"]
+[gd_scene load_steps=6 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
-[ext_resource type="TileSet" uid="uid://c53v2e2wnnn25" path="res://resources/Ash_tileset.tres" id="2"]
+[ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
 [ext_resource type="PackedScene" uid="uid://basbyvaj5pga" path="res://scenes/Gameplay/Unit.tscn" id="4"]
 
