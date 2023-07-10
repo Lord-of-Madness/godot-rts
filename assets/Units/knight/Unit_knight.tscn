@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwsji62gj53dj"]
+
+[ext_resource type="PackedScene" uid="uid://cbma510xjxclo" path="res://scenes/Gameplay/Unit.tscn" id="1_4rkn0"]
+[ext_resource type="Texture2D" uid="uid://bd7elt3debrsf" path="res://assets/Units/knight/Portrait.png" id="2_qo5nv"]
+[ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="3_y7r6o"]
+
+[node name="Unit" instance=ExtResource("1_4rkn0")]
+
+[node name="UnitPortrait" parent="." index="1"]
+texture = ExtResource("2_qo5nv")
+
+[node name="Sprite2D" parent="Graphics" index="1"]
+texture = ExtResource("3_y7r6o")
+hframes = 3
+vframes = 4
+region_enabled = true
+region_rect = Rect2(468, 0, 234, 436)

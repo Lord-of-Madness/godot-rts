@@ -1,0 +1,59 @@
+Units:
+	Attacking
+	Animations (Lets use a sword slash animation for melee, and some bow-like thing for ranged without actually having to animate the sprite itself)
+	Abilities (Energy,Cooldowns)
+	Alegiance(ownership)
+	Stats
+	Status bars
+	Stat screen
+	Selecting by clicks and not just by click and drags (click and drag only works when unit isn't clicked directly)
+	Highlighting units that are being currently selected (More performance intensive (would have to check every frame unlike just at the end))
+	Change the way we currently do the selecting rectangle into a custom function that looks at selectables (specificaly owned selectables) so we don't need to go over every from possibly a lot of physics objects. (Will see about performance)(make the checking in parallel if so.)
+	Highlighting units that are hovered over
+	Pathfinding tweeks:
+		Avoiding static objects (the whole avoidance thing doesn't really do the avoiding)
+	Vision range (done from editor, resizable from code)
+	Attack ranges (done from code (if there are multiple attacks for the unit))
+	If a unit has multiple attacks player can set its main one(globaly, to selection, individually) and the unit will approach for distance required to perform this attack.
+	
+Selectables:
+	Common interface for Unit and Structure and mischelaneous
+	Cannot be parentclass because GodotNodes are its parentclasses and buildings are static objects and units charactersa
+	Highlight upon hover (probably also requires team allegiance (will see))
+	Highlighting should be based on Team allegiance. Default is yellow, Friendily is Blue, Own is Green and Hostile is yellow
+	Clickable (not click and draggable) with displaying things
+	Owner: Player or neutral
+	
+Player(Gameplay):
+	Resources
+		In code
+		As UI elements
+	Arrays of owned things (Buildings, Units, Other)
+	Fog of War -> a sort of grid overlay with 0(within sight) 1(seen) 2(known terrain) 3(obscured)
+		Interacts with player vision range that changes the cells into zeroes upon entering and to 1 upon leaving
+		There is a black...thing (tilemap?) as a visual representation of the fog of war and its alpha chanell is (33%,1) (66%,2) (100%,3) 
+	Unit selection grouped by unit type -> TABing through groups of same units
+	Units of the same type can be sorted by health or if possible by energy as set by the player in the Unit selection part of the GUI
+
+Player UI:
+	Resizable HUD
+	Options menu
+	Each player should have their own visibility layer (looks like there are 20 available so 1 is general, 2 is spectator, 3 is reserved just in case and 4-20 are for players)
+
+Buildings:
+	UI
+	UnitProduction
+	Building
+	Workers and buildingInterface
+
+General:
+	Consciously think of multiplayer -> try and have most things separate from the main players interface.
+	Think of AI player -> try to have graphics as separate as possible from gameplay.
+
+Menu: 
+	Plays a game of FFA with unlimited resources. 
+	F8->MUTE sound effect (Default on)
+	F9->Pause
+	F10->Stop (Replace with Wallpaper or whatnot)
+	Works like a benchmark (If the game crashes it should ask if one wants to play with safe settings, or maybe before the game launches for the first time and then this thing is off otherwise its on by default)
+	It could be interactable (drag units on the screen,Dropping bombs etc.)

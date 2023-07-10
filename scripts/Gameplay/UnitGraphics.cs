@@ -4,6 +4,9 @@ using RTSGameplay;
 
 namespace RTSGraphics
 {
+    /// <summary>
+    /// This should be the unique graphical interface of a Unit and should be unique to each player/viewport
+    /// </summary>
     public partial class UnitGraphics : Node
     {
         private Node2D SelectionVisual;
@@ -13,15 +16,15 @@ namespace RTSGraphics
         private Line2D path;
         private Unit parent;
 
-        // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
             SelectionVisual = GetNode<Node2D>("Selected");
             anim = GetNode<AnimationPlayer>("AnimationPlayer");
             path = GetNode<Line2D>("PathLine");
-            GetNode<Sprite2D>("Sprite2D").Frame = 1;//This might be removed later
+            path.DefaultColor = new Color(0, 1, 0, 0.3f);
+            //GetNode<Sprite2D>("Sprite2D").Frame = 1;//This might be removed later what is this anyway?
             parent = GetParent<Unit>();
-            navAgent = parent.GetNode<NavigationAgent2D>("NavAgent");
+            navAgent = parent.GetNode<NavigationAgent2D>("NavAgent");//this has to be this way cause this gets instantiated earlier than parents navagent (making it parent.navagent null)
         }
 
         public void Select()

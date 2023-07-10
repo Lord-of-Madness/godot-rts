@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbma510xjxclo"]
+[gd_scene load_steps=13 format=3 uid="uid://c1eldf4wb86j3"]
 
-[ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_wtwt1"]
-[ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_2tes4"]
+[ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_q6nie"]
+[ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="2_juegi"]
+[ext_resource type="Texture2D" uid="uid://dhsokhhec3tpf" path="res://assets/Units/king/UnitPortrait.png" id="2_pbhwr"]
+[ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_nn8it"]
 
 [sub_resource type="CapsuleShape2D" id="1"]
 radius = 5.0
@@ -112,7 +114,8 @@ _data = {
 
 [node name="Unit" type="CharacterBody2D"]
 safe_margin = 0.1
-script = ExtResource("1_wtwt1")
+script = ExtResource("1_q6nie")
+speed = 3.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -121,10 +124,11 @@ shape = SubResource("1")
 [node name="UnitPortrait" type="Sprite2D" parent="."]
 visible = false
 scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_pbhwr")
 region_rect = Rect2(18, 24, 39, 39)
 
 [node name="Graphics" type="Node2D" parent="."]
-script = ExtResource("3_2tes4")
+script = ExtResource("3_nn8it")
 
 [node name="Selected" type="Polygon2D" parent="Graphics"]
 visible = false
@@ -134,6 +138,12 @@ color = Color(0, 1, 0, 0.392157)
 polygon = PackedVector2Array(-22, 7, -24, 14.125, -22, 21, -16.25, 24, 12.375, 24, 18, 21, 20, 14, 18, 7, 11.875, 4, -2.34989, 4, -15.875, 4)
 
 [node name="Sprite2D" type="Sprite2D" parent="Graphics"]
+position = Vector2(0, -17)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_juegi")
+hframes = 3
+vframes = 4
+region_enabled = true
 region_rect = Rect2(3, 12, 225, 429)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics"]
@@ -143,7 +153,6 @@ libraries = {
 
 [node name="PathLine" type="Line2D" parent="Graphics"]
 width = 3.0
-default_color = Color(0, 1, 0, 0.235294)
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 path_metadata_flags = 5

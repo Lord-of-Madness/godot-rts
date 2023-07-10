@@ -1,13 +1,19 @@
 using Godot;
 using Physics;
 using RTSGraphics;
+using System;
+using static Godot.TextServer;
+
 namespace RTSGameplay
 {
-	public partial class Unit : CharacterBody2D
+	public partial class Unit : CharacterBody2D,IComparable<Unit>
 	{
 		public bool selected;// this is more of a player to player thing. might not be a part of the units deal
 		public UnitGraphics Graphics;
 		public NavigationAgent2D navAgent;
+
+		public Area2D attackRange;
+		public Area2D sightRange;
 
 		/// <summary>
 		/// Unit movement speed in Tiles per second
@@ -23,8 +29,8 @@ namespace RTSGameplay
 			Graphics = GetNode<UnitGraphics>("Graphics");
 			navAgent = GetNode<NavigationAgent2D>("NavAgent");
 
-			//navAgent.TargetPosition = Position;//So it doesn't start moving right away
-
+            //navAgent.TargetPosition = Position;//So it doesn't start moving right away
+            navAgent.VelocityComputed += GetMoving;
             Deselect();
 		}
 
@@ -44,17 +50,27 @@ namespace RTSGameplay
 		}
 		public override void _PhysicsProcess(double delta)
 		{
-			if (!navAgent.IsNavigationFinished())
+			if (!navAgent.IsNavigationFinished())//This gets recalculated every physics frame. Not sure if that is necessary (technically it should suffice after each pathcheckpoint (although Graphics certainly need to happen each frame))
 			{
 				Vector2 direction = Position.DirectionTo(navAgent.GetNextPathPosition());
-				Vector2 velocity = Speed * direction;
-                navAgent.SetVelocityForced(velocity);
-				Graphics.MovingTo(direction);
-				Velocity = velocity;
-				MoveAndSlide();
+				navAgent.Velocity = Speed * direction;
+                Graphics.MovingTo(direction);
+                
 			}
 			else
 				Graphics.Stop();//Perhaps check if moving so this isn't called too much (could add a bool value if it seemed to affect things)
 		}
-	}
+		private void GetMoving(Vector2 safe_velocity)
+        {
+            Velocity = safe_velocity;
+            MoveAndSlide();
+
+        }
+
+        public int CompareTo(Unit other)
+        {
+			//Currently ordered by age in scene tree (should be last resort)
+			return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
+        }
+    }
 }
