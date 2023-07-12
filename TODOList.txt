@@ -15,6 +15,7 @@ Units:
 	Vision range (done from editor, resizable from code)
 	Attack ranges (done from code (if there are multiple attacks for the unit))
 	If a unit has multiple attacks player can set its main one(globaly, to selection, individually) and the unit will approach for distance required to perform this attack.
+	Have them easily scalable (coliders,sprites) so that it can be done easily when needed
 	
 Selectables:
 	Common interface for Unit and Structure and mischelaneous
@@ -31,9 +32,14 @@ Player(Gameplay):
 	Arrays of owned things (Buildings, Units, Other)
 	Fog of War -> a sort of grid overlay with 0(within sight) 1(seen) 2(known terrain) 3(obscured)
 		Interacts with player vision range that changes the cells into zeroes upon entering and to 1 upon leaving
-		There is a black...thing (tilemap?) as a visual representation of the fog of war and its alpha chanell is (33%,1) (66%,2) (100%,3) 
+		There is a black...thing (tilemap?) as a visual representation of the fog of war and its alpha chanell is (33%,1) (66%,2) (100%,3)
+		ALTERNATIVELY:
+		A sprite with a texture that gets blended with a trasnparent one over time.
+		But thats just fog of war
+		Meaning there would have to be something entirely different for vision.
 	Unit selection grouped by unit type -> TABing through groups of same units
 	Units of the same type can be sorted by health or if possible by energy as set by the player in the Unit selection part of the GUI
+	Keybindings
 
 Player UI:
 	Resizable HUD
@@ -49,6 +55,8 @@ Buildings:
 General:
 	Consciously think of multiplayer -> try and have most things separate from the main players interface.
 	Think of AI player -> try to have graphics as separate as possible from gameplay.
+	That way graphics actually run only in each players vision and since AIs don't have graphical vision it should really help with performance
+	Figure out how to actually do graphics only in vision range.
 
 Menu: 
 	Plays a game of FFA with unlimited resources. 
@@ -57,3 +65,7 @@ Menu:
 	F10->Stop (Replace with Wallpaper or whatnot)
 	Works like a benchmark (If the game crashes it should ask if one wants to play with safe settings, or maybe before the game launches for the first time and then this thing is off otherwise its on by default)
 	It could be interactable (drag units on the screen,Dropping bombs etc.)
+
+Map:
+	Map borders: Would be lovely if we were to make a special object in C++ that is done as a rectangle without the filling. 
+		Then write script that takes the camera and sets its limits the same way

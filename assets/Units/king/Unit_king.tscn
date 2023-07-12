@@ -1,160 +1,20 @@
-[gd_scene load_steps=13 format=3 uid="uid://c1eldf4wb86j3"]
+[gd_scene load_steps=4 format=3 uid="uid://c1eldf4wb86j3"]
 
-[ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_q6nie"]
-[ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="2_juegi"]
-[ext_resource type="Texture2D" uid="uid://dhsokhhec3tpf" path="res://assets/Units/king/UnitPortrait.png" id="2_pbhwr"]
-[ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_nn8it"]
+[ext_resource type="PackedScene" uid="uid://cbma510xjxclo" path="res://scenes/Gameplay/Unit.tscn" id="1_wd507"]
+[ext_resource type="Texture2D" uid="uid://dhsokhhec3tpf" path="res://assets/Units/king/UnitPortrait.png" id="2_5pi8i"]
+[ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="3_voakr"]
 
-[sub_resource type="CapsuleShape2D" id="1"]
-radius = 5.0
-height = 12.0
-
-[sub_resource type="Animation" id="2"]
-resource_name = "Back"
-length = 1.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [11, 10, 9, 10]
-}
-
-[sub_resource type="Animation" id="3"]
-resource_name = "Forward"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = false
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.33, 0.65),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
-}
-
-[sub_resource type="Animation" id="7"]
-resource_name = "Idle"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
-}
-
-[sub_resource type="Animation" id="4"]
-resource_name = "Left"
-length = 1.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [4, 3, 4, 5]
-}
-
-[sub_resource type="Animation" id="5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="6"]
-resource_name = "Right"
-length = 1.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [7, 6, 7, 8]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ibn7o"]
-_data = {
-"Back": SubResource("2"),
-"Forward": SubResource("3"),
-"Idle": SubResource("7"),
-"Left": SubResource("4"),
-"RESET": SubResource("5"),
-"Right": SubResource("6")
-}
-
-[node name="Unit" type="CharacterBody2D"]
-safe_margin = 0.1
-script = ExtResource("1_q6nie")
+[node name="Unit" instance=ExtResource("1_wd507")]
+visionRange = 5.0
 speed = 3.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = 1.5708
-shape = SubResource("1")
+[node name="UnitPortrait" parent="." index="1"]
+texture = ExtResource("2_5pi8i")
 
-[node name="UnitPortrait" type="Sprite2D" parent="."]
-visible = false
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_pbhwr")
-region_rect = Rect2(18, 24, 39, 39)
-
-[node name="Graphics" type="Node2D" parent="."]
-script = ExtResource("3_nn8it")
-
-[node name="Selected" type="Polygon2D" parent="Graphics"]
-visible = false
-position = Vector2(1.09091, -7)
-scale = Vector2(0.545455, 0.5)
-color = Color(0, 1, 0, 0.392157)
-polygon = PackedVector2Array(-22, 7, -24, 14.125, -22, 21, -16.25, 24, 12.375, 24, 18, 21, 20, 14, 18, 7, 11.875, 4, -2.34989, 4, -15.875, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Graphics"]
-position = Vector2(0, -17)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_juegi")
+[node name="Sprite2D" parent="Graphics" index="1"]
+position = Vector2(0, -10)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_voakr")
 hframes = 3
 vframes = 4
 region_enabled = true
-region_rect = Rect2(3, 12, 225, 429)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics"]
-libraries = {
-"": SubResource("AnimationLibrary_ibn7o")
-}
-
-[node name="PathLine" type="Line2D" parent="Graphics"]
-width = 3.0
-
-[node name="NavAgent" type="NavigationAgent2D" parent="."]
-path_metadata_flags = 5
-avoidance_enabled = true
-radius = 12.16

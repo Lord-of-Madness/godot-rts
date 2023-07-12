@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cbma510xjxclo"]
+[gd_scene load_steps=12 format=3 uid="uid://cbma510xjxclo"]
 
 [ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_wtwt1"]
 [ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_2tes4"]
@@ -110,6 +110,9 @@ _data = {
 "Right": SubResource("6")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
+radius = 51.0098
+
 [node name="Unit" type="CharacterBody2D"]
 safe_margin = 0.1
 script = ExtResource("1_wtwt1")
@@ -149,3 +152,8 @@ default_color = Color(0, 1, 0, 0.235294)
 path_metadata_flags = 5
 avoidance_enabled = true
 radius = 12.16
+
+[node name="VisionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+shape = SubResource("CircleShape2D_nwlgh")

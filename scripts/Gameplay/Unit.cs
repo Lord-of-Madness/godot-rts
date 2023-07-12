@@ -12,8 +12,10 @@ namespace RTSGameplay
 		public UnitGraphics Graphics;
 		public NavigationAgent2D navAgent;
 
-		public Area2D attackRange;
-		public Area2D sightRange;
+		public Area2D VisionArea;
+		[Export(PropertyHint.Range, "0,10,1,or_greater")]
+		public float visionRange;//in Tilemeters
+		public Tilemeter VisionRange { get => (Tilemeter)visionRange; set { visionRange=(float)value; } }
 
 		/// <summary>
 		/// Unit movement speed in Tiles per second
@@ -28,6 +30,8 @@ namespace RTSGameplay
 		{
 			Graphics = GetNode<UnitGraphics>("Graphics");
 			navAgent = GetNode<NavigationAgent2D>("NavAgent");
+			VisionArea = GetNode<Area2D>("VisionArea");
+			((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius=VisionRange.ToPixels();
 
             //navAgent.TargetPosition = Position;//So it doesn't start moving right away
             navAgent.VelocityComputed += GetMoving;

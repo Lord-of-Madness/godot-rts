@@ -27,7 +27,9 @@ namespace Physics
         {
             return (TilesPerSecond)(t.value/s.value);
         }
-
+        public static explicit operator Tilemeter(float value) => new(value);
+        public static explicit operator float(Tilemeter value) => value.value;
+        public float ToPixels() => value * 16;
 
     }
     public record struct Second
@@ -41,7 +43,7 @@ namespace Physics
         /// Converts units into Tiles -> divides by 16
         /// (casting into Tilemeters doesn't divide the value)
         /// </summary>
-        public static Tilemeter ToTilemeter(this float f)
+        public static Tilemeter FromPixelsToTilemeter(this float f)
         {
             return new Tilemeter(f/16);
         }
