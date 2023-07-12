@@ -23,20 +23,25 @@ namespace RTSmainspace
         private Camera2D camera;
         public int MAX_SELECTED_THINGS = 99999;
 
+        [Export(PropertyHint.Range, "0,20,1,or_greater")]
+        public float ScrollSpeed=5;
+
+        CanvasLayer HUD;
         private ColorRect topbar;
         private ColorRect bottombar;
         private TextureRect unitPortrait;
         private GridContainer unitsSelectedNode;
         public override void _Ready()
         {
-            CanvasLayer HUD = GetNode<CanvasLayer>("HUD");
+            camera = GetNode<Camera2D>(nameof(Camera2D));
+            HUD = camera.GetNode<CanvasLayer>(nameof(HUD));
             selectRectNode = GetNode<SelectRect>("SelectRect");
             localLevel = GetParent<Node2D>();
             selectedUnits = new();
             topbar = HUD.GetNode<ColorRect>("TopBar");
             bottombar = HUD.GetNode<ColorRect>("BottomBar");
             unitPortrait = bottombar.GetNode<TextureRect>("UnitPortrait");
-            camera = HUD.GetNode<Camera2D>(nameof(Camera2D));
+            
             camera.VisibilityLayer = BitID;//I am not sure this is working proper
             unitsSelectedNode = bottombar.GetNode<GridContainer>("UnitsSelected");
             for(int i =0;i<unitsSelectedNode.Columns;i++ )
@@ -49,6 +54,32 @@ namespace RTSmainspace
                     SizeFlagsVertical=Control.SizeFlags.ExpandFill
                 });
             }
+        }
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            var mouseposition = GetViewport().GetMousePosition();
+            var screenSize = GetViewport().GetVisibleRect().Size;
+            //GD.Print(screenSize);
+            //GD.Print(mouseposition);
+
+            if (mouseposition.X==screenSize.X-1)
+            {
+                camera.Translate(Vector2.Right*ScrollSpeed);
+            }
+            else if (mouseposition.X == 0)
+            {
+                camera.Translate(Vector2.Left * ScrollSpeed);
+            }
+            if(mouseposition.Y == screenSize.Y-1)
+            {
+                camera.Translate(Vector2.Down * ScrollSpeed);
+            }
+            else if (mouseposition.Y == 0)
+            {
+                camera.Translate(Vector2.Up * ScrollSpeed);
+            }
+
         }
         public void TogglePause(bool toggleOn)
         {

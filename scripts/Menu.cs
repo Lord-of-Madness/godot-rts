@@ -13,8 +13,9 @@ namespace RTSmainspace
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
+			Input.MouseMode = Input.MouseModeEnum.Confined;
 
-			MainMenu = GetNode<Control>("MainMenu");
+            MainMenu = GetNode<Control>("MainMenu");
 			ChapterMenu = GetNode<Control>("ChapterMenu");
 			MainMenu.GetNode<Button>("ButtonCampaign").Pressed += Campaign;
 
