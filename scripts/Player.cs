@@ -83,6 +83,7 @@ namespace RTSmainspace
         }
         public void TogglePause(bool toggleOn)
         {
+            Input.MouseMode = toggleOn ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Confined;
             localLevel.GetTree().Paused = toggleOn;
         }
 

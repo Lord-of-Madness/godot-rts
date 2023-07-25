@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
-[ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_king.tscn" id="4_b23cp"]
+[ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)
@@ -11,6 +11,7 @@ size = Vector2(46, 46)
 [node name="Map" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1")]
+ScrollSpeed = 5.0
 
 [node name="Ground" type="TileMap" parent="."]
 tile_set = ExtResource("2")

@@ -45,6 +45,7 @@ Player UI:
 	Resizable HUD
 	Options menu
 	Each player should have their own visibility layer (looks like there are 20 available so 1 is general, 2 is spectator, 3 is reserved just in case and 4-20 are for players)
+	Minimap
 
 Buildings:
 	UI

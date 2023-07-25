@@ -1,10 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://be7aym5fxoaaf"]
+[gd_scene load_steps=10 format=3 uid="uid://be7aym5fxoaaf"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_l5ckk"]
 [ext_resource type="FontFile" path="res://resources/fonts/new_dynamicfont.tres" id="3"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="4_3ymha"]
 [ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
 [ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_jxx01"]
+events = [SubResource("InputEventKey_1ktqu")]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wovyg"]
 noise_type = 0
@@ -55,27 +61,34 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Menu" type="MenuButton" parent="Camera2D/HUD/TopBar/QuickMenu"]
-process_mode = 2
+process_mode = 3
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3")
+shortcut = SubResource("Shortcut_jxx01")
 text = "MENU"
 flat = false
-item_count = 1
-popup/item_0/text = ""
+item_count = 5
+popup/item_0/text = "Save"
 popup/item_0/id = 0
+popup/item_1/text = "Load"
+popup/item_1/id = 1
+popup/item_2/text = "Settings"
+popup/item_2/id = 2
+popup/item_3/text = "Exit to Menu"
+popup/item_3/id = 3
+popup/item_4/text = "Exit Game"
+popup/item_4/id = 4
 script = ExtResource("6")
 
-[node name="Goals" type="MenuButton" parent="Camera2D/HUD/TopBar/QuickMenu"]
+[node name="Goals" type="Button" parent="Camera2D/HUD/TopBar/QuickMenu"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3")
 text = "Goals"
-flat = false
 
-[node name="Log" type="MenuButton" parent="Camera2D/HUD/TopBar/QuickMenu"]
+[node name="Log" type="Button" parent="Camera2D/HUD/TopBar/QuickMenu"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3")
 text = "Log"
-flat = false
 
 [node name="VisualOverlay" type="TextureRect" parent="Camera2D/HUD/TopBar"]
 layout_mode = 1
