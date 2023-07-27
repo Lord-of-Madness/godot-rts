@@ -114,8 +114,10 @@ _data = {
 radius = 51.0098
 
 [node name="Unit" type="CharacterBody2D"]
+input_pickable = true
 safe_margin = 0.1
 script = ExtResource("1_wtwt1")
+Attacks = Array[Object]([])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -152,6 +154,8 @@ default_color = Color(0, 1, 0, 0.235294)
 path_metadata_flags = 5
 avoidance_enabled = true
 radius = 12.16
+max_neighbors = 100
+max_speed = 85235.1
 
 [node name="VisionArea" type="Area2D" parent="."]
 

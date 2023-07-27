@@ -1,17 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjq028k0i6idh"]
+[gd_scene load_steps=8 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
+[ext_resource type="Script" path="res://scenes/Levels/Map.cs" id="1_2xime"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
+[ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)
 
 [node name="Map" type="Node2D"]
+script = ExtResource("1_2xime")
 
 [node name="Player" parent="." instance=ExtResource("1")]
-ScrollSpeed = 5.0
 
 [node name="Ground" type="TileMap" parent="."]
 tile_set = ExtResource("2")
@@ -49,15 +51,32 @@ y_sort_enabled = true
 
 [node name="Unit" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(568, 204)
+input_pickable = false
+Attacks = null
 
 [node name="Unit2" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(316, 293)
+input_pickable = false
+Attacks = null
 
 [node name="Unit3" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(654, 351)
+input_pickable = false
+Attacks = null
 
 [node name="Unit4" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(54, 207)
+input_pickable = false
+Attacks = null
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(0, -1)
+
+[node name="Unit" parent="." instance=ExtResource("6_5q6jk")]
+position = Vector2(182, 451)
+
+[node name="Unit2" parent="." instance=ExtResource("6_5q6jk")]
+position = Vector2(532, 485)
+
+[node name="Unit3" parent="." instance=ExtResource("6_5q6jk")]
+position = Vector2(1106, 296)

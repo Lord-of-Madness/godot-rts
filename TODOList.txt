@@ -9,7 +9,7 @@ Units:
 	Selecting by clicks and not just by click and drags (click and drag only works when unit isn't clicked directly)
 	Highlighting units that are being currently selected (More performance intensive (would have to check every frame unlike just at the end))
 	Change the way we currently do the selecting rectangle into a custom function that looks at selectables (specificaly owned selectables) so we don't need to go over every from possibly a lot of physics objects. (Will see about performance)(make the checking in parallel if so.)
-	Highlighting units that are hovered over
+	Highlighting units/things that are hovered over
 	Pathfinding tweeks:
 		Avoiding static objects (the whole avoidance thing doesn't really do the avoiding)
 	Vision range (done from editor, resizable from code)
@@ -21,7 +21,7 @@ Selectables:
 	Common interface for Unit and Structure and mischelaneous
 	Cannot be parentclass because GodotNodes are its parentclasses and buildings are static objects and units charactersa
 	Highlight upon hover (probably also requires team allegiance (will see))
-	Highlighting should be based on Team allegiance. Default is yellow, Friendily is Blue, Own is Green and Hostile is yellow
+	Highlighting should be based on Team allegiance. Default is yellow, Friendily is blue, Own is green and Hostile is red
 	Clickable (not click and draggable) with displaying things
 	Owner: Player or neutral
 	
@@ -59,7 +59,7 @@ General:
 	That way graphics actually run only in each players vision and since AIs don't have graphical vision it should really help with performance
 	Figure out how to actually do graphics only in vision range.
 
-Menu: 
+MainMenu: 
 	Plays a game of FFA with unlimited resources. 
 	F8->MUTE sound effect (Default on)
 	F9->Pause
@@ -70,3 +70,7 @@ Menu:
 Map:
 	Map borders: Would be lovely if we were to make a special object in C++ that is done as a rectangle without the filling. 
 		Then write script that takes the camera and sets its limits the same way
+
+FileManagement:
+	Figuere out how to make maps represented as files in separate non-compiled in folder.
+	SaveFiles

@@ -1,9 +1,12 @@
-[gd_resource type="TileSet" load_steps=95 format=3 uid="uid://dt7amgr7crygn"]
+[gd_resource type="TileSet" load_steps=96 format=3 uid="uid://dt7amgr7crygn"]
 
 [ext_resource type="Texture2D" uid="uid://bvhtlo0s3efft" path="res://resources/ashlands_tileset.png" id="1"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_yrsxx"]
 tile_data = PackedInt32Array(0, 65569, 5, 65536, 65569, 6, 131072, 65569, 6, 196608, 65569, 6, 262144, 65569, 6, 327680, 65569, 7, 1, 196641, 5, 65537, 196641, 6, 131073, 196641, 6, 196609, 196641, 6, 262145, 196641, 6, 327681, 196641, 7)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_svkva"]
+tile_data = PackedInt32Array(0, 2031649, 11, 131072, 2031649, 11, 262144, 2031649, 11, 27, 2293793, 11, 131099, 2293793, 11, 262171, 2293793, 11)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mpugf"]
 texture = ExtResource("1")
@@ -7436,3 +7439,4 @@ sources/27 = SubResource("TileSetAtlasSource_wqu7n")
 sources/28 = SubResource("TileSetAtlasSource_lyad7")
 sources/33 = SubResource("TileSetAtlasSource_yyyho")
 pattern_0 = SubResource("TileMapPattern_yrsxx")
+pattern_1 = SubResource("TileMapPattern_svkva")

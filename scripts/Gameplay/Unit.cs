@@ -2,15 +2,16 @@ using Godot;
 using Physics;
 using RTSGraphics;
 using System;
-using static Godot.TextServer;
 
 namespace RTSGameplay
 {
-	public partial class Unit : CharacterBody2D,IComparable<Unit>
+    
+    
+    public partial class Unit : CharacterBody2D,IComparable<Unit>
 	{
-		public bool selected;// this is more of a player to player thing. might not be a part of the units deal
 		public UnitGraphics Graphics;
 		public NavigationAgent2D navAgent;
+
 
 		public Area2D VisionArea;
 		[Export(PropertyHint.Range, "0,10,1,or_greater")]
@@ -25,8 +26,13 @@ namespace RTSGameplay
         float speed;
 		public TilesPerSecond Speed { get=>(TilesPerSecond)speed; set { speed = (float)value; } }
 
+        
+		[ExportGroup("CombatStats")]
+		[Export] int HP;
+		[Export] Godot.Collections.Array<Attack> Attacks;
 
-		public override void _Ready()
+
+        public override void _Ready()
 		{
 			Graphics = GetNode<UnitGraphics>("Graphics");
 			navAgent = GetNode<NavigationAgent2D>("NavAgent");
@@ -37,40 +43,54 @@ namespace RTSGameplay
             navAgent.VelocityComputed += GetMoving;
             Deselect();
 		}
-
+		/// <summary>
+		/// Graphicaly shows the selected status.
+		/// </summary>
 		public void Select()
 		{
-			selected = true;
 			Graphics.Select();
 		}
 		public void Deselect()
 		{
-			selected = false;
 			Graphics.Deselect();
 		}
+		/// <summary>
+		/// Gives the Navigation agent new target.
+		/// </summary>
+		/// <param name="location"></param>
 		public void MoveTo(Vector2 location)
 		{
 			navAgent.TargetPosition = location;
-		}
+        }
 		public override void _PhysicsProcess(double delta)
 		{
 			if (!navAgent.IsNavigationFinished())//This gets recalculated every physics frame. Not sure if that is necessary (technically it should suffice after each pathcheckpoint (although Graphics certainly need to happen each frame))
 			{
 				Vector2 direction = Position.DirectionTo(navAgent.GetNextPathPosition());
-				navAgent.Velocity = Speed * direction;
+				navAgent.Velocity = Speed.GetSpeed() * direction;
                 Graphics.MovingTo(direction);
                 
 			}
 			else
 				Graphics.Stop();//Perhaps check if moving so this isn't called too much (could add a bool value if it seemed to affect things)
 		}
+		/// <summary>
+		/// Sets <c>safe_velocity</c> as <c>Velocity</c> and moves the unit along it.
+		/// </summary>
+		/// <param name="safe_velocity"></param>
 		private void GetMoving(Vector2 safe_velocity)
         {
             Velocity = safe_velocity;
+            GD.Print("safe_velocity:");
+            GD.Print(safe_velocity.Length());
             MoveAndSlide();
-
         }
 
+		/// <summary>
+		/// Unit comparison based on gameplay priority (sorting player selection etc.)
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
         public int CompareTo(Unit other)
         {
 			//Currently ordered by age in scene tree (should be last resort)

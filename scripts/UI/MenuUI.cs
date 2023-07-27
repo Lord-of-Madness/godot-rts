@@ -33,18 +33,21 @@ namespace RTSUI
             switch ((Buttons)id)
             {
                 case Buttons.Save:
+                    SavingLoading.Save();
                     break;
                 case Buttons.Load:
+                    SavingLoading.Load();
                     break;
                 case Buttons.Options:
                     break;
                 case Buttons.ExitToMenu:
+                    GetTree().ChangeSceneToFile("res://scenes/Menu.tscn");
                     break;
                 case Buttons.ExitGame:
                     GetTree().Quit();
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException("This button has no attached code.");
             }
         }
     }

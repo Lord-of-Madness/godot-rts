@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8fpqhh5ad6jf"]
+
+[ext_resource type="Texture2D" uid="uid://1lnt5qawrngv" path="res://resources/Kyrise's RPG Icon Pack/icons/48x48/sword_03e.png" id="1_obkuo"]
+
+[sub_resource type="Animation" id="Animation_gdnf2"]
+resource_name = "Attack"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -64), Vector2(-63, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 0.999999),
+"update": 0,
+"values": [0.755728, -0.785398]
+}
+
+[sub_resource type="Animation" id="Animation_tfc1l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.755728]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_saw2s"]
+_data = {
+"Attack": SubResource("Animation_gdnf2"),
+"RESET": SubResource("Animation_tfc1l")
+}
+
+[node name="Node2D" type="Sprite2D"]
+rotation = 0.755728
+texture = ExtResource("1_obkuo")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_saw2s")
+}

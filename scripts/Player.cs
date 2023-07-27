@@ -24,13 +24,24 @@ namespace RTSmainspace
         public int MAX_SELECTED_THINGS = 99999;
 
         [Export(PropertyHint.Range, "0,20,1,or_greater")]
-        public float ScrollSpeed=5;
+        public float ScrollSpeed = 5;
 
         CanvasLayer HUD;
         private ColorRect topbar;
         private ColorRect bottombar;
         private TextureRect unitPortrait;
         private GridContainer unitsSelectedNode;
+
+        private Selectable hoveringOver;
+
+        enum ClickMode
+        {
+            Move,
+            Attack,
+            Patrol,
+            Defend
+        }
+        private ClickMode clickMode = ClickMode.Move;
         public override void _Ready()
         {
             camera = GetNode<Camera2D>(nameof(Camera2D));
@@ -41,17 +52,17 @@ namespace RTSmainspace
             topbar = HUD.GetNode<ColorRect>("TopBar");
             bottombar = HUD.GetNode<ColorRect>("BottomBar");
             unitPortrait = bottombar.GetNode<TextureRect>("UnitPortrait");
-            
+
             camera.VisibilityLayer = BitID;//I am not sure this is working proper
             unitsSelectedNode = bottombar.GetNode<GridContainer>("UnitsSelected");
-            for(int i =0;i<unitsSelectedNode.Columns;i++ )
+            for (int i = 0; i < unitsSelectedNode.Columns; i++)
             {
                 unitsSelectedNode.AddChild(new TextureRect()
                 {
-                    ExpandMode=TextureRect.ExpandModeEnum.FitHeight,
-                    StretchMode=TextureRect.StretchModeEnum.KeepAspectCentered,
-                    SizeFlagsHorizontal=Control.SizeFlags.ExpandFill,
-                    SizeFlagsVertical=Control.SizeFlags.ExpandFill
+                    ExpandMode = TextureRect.ExpandModeEnum.FitHeight,
+                    StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                    SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+                    SizeFlagsVertical = Control.SizeFlags.ExpandFill
                 });
             }
         }
@@ -63,15 +74,15 @@ namespace RTSmainspace
             //GD.Print(screenSize);
             //GD.Print(mouseposition);
 
-            if (mouseposition.X==screenSize.X-1)
+            if (mouseposition.X == screenSize.X - 1)
             {
-                camera.Translate(Vector2.Right*ScrollSpeed);
+                camera.Translate(Vector2.Right * ScrollSpeed);
             }
             else if (mouseposition.X == 0)
             {
                 camera.Translate(Vector2.Left * ScrollSpeed);
             }
-            if(mouseposition.Y == screenSize.Y-1)
+            if (mouseposition.Y == screenSize.Y - 1)
             {
                 camera.Translate(Vector2.Down * ScrollSpeed);
             }
@@ -99,9 +110,20 @@ namespace RTSmainspace
                 else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
                 {
                     //Here should be a check whether mousebutton.Position is a location or a hostile entity.
-                    foreach (Unit unit in selectedUnits)
+                    switch (clickMode)
                     {
-                        unit.MoveTo(mousebutton.Position);
+                        case ClickMode.Move:
+                            foreach (Unit unit in selectedUnits)
+                            {
+                                unit.MoveTo(mousebutton.Position);
+                            }
+                            break;
+                        case ClickMode.Attack:
+                            foreach (Unit unit in selectedUnits)
+                            {
+                                unit.Attack(mousebutton.Position);
+                            }
+                            break;
                     }
                 }
             if (selectRectNode.dragging && @event is InputEventMouseMotion mousemotion)
