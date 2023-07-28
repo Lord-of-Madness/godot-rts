@@ -6,4 +6,11 @@ namespace RTS.mainspace
     public static class GodotExtensions
     {
     }
+    public enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }

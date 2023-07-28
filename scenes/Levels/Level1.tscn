@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
-[ext_resource type="Script" path="res://scenes/Levels/Map.cs" id="1_2xime"]
+[ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
@@ -11,7 +11,7 @@
 size = Vector2(46, 46)
 
 [node name="Map" type="Node2D"]
-script = ExtResource("1_2xime")
+script = ExtResource("1_8ua6g")
 
 [node name="Player" parent="." instance=ExtResource("1")]
 
@@ -49,23 +49,29 @@ texture = ExtResource("3")
 [node name="units" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="Unit5" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(397, 223)
+[node name="Unit" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("4_b23cp")]
+position = Vector2(173.322, 287.648)
+floor_stop_on_slope = true
+safe_margin = 0.1
+owner = NodePath("../../Player")
 
-[node name="Unit4" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(290.563, 212.854)
+[node name="Unit2" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("4_b23cp")]
+position = Vector2(315.349, 295.123)
+floor_stop_on_slope = true
+safe_margin = 0.1
+owner = NodePath("../../Player")
 
-[node name="Unit6" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(329.807, 300.954)
+[node name="Unit3" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("6_5q6jk")]
+position = Vector2(179.73, 368.806)
+floor_stop_on_slope = true
+safe_margin = 0.1
+owner = NodePath("../../Player")
 
-[node name="Unit" parent="units" instance=ExtResource("6_5q6jk")]
-position = Vector2(155.539, 403.129)
-
-[node name="Unit2" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(543.462, 464.191)
-
-[node name="Unit3" parent="units" instance=ExtResource("6_5q6jk")]
-position = Vector2(1109.18, 306.149)
+[node name="Unit4" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("6_5q6jk")]
+position = Vector2(304.563, 376.706)
+floor_stop_on_slope = true
+safe_margin = 0.1
+owner = NodePath("../../Player")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(0, -1)

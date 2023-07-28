@@ -25,14 +25,16 @@ namespace RTS.Gameplay
         float speed;
         public TilesPerSecond Speed { get => (TilesPerSecond)speed; set { speed = (float)value; } }
 
+        [Export]
+        public Player owner;
 
 
         [ExportGroup("CombatStats")]
         [Export] public int MaxHP { get; set; }
         public int HP { get; set; }
         private ProgressBar HealthBar;
-        [Export] private Godot.Collections.Array<Attack> ExportAttacks;
-        private Attack[] Attacks;
+        private Godot.Collections.Array<Attack> Attacks;
+        //private Attack[] Attacks;
         [Export] private int PrimaryAttack;//Changeable by the player. Will change to which position will the unit try to get if it has more than 1 attack available.
         //Could write a Tool script to make this smoother (at the moment I cannot know how many attacks exist when setting PrimaryAttack and therefore cannot add bounds)
 
@@ -43,20 +45,15 @@ namespace RTS.Gameplay
             HealthBar = Graphics.GetNode<ProgressBar>(nameof(HealthBar));
             HealthBar.MaxValue = MaxHP;
             HP = MaxHP;
+            Attacks = new();
+            foreach (Node attack in GetNode<Node>(nameof(Attacks)).GetChildren())
+            {
+                Attacks.Add((Attack)attack);
+            }
+            if(PrimaryAttack>=Attacks.Count) { PrimaryAttack = 0; }
             navAgent = GetNode<NavigationAgent2D>("NavAgent");
             VisionArea = GetNode<Area2D>("VisionArea");
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
-            if (ExportAttacks is not null)
-            {
-                Attacks = new Attack[ExportAttacks.Count];//This should localize the attacks
-                GD.Print(Attacks);
-                ExportAttacks.CopyTo(Attacks, 0);
-                GD.Print(Attacks);
-                foreach (Attack attack in Attacks)
-                {
-                    attack.Effect = Graphics.GetNode<Sprite2D>("Attack");//Worked strange in the editor had to do it through code. This now adds 1 effect to all attacks
-                }
-            }
             navAgent.VelocityComputed += GetMoving;
             Deselect();
         }
@@ -76,10 +73,18 @@ namespace RTS.Gameplay
         public void AttackCommand(Vector2 location)
         {
             MoveTo(location);//by default will move there
-            if (Attacks is not null && Attacks.Length > 0)
+            if (Attacks is not null && Attacks.Count > 0)
             {
-                Attacks[PrimaryAttack].AttackAnim();
+                Attacks[PrimaryAttack].AttackAnim(Graphics.Direction);
             }
+        }
+        public void _on_mouse_entered()
+        {
+            owner.JustHovered(this);
+        }
+        public void _on_mouse_exited()
+        {
+            owner.DeHovered(this);
         }
         public override void _PhysicsProcess(double delta)
         {

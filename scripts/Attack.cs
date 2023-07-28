@@ -1,8 +1,10 @@
 using Godot;
+using RTS.mainspace;
+
 namespace RTS.Gameplay
 {
     [GlobalClass]
-    public partial class Attack : Resource
+    public partial class Attack : Sprite2D
     {
         /*
          Doing it this way allows me to recycle easier however for full release with own models and everythign this should be part of a Unit solidly.
@@ -13,18 +15,35 @@ namespace RTS.Gameplay
             Standart
         }
         [Export(PropertyHint.Range, "0,10,1,or_greater")] public float AttackSpeed { get; set; }
-        [Export (PropertyHint.Range, "0,10,1,or_greater")] public float Damage { get; set; }
+        [Export(PropertyHint.Range, "0,10,1,or_greater")] public float Damage { get; set; }
         [Export] public bool Ranged { get; set; }//If ranged unit will attack once enemy is in range. If melee unit will attack once close and range only affects "escape distance" and/or AoE
         [Export] public bool AoE { get; set; }//Tool needed to require area2D if AoE.
         [Export(PropertyHint.Range, "0,10,1,or_greater")] public float Range { get; set; }
-        [Export] public DamageType Damagetype {get;set;}
-        //[Export] 
-        public Sprite2D Effect { get; set; }
+        [Export] public DamageType Damagetype { get; set; }
         public AnimationPlayer anim;
-        public void AttackAnim()
+        public override void _Ready()
         {
-            anim ??= Effect.GetNode<AnimationPlayer>(nameof(AnimationPlayer));
-            anim.Play("AttackLeft");
+            base._Ready();
+            anim = GetNode<AnimationPlayer>(nameof(AnimationPlayer));
+        }
+        public void AttackAnim(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Left:
+                    anim.Play("Left");
+                    break;
+                case Direction.Up:
+                    anim.Play("Up");
+                    break;
+                case Direction.Down:
+                    anim.Play("Down");
+                    break;
+                case Direction.Right:
+                    anim.Play("Right");
+                    break;
+            }
+            
         }
         public override string ToString()
         {

@@ -4,11 +4,23 @@ using System;
 using System.Collections.Generic;
 using RTS.UI;
 using RTS.Gameplay;
+using static RTS.mainspace.Player;
 
 namespace RTS.mainspace
 {
     public partial class Player : Node
     {
+        public class Target
+        {
+            public enum Type
+            {
+                Location,
+                Selectable
+            }
+            public Type type;
+            public Selectable selectable;
+            public Vector2 location;
+        }
         public int ID { get; private set; } = 3;
         public uint BitID//WIP THIS can be done like in the editor via the flag export
         {
@@ -31,7 +43,21 @@ namespace RTS.mainspace
         private TextureRect unitPortrait;
         private GridContainer unitsSelectedNode;
 
-        private Selectable hoveringOver;
+        private Target hoveringOver;
+
+        public void JustHovered(Selectable target)
+        {
+            hoveringOver.type = Target.Type.Selectable;
+            GD.Print("HOVERED");
+            hoveringOver.selectable = target;
+            ((Unit)target).Graphics.Hover();
+        }
+        public void DeHovered(Selectable target)
+        {
+            hoveringOver.type = Target.Type.Location;
+            hoveringOver.selectable = null;
+            ((Unit)target).Graphics.DeHover();
+        }
 
         enum ClickMode
         {
@@ -43,6 +69,7 @@ namespace RTS.mainspace
         private ClickMode clickMode = ClickMode.Move;
         public override void _Ready()
         {
+            hoveringOver = new();
             camera = GetNode<Camera2D>(nameof(Camera2D));
             HUD = camera.GetNode<CanvasLayer>(nameof(HUD));
             selectRectNode = GetNode<SelectRect>("SelectRect");
@@ -114,13 +141,13 @@ namespace RTS.mainspace
                         case ClickMode.Move:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.MoveTo(mousebutton.GlobalPosition);
+                                unit.MoveTo(mousebutton.Position);
                             }
                             break;
                         case ClickMode.Attack:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.AttackCommand(mousebutton.GlobalPosition);
+                                unit.AttackCommand(mousebutton.Position);
                                 clickMode = ClickMode.Move;
                             }
                             break;

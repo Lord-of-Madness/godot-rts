@@ -115,7 +115,8 @@ radius = 51.0098
 
 [node name="Unit" type="CharacterBody2D"]
 input_pickable = true
-safe_margin = 0.1
+floor_stop_on_slope = false
+safe_margin = 1.0
 script = ExtResource("1_wtwt1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -173,3 +174,8 @@ max_speed = 85235.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
 shape = SubResource("CircleShape2D_nwlgh")
+
+[node name="Attacks" type="Node2D" parent="."]
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
