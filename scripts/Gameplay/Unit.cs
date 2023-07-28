@@ -1,17 +1,15 @@
 using Godot;
-using Physics;
-using RTSGraphics;
+using RtsZ·poËù·k.Physics;
+using RtsZ·poËù·k.mainspace;
 using System;
 
-namespace RTSGameplay
+namespace RtsZ·poËù·k.Gameplay
 {
     
     
-    public partial class Unit : CharacterBody2D,IComparable<Unit>
+    public partial class Unit : Selectable, IComparable<Unit>,IDamagable
 	{
-		public UnitGraphics Graphics;
 		public NavigationAgent2D navAgent;
-
 
 		public Area2D VisionArea;
 		[Export(PropertyHint.Range, "0,10,1,or_greater")]
@@ -27,33 +25,27 @@ namespace RTSGameplay
 		public TilesPerSecond Speed { get=>(TilesPerSecond)speed; set { speed = (float)value; } }
 
         
-		[ExportGroup("CombatStats")]
-		[Export] int HP;
-		[Export] Godot.Collections.Array<Attack> Attacks;
+
+        [ExportGroup("CombatStats")]
+        [Export] public int HP { get; set; }
+        [Export] private Godot.Collections.Array<Attack> Attacks;
+		[Export] private int PrimaryAttack;//Changeable by the player. Will change to which position will the unit try to get if it has more than 1 attack available.
+		//Could write a Tool script to make this smoother (at the moment I cannot know how many attacks exist when setting PrimaryAttack and therefore cannot add bounds)
 
 
         public override void _Ready()
 		{
-			Graphics = GetNode<UnitGraphics>("Graphics");
+			base._Ready();
 			navAgent = GetNode<NavigationAgent2D>("NavAgent");
 			VisionArea = GetNode<Area2D>("VisionArea");
 			((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius=VisionRange.ToPixels();
 
-            //navAgent.TargetPosition = Position;//So it doesn't start moving right away
+
+            
             navAgent.VelocityComputed += GetMoving;
             Deselect();
 		}
-		/// <summary>
-		/// Graphicaly shows the selected status.
-		/// </summary>
-		public void Select()
-		{
-			Graphics.Select();
-		}
-		public void Deselect()
-		{
-			Graphics.Deselect();
-		}
+		
 		/// <summary>
 		/// Gives the Navigation agent new target.
 		/// </summary>
@@ -62,6 +54,13 @@ namespace RTSGameplay
 		{
 			navAgent.TargetPosition = location;
         }
+		public void AttackCommand(Vector2 location) {
+			MoveTo(location);//by default will move there
+            if (Attacks.Count > 0)
+			{
+				GD.Print("TODO: Attack!");
+			}
+		}
 		public override void _PhysicsProcess(double delta)
 		{
 			if (!navAgent.IsNavigationFinished())//This gets recalculated every physics frame. Not sure if that is necessary (technically it should suffice after each pathcheckpoint (although Graphics certainly need to happen each frame))
@@ -81,16 +80,18 @@ namespace RTSGameplay
 		private void GetMoving(Vector2 safe_velocity)
         {
             Velocity = safe_velocity;
-            GD.Print("safe_velocity:");
-            GD.Print(safe_velocity.Length());
             MoveAndSlide();
         }
 
-		/// <summary>
-		/// Unit comparison based on gameplay priority (sorting player selection etc.)
-		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Unit comparison based on gameplay priority (sorting player selection etc.)
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>
+        /// less than zero => lesser<br />
+		/// equal to 0 => equal<br />
+		/// greater than 0 => greater<br />
+        /// </returns>
         public int CompareTo(Unit other)
         {
 			//Currently ordered by age in scene tree (should be last resort)

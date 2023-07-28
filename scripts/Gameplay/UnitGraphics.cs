@@ -1,8 +1,8 @@
 using Godot;
 using System;
-using RTSGameplay;
+using RtsZ·poËù·k.Gameplay;
 
-namespace RTSGraphics
+namespace RtsZ·poËù·k.Graphics
 {
     /// <summary>
     /// This should be the unique graphical interface of a Unit and should be unique to each player/viewport

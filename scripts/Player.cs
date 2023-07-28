@@ -2,17 +2,15 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
-using RTSUI;
-using RTSGameplay;
-using GDArray = Godot.Collections.Array;
-using System.Linq;
+using RtsZápoèák.UI;
+using RtsZápoèák.Gameplay;
 
-namespace RTSmainspace
+namespace RtsZápoèák.mainspace
 {
     public partial class Player : Node
     {
         public int ID { get; private set; } = 3;
-        public uint BitID//WIP
+        public uint BitID//WIP THIS can be done like in the editor via the flag export
         {
             get => ((uint)1) << (ID - 1);
         }
@@ -121,7 +119,7 @@ namespace RTSmainspace
                         case ClickMode.Attack:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.Attack(mousebutton.Position);
+                                unit.AttackCommand(mousebutton.Position);
                             }
                             break;
                     }
@@ -164,6 +162,7 @@ namespace RTSmainspace
                     Transform = new Transform2D(0, (dragEnd + selectRectNode.start) / 2)
                 };
 
+
                 foreach (Dictionary shape in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query, MAX_SELECTED_THINGS))
                 {
                     if (((GodotObject)shape["collider"]) is Unit unit)
@@ -174,6 +173,10 @@ namespace RTSmainspace
                         }
                     }
 
+                }
+                if(selectedUnits.Count == 0)
+                {
+                    //TODO select other things than units -> buildings?
                 }
                 var suEnum = selectedUnits.GetEnumerator();
                 for (int i = 0; i < Math.Min(unitsSelectedNode.Columns, selectedUnits.Count); i++)
