@@ -2,10 +2,10 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
-using RtsZápoèák.UI;
-using RtsZápoèák.Gameplay;
+using RTS.UI;
+using RTS.Gameplay;
 
-namespace RtsZápoèák.mainspace
+namespace RTS.mainspace
 {
     public partial class Player : Node
     {
@@ -14,6 +14,7 @@ namespace RtsZápoèák.mainspace
         {
             get => ((uint)1) << (ID - 1);
         }
+        public string name = "Player";
 
         private SortedSet<Unit> selectedUnits;
         private SelectRect selectRectNode;
@@ -113,17 +114,25 @@ namespace RtsZápoèák.mainspace
                         case ClickMode.Move:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.MoveTo(mousebutton.Position);
+                                unit.MoveTo(mousebutton.GlobalPosition);
                             }
                             break;
                         case ClickMode.Attack:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.AttackCommand(mousebutton.Position);
+                                unit.AttackCommand(mousebutton.GlobalPosition);
+                                clickMode = ClickMode.Move;
                             }
                             break;
                     }
                 }
+            if (@event is InputEventKey key)
+            {
+                if (key.Keycode == Key.A)
+                {
+                    clickMode = ClickMode.Attack;
+                }
+            }
             if (selectRectNode.dragging && @event is InputEventMouseMotion mousemotion)
             {
                 selectRectNode.UpdateStats(mousemotion.Position);
@@ -174,7 +183,7 @@ namespace RtsZápoèák.mainspace
                     }
 
                 }
-                if(selectedUnits.Count == 0)
+                if (selectedUnits.Count == 0)
                 {
                     //TODO select other things than units -> buildings?
                 }

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace RtsZ·poËù·k.Physics
+namespace RTS.Physics
 {
     public static class PhysicsConsts
     {

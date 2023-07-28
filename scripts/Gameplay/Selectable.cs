@@ -1,12 +1,12 @@
 ﻿using Godot;
-using RtsZápočťák.Graphics;
+using RTS.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RtsZápočťák.Gameplay
+namespace RTS.Gameplay
 {
     public partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {

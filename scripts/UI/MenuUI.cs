@@ -1,8 +1,8 @@
 using Godot;
-using RtsZápoèák.mainspace;
+using RTS.mainspace;
 using System;
 
-namespace RtsZápoèák.UI
+namespace RTS.UI
 {
     public partial class MenuUI : MenuButton
     {

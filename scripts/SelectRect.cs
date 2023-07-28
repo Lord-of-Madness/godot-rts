@@ -1,5 +1,5 @@
 using Godot;
-namespace RtsZ·poËù·k.UI
+namespace RTS.UI
 {
     public partial class SelectRect : Node2D
     {

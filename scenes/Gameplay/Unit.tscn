@@ -117,7 +117,6 @@ radius = 51.0098
 input_pickable = true
 safe_margin = 0.1
 script = ExtResource("1_wtwt1")
-Attacks = Array[Object]([])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -149,6 +148,19 @@ libraries = {
 [node name="PathLine" type="Line2D" parent="Graphics"]
 width = 3.0
 default_color = Color(0, 1, 0, 0.235294)
+
+[node name="HealthBar" type="ProgressBar" parent="Graphics"]
+modulate = Color(0, 1, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -13.0
+offset_top = -23.0
+offset_right = 13.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+show_percentage = false
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 path_metadata_flags = 5

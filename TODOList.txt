@@ -1,15 +1,21 @@
+Bugs:
+	Mouseposition works in local coordinates(despite set to global) meaning that once camera moves the target click position is Mouseposition relative to the screen and not to the map allowing units to move only in the initial screen view
+	Attack animation is shared ammong all units of the same type meaning whichever unit is clicked only the youngest one in scene tree does the attack animation despite not being selected
+
+
+
+
 Units:
-	Attacking
+	Attacking -WIP
 	Animations (Lets use a sword slash animation for melee, and some bow-like thing for ranged without actually having to animate the sprite itself)
 	Abilities (Energy,Cooldowns)
 	Alegiance(ownership)
-	Stats
-	Status bars
+	Stats - HP added
+	Status bars - HPbar added
 	Stat screen
-	Selecting by clicks and not just by click and drags (click and drag only works when unit isn't clicked directly)
+	Selecting by clicks and not just by click and drags (click and drag only works when unit isn't clicked directly) (probably direct clicks will be clickanddrags that have just 1 item)
 	Highlighting units that are being currently selected (More performance intensive (would have to check every frame unlike just at the end))
 	Change the way we currently do the selecting rectangle into a custom function that looks at selectables (specificaly owned selectables) so we don't need to go over every from possibly a lot of physics objects. (Will see about performance)(make the checking in parallel if so.)
-	Highlighting units/things that are hovered over
 	Pathfinding tweeks:
 		Avoiding static objects (the whole avoidance thing doesn't really do the avoiding)
 	Vision range (done from editor, resizable from code)
@@ -18,8 +24,6 @@ Units:
 	Have them easily scalable (coliders,sprites) so that it can be done easily when needed
 	
 Selectables:
-	Common interface for Unit and Structure and mischelaneous
-	Cannot be parentclass because GodotNodes are its parentclasses and buildings are static objects and units charactersa
 	Highlight upon hover (probably also requires team allegiance (will see))
 	Highlighting should be based on Team allegiance. Default is yellow, Friendily is blue, Own is green and Hostile is red
 	Clickable (not click and draggable) with displaying things

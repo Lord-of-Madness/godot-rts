@@ -1,8 +1,8 @@
-﻿namespace RtsZápočťák.mainspace
+﻿namespace RTS.mainspace
 {
     public interface IDamagable
     {
-        int HP { get; set; }
+        public int HP { get; set; }
 
     }
 }
