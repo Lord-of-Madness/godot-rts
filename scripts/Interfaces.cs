@@ -1,6 +1,6 @@
 ﻿namespace RtsZápočťák.mainspace
 {
-    public interface Damagable
+    public interface IDamagable
     {
         int HP { get; set; }
 

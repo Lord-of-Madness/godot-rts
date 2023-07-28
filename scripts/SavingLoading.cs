@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RTSmainspace
+namespace RtsZápočťák.mainspace
 {
 
 

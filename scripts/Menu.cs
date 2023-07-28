@@ -2,7 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RTSmainspace
+namespace RtsZápoèák.mainspace
 {
 	public partial class Menu : Control
 	{

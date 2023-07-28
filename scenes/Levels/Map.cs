@@ -1,6 +1,6 @@
 using Godot;
-using Physics;
-namespace RTSGameplay
+using RtsZápoèák.Physics;
+namespace RtsZápoèák.Gameplay
 {
     public partial class Map : Node2D
     {

@@ -1,6 +1,5 @@
 using Godot;
-using System;
-namespace RTSGameplay
+namespace RtsZ·poËù·k.Gameplay
 {
     [GlobalClass]
     public partial class Attack : Resource
