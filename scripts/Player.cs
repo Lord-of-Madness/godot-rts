@@ -5,22 +5,27 @@ using System.Collections.Generic;
 using RTS.UI;
 using RTS.Gameplay;
 using static RTS.mainspace.Player;
+using System.Runtime.InteropServices;
 
 namespace RTS.mainspace
 {
+    //[StructLayout(LayoutKind.Explicit)]//Tried making it into C++esque  Variant-like object. Probably silly and completely unecessary. And it didn't even work(even making it a struck broke something somewhere)
+    public class Target
+    {
+        public enum Type
+        {
+            Location,
+            Selectable
+        }
+        //[FieldOffset(0)]
+        public Type type;
+        //[FieldOffset(sizeof(Type))]
+        public Selectable selectable;
+        //[FieldOffset(sizeof(Type))]
+        public Vector2 location;
+    }
     public partial class Player : Node
     {
-        public class Target
-        {
-            public enum Type
-            {
-                Location,
-                Selectable
-            }
-            public Type type;
-            public Selectable selectable;
-            public Vector2 location;
-        }
         public int ID { get; private set; } = 3;
         public uint BitID//WIP THIS can be done like in the editor via the flag export
         {
@@ -38,9 +43,9 @@ namespace RTS.mainspace
         public float ScrollSpeed = 5;
 
         CanvasLayer HUD;
-        private ColorRect topbar;
-        private ColorRect bottombar;
-        private TextureRect unitPortrait;
+        private ColorRect TopBar;
+        private ColorRect BottomBar;
+        private TextureRect UnitPortrait;
         private GridContainer unitsSelectedNode;
 
         private Target hoveringOver;
@@ -72,15 +77,15 @@ namespace RTS.mainspace
             hoveringOver = new();
             camera = GetNode<Camera2D>(nameof(Camera2D));
             HUD = camera.GetNode<CanvasLayer>(nameof(HUD));
-            selectRectNode = GetNode<SelectRect>("SelectRect");
+            selectRectNode = HUD.GetNode<SelectRect>(nameof(SelectRect));
             localLevel = GetParent<Node2D>();
             selectedUnits = new();
-            topbar = HUD.GetNode<ColorRect>("TopBar");
-            bottombar = HUD.GetNode<ColorRect>("BottomBar");
-            unitPortrait = bottombar.GetNode<TextureRect>("UnitPortrait");
+            TopBar = HUD.GetNode<ColorRect>(nameof(TopBar));
+            BottomBar = HUD.GetNode<ColorRect>(nameof(BottomBar));
+            UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
             camera.VisibilityLayer = BitID;//I am not sure this is working proper
-            unitsSelectedNode = bottombar.GetNode<GridContainer>("UnitsSelected");
+            unitsSelectedNode = BottomBar.GetNode<GridContainer>("UnitsSelected");
             for (int i = 0; i < unitsSelectedNode.Columns; i++)
             {
                 unitsSelectedNode.AddChild(new TextureRect()
@@ -100,21 +105,32 @@ namespace RTS.mainspace
             //GD.Print(screenSize);
             //GD.Print(mouseposition);
 
-            if (mouseposition.X == screenSize.X - 1)
+            if (mouseposition.X >= screenSize.X - 1)
             {
                 camera.Translate(Vector2.Right * ScrollSpeed);
+                camera.Position= new Vector2(Math.Min(camera.Position.X, camera.LimitRight-camera.GetViewportRect().Size.X),camera.Position.Y);
+                //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
+                //These coordinates are being translated by pushing mouse to the sides of the screen.
+                //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top right corner of the viewport.
+                //so I am after every translation moving it back into the  Topleft corner of the viewport within limits.
+                //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
+                //I mean there has to be a better way I just didn't find it
+                
             }
-            else if (mouseposition.X == 0)
+            else if (mouseposition.X <= 0)
             {
                 camera.Translate(Vector2.Left * ScrollSpeed);
+                camera.Position = new Vector2(Math.Max(camera.Position.X, camera.LimitLeft), camera.Position.Y);
             }
-            if (mouseposition.Y == screenSize.Y - 1)
+            if (mouseposition.Y >= screenSize.Y - 1)
             {
                 camera.Translate(Vector2.Down * ScrollSpeed);
+                camera.Position = new Vector2(camera.Position.X, Math.Min(camera.Position.Y, camera.LimitBottom - camera.GetViewportRect().Size.Y));
             }
-            else if (mouseposition.Y == 0)
+            else if (mouseposition.Y <= 0)
             {
                 camera.Translate(Vector2.Up * ScrollSpeed);
+                camera.Position = new Vector2(camera.Position.X, Math.Max(camera.Position.Y, camera.LimitTop));
             }
 
         }
@@ -135,19 +151,20 @@ namespace RTS.mainspace
                 }
                 else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
                 {
+                    if (hoveringOver.type == Target.Type.Location) { hoveringOver.location = mousebutton.GlobalPosition+camera.Position; }
                     //Here should be a check whether mousebutton.Position is a location or a hostile entity.
                     switch (clickMode)
                     {
                         case ClickMode.Move:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.MoveTo(mousebutton.Position);
+                                unit.MoveTo(hoveringOver);
                             }
                             break;
                         case ClickMode.Attack:
                             foreach (Unit unit in selectedUnits)
                             {
-                                unit.AttackCommand(mousebutton.Position);
+                                unit.AttackCommand(hoveringOver);
                                 clickMode = ClickMode.Move;
                             }
                             break;
@@ -184,7 +201,7 @@ namespace RTS.mainspace
                     selectedUnits = new();
                     foreach (TextureRect child in unitsSelectedNode.GetChildren())
                         child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
-                    unitPortrait.Texture = null;
+                    UnitPortrait.Texture = null;
                 }
             }
             else if (selectRectNode.dragging)//Just released (The mouseevent triggers only when pressing/releasing this just ensures it was dragging before)
@@ -194,8 +211,8 @@ namespace RTS.mainspace
                 selectRectNode.UpdateStats(dragEnd);
                 PhysicsShapeQueryParameters2D query = new()
                 {
-                    Shape = new RectangleShape2D() { Size = selectRectNode.Size.Abs() },
-                    Transform = new Transform2D(0, (dragEnd + selectRectNode.start) / 2)
+                    Shape = new RectangleShape2D() { Size = selectRectNode.Size },
+                    Transform =new Transform2D(0, camera.GlobalPosition+(dragEnd + selectRectNode.start) / 2)
                 };
 
 
@@ -222,7 +239,7 @@ namespace RTS.mainspace
                     ((TextureRect)unitsSelectedNode.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>("UnitPortrait").Texture;
                 }
                 if (selectedUnits.Count > 0)
-                    unitPortrait.Texture = selectedUnits.Min.GetNode<Sprite2D>("UnitPortrait").Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
+                    UnitPortrait.Texture = selectedUnits.Min.GetNode<Sprite2D>("UnitPortrait").Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
             }
         }
 

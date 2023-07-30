@@ -1,0 +1,30 @@
+A postapocalyptic world.
+A small village near a dilapidated ancient trainstation.
+Something happends which causes Ratmen swarm (Vermintide if you'd like) to start coming for the village.
+First introductory mission should be about discovering this "something" that causes the Ratmen to rile up.
+And first serious mission is defending against the vermintide before the train gets rolling.
+Rest of the campaign is using and developing RPGlike the train as you fend of the vermintide from behind and another faction and general creeps and hazards from infront.
+This "something" that has the ratmen so riled might be "hidden" from the player character until they discover it later on.
+
+Time (as a headstart from the vermintide) is a resource throughout the campaign.
+Doing side activities might result in boons but also makes the vermintide catch up with you in greater numbers.
+
+The Ratmen are a swarm faction meaning sometimes it will be necesarry to defend a side of the base from constant stream of enemies while other player forces make their way to whatever objective is on the map.
+
+The rails pass through various terrain. Sometimes requireing a "gather a number of resources" type of mission to fix em.
+Or just Destroy the base thats on the tracks.
+
+The train itself may in some cases be a "Hero" unit with its own Cannons and defense systems.
+But also its cargo space increases the ammount of resources that you can have at the start of a mission.
+And the maximium popcap.
+Allowing players to make a resource strong but population weak train for elite units or a underequipped but swarmy army of infantry.
+
+This default human faction should be a fairly defensive one not unlike StarCrafts terrans. With cannons and flamethrower weapons to fend of the swaths of ratmen. Their bases are outposts since their main is always the train(at least in campaign) and their buildings are generaly conjoined together and create biiig connected complexes with a lot of attatchments on them.
+
+Ratmen should feel Zergy but unlike the zerg they are to feel more like Warhammer skaven. Where yes there is a lot of swarm-like melee units but also elite high-tech and/or mutated creatures with cunning leadership if a wee backstabby in nature.
+Their bases have these spawning rings in them that you pay money to make a brood of units and the longer they stay in the barrack/spawning building the more they kill each other off making stronger units.
+Meaning if you let them out early you have expendable infantry and if you take them out late they are elite superunits
+
+The faction that is INFRONT of the train I have some ideas about. I am imagining walking factories/giant 3Dprinters. They spew a lot of timed units with batteries on them. Once they expire they can be recharged but only by actual supply taking and kinda vulnerable workers (upgradable in defence etc.) So you have like these people who control this ancient batterypowered tech but don't really understand it.
+
+Have to make these factions more unique and not just copies of SC2, WC3 and Warhammer. But for the general idea thats where we stand now.

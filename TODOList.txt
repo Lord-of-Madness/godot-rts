@@ -1,8 +1,4 @@
 Bugs:
-	Mouseposition works in local coordinates(despite set to global) meaning that once camera moves the target click position is Mouseposition relative to the screen and not to the map allowing units to move only in the initial screen view
-
-
-
 
 Units:
 	Attacking -Animations DONE
@@ -23,10 +19,10 @@ Units:
 	Have them easily scalable (coliders,sprites) so that it can be done easily when needed
 	
 Selectables:
-	Highlight upon hover (probably also requires team allegiance (will see)) - Works rudimentary
+	Highlight upon hover (probably also requires team allegiance (will see)) - Works rudimentary (without team allegiance)
 	Highlighting should be based on Team allegiance. Default is yellow, Friendily is blue, Own is green and Hostile is red
 	Clickable (not click and draggable) with displaying things
-	Owner: Player or neutral
+	Owner: Player or neutral (neutral is probably a special kind of player)
 	
 Player(Gameplay):
 	Resources

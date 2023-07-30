@@ -3,6 +3,7 @@ using RTS.Physics;
 using RTS.mainspace;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace RTS.Gameplay
 {
@@ -10,6 +11,18 @@ namespace RTS.Gameplay
 
     public partial class Unit : Selectable, IComparable<Unit>, IDamagable
     {
+        [Signal] public delegate void SignalDeadEventHandler();
+        [Signal] public delegate void SignalDamagedEventHandler();
+        [Signal] public delegate void SignalHealthChangedEventHandler();
+
+        public enum UnitAction
+        {
+            Move,
+            Attack,
+            Idle,
+            Stay,
+            Patrol
+        }
         public NavigationAgent2D navAgent;
 
         public Area2D VisionArea;
@@ -39,8 +52,14 @@ namespace RTS.Gameplay
         //Could write a Tool script to make this smoother (at the moment I cannot know how many attacks exist when setting PrimaryAttack and therefore cannot add bounds)
 
 
+        //This will be action queue later now it shall be just one command.
+        public UnitAction currentAction;
+
+        private Selectable target;
+
         public override void _Ready()
         {
+            currentAction = UnitAction.Idle;
             base._Ready();
             HealthBar = Graphics.GetNode<ProgressBar>(nameof(HealthBar));
             HealthBar.MaxValue = MaxHP;
@@ -55,28 +74,58 @@ namespace RTS.Gameplay
             VisionArea = GetNode<Area2D>("VisionArea");
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
             navAgent.VelocityComputed += GetMoving;
+            navAgent.TargetReached += TargetReached;
             Deselect();
         }
+
+        private void TargetReached()
+        {
+            if(currentAction == UnitAction.Move)currentAction= UnitAction.Idle;
+        }
+        private void Follow(Selectable target)
+        {
+            this.target = target;
+        }
+
         public override void _Process(double delta)
         {
             base._Process(delta);
-            HealthBar.Value = HP;
+            
         }
         /// <summary>
-        /// Gives the Navigation agent new target.
+        /// Gives the Navigation agent new target if target is a location.
+        /// Otherwise moves to a unit.
         /// </summary>
-        /// <param name="location"></param>
-        public void MoveTo(Vector2 location)
+        /// <param name="target"></param>
+        public void MoveTo(Target target)
         {
-            navAgent.TargetPosition = location;
+            currentAction = UnitAction.Move;
+            if(target.type==Target.Type.Location)
+                navAgent.TargetPosition = target.location;
+            else
+            {
+                this.target = target.selectable;
+            }
         }
-        public void AttackCommand(Vector2 location)
+        public void AttackCommand(Target target)
         {
-            MoveTo(location);//by default will move there
+            MoveTo(target);//Moving as base plus extra
+            currentAction = UnitAction.Attack;
+            if(target.type == Target.Type.Selectable && target.selectable is Unit unit)
+            {
+                unit.SignalDead += Detarget;
+
+            }
             if (Attacks is not null && Attacks.Count > 0)
             {
                 Attacks[PrimaryAttack].AttackAnim(Graphics.Direction);
             }
+        }
+        private void Detarget()
+        {
+            currentAction= UnitAction.Idle;
+            navAgent.TargetPosition = Position;
+            target = null;
         }
         public void _on_mouse_entered()
         {
@@ -121,6 +170,24 @@ namespace RTS.Gameplay
         {
             //Currently ordered by age in scene tree (should be last resort)
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
+        }
+
+        public void HealthChanged()
+        {
+            HealthBar.Value = HP;
+            GD.PrintErr(EmitSignal(nameof(SignalHealthChanged)));
+            if (HP <= 0) Dead();
+        }
+
+        public void Dead()
+        {
+            EmitSignal(nameof(SignalDead));
+        }
+
+        public void Damaged()
+        {
+            HealthChanged();
+            EmitSignal(nameof(SignalDamaged));
         }
     }
 }
