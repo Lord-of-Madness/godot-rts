@@ -12,13 +12,16 @@ namespace RTS.Graphics
     {
         private Node2D SelectionVisual;
         private Color selectionSelfModulateColor;
-        
+        public bool selected;
+
         private AnimationPlayer anim;
         public static readonly float SQRT2 = (float)Math.Sqrt(2);
         public NavigationAgent2D navAgent;
         private Line2D path;
         private Unit parent;
         public Direction Direction { get; private set; }
+
+
 
         public override void _Ready()
         {
@@ -30,29 +33,39 @@ namespace RTS.Graphics
             //GetNode<Sprite2D>("Sprite2D").Frame = 1;//This might be removed later what is this anyway?
             parent = GetParent<Unit>();
             navAgent = parent.GetNode<NavigationAgent2D>("NavAgent");//this has to be this way cause this gets instantiated earlier than parents navagent (making it parent.navagent null)
+            selected = false;
         }
 
         public void Hover()
         {
-            SelectionVisual.Visible = true;
-            Color c = selectionSelfModulateColor;
-            c.A /= 2;
-            SelectionVisual.SelfModulate = c;
+            if (!selected)
+            {
+                SelectionVisual.Visible = true;
+                Color c = selectionSelfModulateColor;
+                c.A /= 2;
+                SelectionVisual.SelfModulate = c;
+            }
         }
         public void DeHover()
         {
-            SelectionVisual.Visible = false;
-            SelectionVisual.SelfModulate = selectionSelfModulateColor;
+            if (!selected)
+            {
+                SelectionVisual.SelfModulate = selectionSelfModulateColor;
+                SelectionVisual.Visible = false;
+            }
 
         }
         public void Select()
         {
+            DeHover();
+            selected = true;
             SelectionVisual.Visible = true;
             path.Visible = true;
 
         }
         public void Deselect()
         {
+            selected = false;
             SelectionVisual.Visible = false;
             path.Visible = false;
 
@@ -63,20 +76,20 @@ namespace RTS.Graphics
             //Sprite:
             if (direction.X > 0.5)
             {
-                anim.Play("Right");
+                anim.Play(Direction.Right.ToString());
                 Direction = Direction.Right;
             }
             else if (direction.X < -0.5)
             {
-                anim.Play("Left"); Direction = Direction.Left;
+                anim.Play(Direction.Left.ToString()); Direction = Direction.Left;
             }
             else if (direction.Y < -0.5)
             {
-                anim.Play("Back"); Direction = Direction.Up;
+                anim.Play(Direction.Back.ToString()); Direction = Direction.Back;
             }
             else
             {
-                anim.Play("Forward"); Direction = Direction.Down;
+                anim.Play(Direction.Forward.ToString()); Direction = Direction.Forward;
             }
 
             //Path:
@@ -89,9 +102,11 @@ namespace RTS.Graphics
             path.Points = pts;
 
         }
-        public void Stop()
+        public void NavigationFinished()
         {
-            anim.Play("Idle");
+            anim.Play($"Idle{Direction}");
+            path.Points= Array.Empty<Vector2>();
+            //Sometimes navigation is finished even when not all points have been passed through
         }
 
     }

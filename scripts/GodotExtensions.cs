@@ -8,8 +8,8 @@ namespace RTS.mainspace
     }
     public enum Direction
     {
-        Up,
-        Down,
+        Back,
+        Forward,
         Left,
         Right
     }

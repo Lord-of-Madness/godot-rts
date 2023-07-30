@@ -27,4 +27,7 @@ offset_top = -26.0
 offset_right = 6.0
 offset_bottom = -22.0
 
+[node name="NavAgent" parent="." index="3"]
+radius = 0.01
+
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_87v5t")]

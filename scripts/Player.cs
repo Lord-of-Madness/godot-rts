@@ -6,6 +6,7 @@ using RTS.UI;
 using RTS.Gameplay;
 using static RTS.mainspace.Player;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace RTS.mainspace
 {
@@ -53,7 +54,6 @@ namespace RTS.mainspace
         public void JustHovered(Selectable target)
         {
             hoveringOver.type = Target.Type.Selectable;
-            GD.Print("HOVERED");
             hoveringOver.selectable = target;
             ((Unit)target).Graphics.Hover();
         }
@@ -64,7 +64,7 @@ namespace RTS.mainspace
             ((Unit)target).Graphics.DeHover();
         }
 
-        enum ClickMode
+        public enum ClickMode
         {
             Move,
             Attack,
@@ -111,8 +111,8 @@ namespace RTS.mainspace
                 camera.Position= new Vector2(Math.Min(camera.Position.X, camera.LimitRight-camera.GetViewportRect().Size.X),camera.Position.Y);
                 //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
                 //These coordinates are being translated by pushing mouse to the sides of the screen.
-                //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top right corner of the viewport.
-                //so I am after every translation moving it back into the  Topleft corner of the viewport within limits.
+                //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top left corner of the viewport.
+                //so I am, after every translation, moving it back into the Topleft corner of the viewport within limits.
                 //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
                 //I mean there has to be a better way I just didn't find it
                 
@@ -151,24 +151,15 @@ namespace RTS.mainspace
                 }
                 else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
                 {
+                    
                     if (hoveringOver.type == Target.Type.Location) { hoveringOver.location = mousebutton.GlobalPosition+camera.Position; }
-                    //Here should be a check whether mousebutton.Position is a location or a hostile entity.
-                    switch (clickMode)
+                    foreach (Unit unit in selectedUnits)
                     {
-                        case ClickMode.Move:
-                            foreach (Unit unit in selectedUnits)
-                            {
-                                unit.MoveTo(hoveringOver);
-                            }
-                            break;
-                        case ClickMode.Attack:
-                            foreach (Unit unit in selectedUnits)
-                            {
-                                unit.AttackCommand(hoveringOver);
-                                clickMode = ClickMode.Move;
-                            }
-                            break;
+                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); clickMode = ClickMode.Move; }
+                        unit.Command(clickMode,hoveringOver);
                     }
+
+                        
                 }
             if (@event is InputEventKey key)
             {
@@ -199,7 +190,7 @@ namespace RTS.mainspace
                         }
                     }
                     selectedUnits = new();
-                    foreach (TextureRect child in unitsSelectedNode.GetChildren())
+                    foreach (TextureRect child in unitsSelectedNode.GetChildren().Cast<TextureRect>())
                         child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
                     UnitPortrait.Texture = null;
                 }

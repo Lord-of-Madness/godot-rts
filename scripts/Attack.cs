@@ -33,10 +33,10 @@ namespace RTS.Gameplay
                 case Direction.Left:
                     anim.Play("Left");
                     break;
-                case Direction.Up:
+                case Direction.Back:
                     anim.Play("Up");
                     break;
-                case Direction.Down:
+                case Direction.Forward:
                     anim.Play("Down");
                     break;
                 case Direction.Right:
