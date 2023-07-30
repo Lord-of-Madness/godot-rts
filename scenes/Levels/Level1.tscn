@@ -46,8 +46,7 @@ shape = SubResource("1")
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("3")
 
-[node name="units" type="Node2D" parent="."]
-y_sort_enabled = true
+[node name="units" type="Node" parent="."]
 
 [node name="Unit" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("4_b23cp")]
 position = Vector2(173.322, 287.648)

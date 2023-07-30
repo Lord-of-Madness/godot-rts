@@ -3,14 +3,13 @@ using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using RTS.UI;
-using RTS.Gameplay;
-using static RTS.mainspace.Player;
+using RTS.mainspace;
 using System.Runtime.InteropServices;
 using System.Linq;
 
-namespace RTS.mainspace
+namespace RTS.Gameplay
 {
-    //[StructLayout(LayoutKind.Explicit)]//Tried making it into C++esque  Variant-like object. Probably silly and completely unecessary. And it didn't even work(even making it a struck broke something somewhere)
+    //[StructLayout(LayoutKind.Explicit)]//Tried making it into C++esque  Variant-like object. Probably silly and completely unecessary. And it didn't even work(even making it a struct broke something somewhere)
     public class Target
     {
         public enum Type
@@ -47,7 +46,7 @@ namespace RTS.mainspace
         private ColorRect TopBar;
         private ColorRect BottomBar;
         private TextureRect UnitPortrait;
-        private GridContainer unitsSelectedNode;
+        private GridContainer UnitsSelected;
 
         private Target hoveringOver;
 
@@ -85,10 +84,10 @@ namespace RTS.mainspace
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
             camera.VisibilityLayer = BitID;//I am not sure this is working proper
-            unitsSelectedNode = BottomBar.GetNode<GridContainer>("UnitsSelected");
-            for (int i = 0; i < unitsSelectedNode.Columns; i++)
+            UnitsSelected = BottomBar.GetNode<GridContainer>(nameof(UnitsSelected));
+            for (int i = 0; i < UnitsSelected.Columns; i++)
             {
-                unitsSelectedNode.AddChild(new TextureRect()
+                UnitsSelected.AddChild(new TextureRect()
                 {
                     ExpandMode = TextureRect.ExpandModeEnum.FitHeight,
                     StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
@@ -155,8 +154,9 @@ namespace RTS.mainspace
                     if (hoveringOver.type == Target.Type.Location) { hoveringOver.location = mousebutton.GlobalPosition+camera.Position; }
                     foreach (Unit unit in selectedUnits)
                     {
-                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); clickMode = ClickMode.Move; }
+                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue();}
                         unit.Command(clickMode,hoveringOver);
+                        if (!mousebutton.ShiftPressed)clickMode = ClickMode.Move;
                     }
 
                         
@@ -190,7 +190,7 @@ namespace RTS.mainspace
                         }
                     }
                     selectedUnits = new();
-                    foreach (TextureRect child in unitsSelectedNode.GetChildren().Cast<TextureRect>())
+                    foreach (TextureRect child in UnitsSelected.GetChildren().Cast<TextureRect>())
                         child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
                     UnitPortrait.Texture = null;
                 }
@@ -223,11 +223,11 @@ namespace RTS.mainspace
                     //TODO select other things than units -> buildings?
                 }
                 var suEnum = selectedUnits.GetEnumerator();
-                for (int i = 0; i < Math.Min(unitsSelectedNode.Columns, selectedUnits.Count); i++)
+                for (int i = 0; i < Math.Min(UnitsSelected.Columns, selectedUnits.Count); i++)
                 {
                     //this feels like the best way to do it while keeping the sortedSet. (Eventually could change it to SortedList I guess and just index into it)
                     suEnum.MoveNext();
-                    ((TextureRect)unitsSelectedNode.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>("UnitPortrait").Texture;
+                    ((TextureRect)UnitsSelected.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>("UnitPortrait").Texture;
                 }
                 if (selectedUnits.Count > 0)
                     UnitPortrait.Texture = selectedUnits.Min.GetNode<Sprite2D>("UnitPortrait").Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?

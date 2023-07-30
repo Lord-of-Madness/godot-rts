@@ -147,6 +147,7 @@ namespace RTS.Gameplay
             currentAction = UnitAction.Attack;
             if (Attacks is not null && Attacks.Count > 0)
             {
+                GD.Print("ATTACK!");
                 Attacks[PrimaryAttack].AttackAnim(Graphics.Direction);
             }
         }

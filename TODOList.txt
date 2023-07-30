@@ -1,5 +1,5 @@
 Bugs:
-	
+	Turning avoidance off made units solid for other units. That isn't right
 Units:
 	Attacking -Animations DONE
 	Animations (Lets use a sword slash animation for melee, and some bow-like thing for ranged without actually having to animate the sprite itself)

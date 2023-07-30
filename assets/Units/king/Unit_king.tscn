@@ -31,3 +31,5 @@ offset_bottom = -22.0
 radius = 0.01
 
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_87v5t")]
+AttackSpeed = 5.0
+Damage = 1.0

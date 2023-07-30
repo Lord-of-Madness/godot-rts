@@ -81,15 +81,18 @@ namespace RTS.Graphics
             }
             else if (direction.X < -0.5)
             {
-                anim.Play(Direction.Left.ToString()); Direction = Direction.Left;
+                anim.Play(Direction.Left.ToString());
+                Direction = Direction.Left;
             }
             else if (direction.Y < -0.5)
             {
-                anim.Play(Direction.Back.ToString()); Direction = Direction.Back;
+                anim.Play(Direction.Back.ToString());
+                Direction = Direction.Back;
             }
             else
             {
-                anim.Play(Direction.Forward.ToString()); Direction = Direction.Forward;
+                anim.Play(Direction.Forward.ToString());
+                Direction = Direction.Forward;
             }
 
             //Path:
