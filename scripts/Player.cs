@@ -108,6 +108,7 @@ namespace RTS.Gameplay
             {
                 camera.Translate(Vector2.Right * ScrollSpeed);
                 camera.Position= new Vector2(Math.Min(camera.Position.X, camera.LimitRight-camera.GetViewportRect().Size.X),camera.Position.Y);
+                
                 //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
                 //These coordinates are being translated by pushing mouse to the sides of the screen.
                 //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top left corner of the viewport.
@@ -151,7 +152,10 @@ namespace RTS.Gameplay
                 else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
                 {
                     
-                    if (hoveringOver.type == Target.Type.Location) { hoveringOver.location = mousebutton.GlobalPosition+camera.Position; }
+                    if (hoveringOver.type == Target.Type.Location) {
+                        //hoveringOver.location = mousebutton.GlobalPosition+camera.Position;
+                        hoveringOver.location = GetViewport().GetMousePosition() + camera.Position;
+                    }
                     foreach (Unit unit in selectedUnits)
                     {
                         if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue();}

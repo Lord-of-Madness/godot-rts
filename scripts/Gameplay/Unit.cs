@@ -49,6 +49,7 @@ namespace RTS.Gameplay
         public int HP { get { return hp; } set { hp = value; HealthChanged(); } }
         private ProgressBar HealthBar;
         private Godot.Collections.Array<Attack> Attacks;
+        //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
         //private Attack[] Attacks;
         [Export] private int PrimaryAttack;//Changeable by the player. Will change to which position will the unit try to get if it has more than 1 attack available.
         //Could write a Tool script to make this smoother (at the moment I cannot know how many attacks exist when setting PrimaryAttack and therefore cannot add bounds)
@@ -128,8 +129,9 @@ namespace RTS.Gameplay
         public void MoveTo(Target target)
         {
             currentAction = UnitAction.Move;
-            if (target.type == Target.Type.Location)
+            if (target.type == Target.Type.Location) { 
                 navAgent.TargetPosition = target.location;
+            }
             else
             {
                 this.target = target.selectable;

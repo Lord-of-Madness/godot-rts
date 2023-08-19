@@ -1,42 +1,43 @@
 Bugs:
 	Turning avoidance off made units solid for other units. That isn't right
 Units:
-	Attacking -Animations DONE
-	Animations (Lets use a sword slash animation for melee, and some bow-like thing for ranged without actually having to animate the sprite itself)
+	Attacking
+		Its a follow command with attacking
+	Animations- try to make them more modular and less baked in
 	Abilities (Energy,Cooldowns)
-	Alegiance(ownership)
+	Allegiance(ownership)
+		Player specific coloration of things
 	Stats - HP added
 	Status bars - HPbar added
 	Stat screen
-	Selecting by clicks and not just by click and drags (click and drag only works when unit isn't clicked directly) (probably direct clicks will be clickanddrags that have just 1 item)
-	Highlighting units that are being currently selected (More performance intensive (would have to check every frame unlike just at the end))
-	Change the way we currently do the selecting rectangle into a custom function that looks at selectables (specificaly owned selectables) so we don't need to go over every from possibly a lot of physics objects. (Will see about performance)(make the checking in parallel if so.)
+	Change the way we currently do the selecting rectangle into a custom function that looks at selectables (specificaly owned selectables) so we don't need to go over every, from possibly a lot of, physics objects. (Will see about performance)(make the checking in parallel if so.)
 	Pathfinding tweeks:
 		Avoiding static objects (the whole avoidance thing doesn't really do the avoiding)
-	Vision range (done from editor, resizable from code)
-	Attack ranges (done from code (if there are multiple attacks for the unit))
+	Vision range (done from editor, resizable from code) (should be fairly similar for most units? Maybe some are like scouts?)
+	Agro range (range from which the unit automaticaly starts attacking when idle, should be capped from the bottom by highest attack range)
+	Attack range(s) (done from code (if there are multiple attacks for the unit))
 	If a unit has multiple attacks player can set its main one(globaly, to selection, individually) and the unit will approach for distance required to perform this attack.
-	Have them easily scalable (coliders,sprites) so that it can be done easily when needed
+	Have them easily scalable (colliders,sprites) so that it can be done easily when needed
 	
 Selectables:
-	Highlight upon hover (probably also requires team allegiance (will see)) - Works rudimentary (without team allegiance)
+	Highlight upon hover with team allegiance
 	Highlighting should be based on Team allegiance. Default is yellow, Friendily is blue, Own is green and Hostile is red
-	Clickable (not click and draggable) with displaying things
-	Owner: Player or neutral (neutral is probably a special kind of player)
+	If in players selection is any non-owned it should not be selected. Only if its a single one.
+	Owner: Fake Player or neutral (special kind of player)
 	
 Player(Gameplay):
 	Resources
 		In code
 		As UI elements
-	Arrays of owned things (Buildings, Units, Other)
-	Fog of War -> a sort of grid overlay with 0(within sight) 1(seen) 2(known terrain) 3(obscured)
+	Arrays of owned Selectables (for faster selections and stuff)
+	Fog of War -> a sort of grid overlay with 0(within sight) 1(visible) 2(known) 3(unknown) (3 is only for campaign)
 		Interacts with player vision range that changes the cells into zeroes upon entering and to 1 upon leaving
 		There is a black...thing (tilemap?) as a visual representation of the fog of war and its alpha chanell is (33%,1) (66%,2) (100%,3)
 		ALTERNATIVELY:
 		A sprite with a texture that gets blended with a trasnparent one over time.
 		But thats just fog of war
 		Meaning there would have to be something entirely different for vision.
-	Unit selection grouped by unit type -> TABing through groups of same units
+	Unit selection grouped by unit type -> TABing through groups of same units (need to fix the comparator)
 	Units of the same type can be sorted by health or if possible by energy as set by the player in the Unit selection part of the GUI
 	Keybindings
 
