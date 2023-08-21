@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RTS.Gameplay
 {
@@ -24,7 +26,7 @@ namespace RTS.Gameplay
             Stay,
             Patrol
         }
-        public NavigationAgent2D navAgent;
+        public NavigationAgent2D NavAgent;
 
         public Area2D VisionArea;
         [Export(PropertyHint.Range, "0,10,1,or_greater")]
@@ -56,14 +58,31 @@ namespace RTS.Gameplay
 
 
         //This will be action queue later now it shall be just one command.
-        public UnitAction currentAction;
+        private UnitAction ca;
+        public UnitAction CurrentAction
+        {
+            get { return ca; }
+            set
+            {
+                /*if (ca == UnitAction.Attack && value != UnitAction.Attack)
+                {
+                    GD.Print("Undoing");
+                    foreach (Attack attack in Attacks)
+                    {
+                        attack.AttackRange.BodyEntered -= AttackTargetInRange;
+                    }
 
-        private Selectable target;
+                }*/
+                ca = value;
+            }
+        }
+
+        public Target target;
         private bool following;
 
         public override void _Ready()
         {
-            
+
             base._Ready();
             HealthBar = Graphics.GetNode<ProgressBar>(nameof(HealthBar));
             HealthBar.MaxValue = MaxHP;
@@ -72,14 +91,16 @@ namespace RTS.Gameplay
             foreach (Attack attack in GetNode<Node>(nameof(Attacks)).GetChildren().Cast<Attack>())
             {
                 Attacks.Add(attack);
+                attack.owner = this;
+                //attack.target = target;
             }
             if (PrimaryAttack >= Attacks.Count) { PrimaryAttack = 0; }
-            navAgent = GetNode<NavigationAgent2D>("NavAgent");
-            VisionArea = GetNode<Area2D>("VisionArea");
+            NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
+            VisionArea = GetNode<Area2D>(nameof(VisionArea));
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
-            navAgent.VelocityComputed += GetMoving;
-            navAgent.NavigationFinished += TargetReached;
-            navAgent.NavigationFinished += Graphics.NavigationFinished;
+            NavAgent.VelocityComputed += GetMoving;
+            NavAgent.NavigationFinished += TargetReached;
+            NavAgent.NavigationFinished += Graphics.NavigationFinished;
             GoIdle();
             Deselect();
             following = false;
@@ -90,36 +111,61 @@ namespace RTS.Gameplay
         }
         public void Command(Player.ClickMode clickMode, Target target)
         {
-            navAgent.AvoidanceEnabled = true;
-            //Here should be a check whether mousebutton.Position is a location or a hostile entity.
+            NavAgent.AvoidanceEnabled = true;
             switch (clickMode)
             {
                 case Player.ClickMode.Move:
+                    CurrentAction = UnitAction.Move;
                     MoveTo(target);
                     break;
                 case Player.ClickMode.Attack:
+                    CurrentAction = UnitAction.Attack;
                     AttackCommand(target);
                     break;
             }
         }
         private void TargetReached()
         {
-            if (currentAction == UnitAction.Move) GoIdle();
+            if (following) return;
+            if (CurrentAction == UnitAction.Move) GoIdle();
             Detarget();
         }
         private void GoIdle()
         {
-            currentAction = UnitAction.Idle;
-            navAgent.AvoidanceEnabled = false;
+            CurrentAction = UnitAction.Idle;
+            NavAgent.AvoidanceEnabled = false;
         }
-
+        private double timer = 0;//for debug purposes
         public override void _Process(double delta)
         {
-
             base._Process(delta);
+            if (OS.IsDebugBuild())
+            {
+                timer += delta;
+                if (timer >= 1)
+                {
+                    if (CurrentAction != UnitAction.Idle)
+                        GD.Print(CurrentAction);
+                    timer = 0;
+                }
+            }
+            foreach (var attack in Attacks)
+            {
+                if (attack.cooldown < attack.AttackPeriod) attack.cooldown += delta;
+                if (attack.targetInRange)
+                {
+                    if (attack.cooldown >= attack.AttackPeriod)
+                    {
+                        attack.AttackAnim(Graphics.Direction);
+                        attack.cooldown = 0;
+                        Unit unit = (Unit)attack.target.selectable;
+                        unit.HP = (int)Math.Round(unit.HP - attack.Damage);//Not the nicest but feels the correctest
+                    }
+                }
+            }
             //if (GetLastSlideCollision() is KinematicCollision2D collision && collision.GetCollider() == target) TargetReached();
 
-            
+
         }
         /// <summary>
         /// Gives the Navigation agent new target if target is a location.
@@ -128,13 +174,13 @@ namespace RTS.Gameplay
         /// <param name="target"></param>
         public void MoveTo(Target target)
         {
-            currentAction = UnitAction.Move;
-            if (target.type == Target.Type.Location) { 
-                navAgent.TargetPosition = target.location;
+            this.target = target;
+            if (target.type == Target.Type.Location)
+            {
+                NavAgent.TargetPosition = target.location;
             }
             else
             {
-                this.target = target.selectable;
                 following = true;
                 if (target.selectable is Unit unit)
                 {
@@ -145,22 +191,37 @@ namespace RTS.Gameplay
         }
         public void AttackCommand(Target target)
         {
+            GD.Print("AttackCommand?");
             MoveTo(target);//Moving as base plus extra
-            currentAction = UnitAction.Attack;
-            if (Attacks is not null && Attacks.Count > 0)
+            if (Attacks is not null)
             {
-                GD.Print("ATTACK!");
-                Attacks[PrimaryAttack].AttackAnim(Graphics.Direction);
+                foreach (var attack in Attacks)
+                {
+                    attack.Retarget(target);
+                    /*
+                    attack.AttackRange.BodyEntered += (body) =>
+                    {
+                        AttackTargetInRange(body, attack);
+                    };
+                    //attack.AttackRange.BodyEntered += (Node2D smthn) => { GD.Print("Whatever"); };
+                    //attack.AttackRange.AreaEntered += (Area2D smthn) => { GD.Print(smthn); };
+                    //GD.Print(((CircleShape2D)attack.AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius);
+                    */
+                }
+
             }
         }
+
+
         private void Detarget()
         {
             GoIdle();
             //navAgent.TargetPosition = Position;
             if (following && target is not null)
             {
-                ((Unit)target).SignalDead -= Detarget;
-                target = null;
+                if (target.selectable is Unit unit)
+                    unit.SignalDead -= Detarget;
+                target = new();
                 following = false;
             }
         }
@@ -178,14 +239,14 @@ namespace RTS.Gameplay
         }
         public override void _PhysicsProcess(double delta)
         {
-            if (following) navAgent.TargetPosition = target.Position;
-            if (!navAgent.IsNavigationFinished())
+            if (following) NavAgent.TargetPosition = target.Position;
+            if (!NavAgent.IsNavigationFinished())
             {
-                Vector2 direction = Position.DirectionTo(navAgent.GetNextPathPosition());
-                navAgent.Velocity = Speed.GetSpeed() * direction;
+                Vector2 direction = Position.DirectionTo(NavAgent.GetNextPathPosition());
+                NavAgent.Velocity = Speed.GetSpeed() * direction;
                 Graphics.MovingTo(direction);
             }
-                
+
         }
         /// <summary>
         /// Sets <c>safe_velocity</c> as <c>Velocity</c> and moves the unit along it.

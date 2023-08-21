@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b8fpqhh5ad6jf"]
+[gd_scene load_steps=10 format=3 uid="uid://b8fpqhh5ad6jf"]
 
 [ext_resource type="Texture2D" uid="uid://1lnt5qawrngv" path="res://resources/Kyrise's RPG Icon Pack/icons/48x48/sword_03e.png" id="1_obkuo"]
 [ext_resource type="Script" path="res://scripts/Attack.cs" id="2_ppo7f"]
@@ -259,6 +259,8 @@ _data = {
 "Up": SubResource("Animation_pnhtc")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_y1rvi"]
+
 [node name="Attack" type="Sprite2D"]
 visible = false
 rotation = 0.755728
@@ -270,3 +272,8 @@ script = ExtResource("2_ppo7f")
 libraries = {
 "": SubResource("AnimationLibrary_saw2s")
 }
+
+[node name="AttackRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+shape = SubResource("CircleShape2D_y1rvi")

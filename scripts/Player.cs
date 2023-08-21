@@ -6,6 +6,7 @@ using RTS.UI;
 using RTS.mainspace;
 using System.Runtime.InteropServices;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RTS.Gameplay
 {
@@ -17,12 +18,24 @@ namespace RTS.Gameplay
             Location,
             Selectable
         }
+        public Target(){}
+        public Target(Target other)
+        {
+            type = other.type;
+            selectable = other.selectable;
+            location = other.location;
+        }
         //[FieldOffset(0)]
         public Type type;
         //[FieldOffset(sizeof(Type))]
         public Selectable selectable;
         //[FieldOffset(sizeof(Type))]
         public Vector2 location;
+        public Vector2 Position { get
+            {
+                if (type == Type.Location) return location;
+                else return selectable.Position;
+            } }
     }
     public partial class Player : Node
     {
@@ -107,15 +120,15 @@ namespace RTS.Gameplay
             if (mouseposition.X >= screenSize.X - 1)
             {
                 camera.Translate(Vector2.Right * ScrollSpeed);
-                camera.Position= new Vector2(Math.Min(camera.Position.X, camera.LimitRight-camera.GetViewportRect().Size.X),camera.Position.Y);
-                
+                camera.Position = new Vector2(Math.Min(camera.Position.X, camera.LimitRight - camera.GetViewportRect().Size.X), camera.Position.Y);
+
                 //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
                 //These coordinates are being translated by pushing mouse to the sides of the screen.
                 //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top left corner of the viewport.
                 //so I am, after every translation, moving it back into the Topleft corner of the viewport within limits.
                 //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
                 //I mean there has to be a better way I just didn't find it
-                
+
             }
             else if (mouseposition.X <= 0)
             {
@@ -151,19 +164,29 @@ namespace RTS.Gameplay
                 }
                 else if (mousebutton.ButtonIndex == MouseButton.Right && mousebutton.Pressed)
                 {
-                    
-                    if (hoveringOver.type == Target.Type.Location) {
+
+                    if (hoveringOver.type == Target.Type.Location)
+                    {
                         //hoveringOver.location = mousebutton.GlobalPosition+camera.Position;
                         hoveringOver.location = GetViewport().GetMousePosition() + camera.Position;
                     }
-                    foreach (Unit unit in selectedUnits)
+                    else if(hoveringOver.type == Target.Type.Selectable && hoveringOver.selectable.team.IsHostile())
                     {
-                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue();}
-                        unit.Command(clickMode,hoveringOver);
-                        if (!mousebutton.ShiftPressed)clickMode = ClickMode.Move;
+                        clickMode=ClickMode.Attack;
                     }
+                    /*Parallel.ForEach(selectedUnits, unit => {
+                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); }
+                        unit.Command(clickMode, hoveringOver);
+                    });*/
+                    //Throws odd errors
+                    foreach (Unit unit in selectedUnits)//Can be paralelised
+                    {
+                        if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); }
+                        unit.Command(clickMode, new Target(hoveringOver));
+                    }
+                    if (!mousebutton.ShiftPressed) clickMode = ClickMode.Move;
 
-                        
+
                 }
             if (@event is InputEventKey key)
             {
@@ -207,7 +230,7 @@ namespace RTS.Gameplay
                 PhysicsShapeQueryParameters2D query = new()
                 {
                     Shape = new RectangleShape2D() { Size = selectRectNode.Size },
-                    Transform =new Transform2D(0, camera.GlobalPosition+(dragEnd + selectRectNode.start) / 2)
+                    Transform = new Transform2D(0, camera.GlobalPosition + (dragEnd + selectRectNode.start) / 2)
                 };
 
 

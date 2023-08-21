@@ -34,3 +34,4 @@ avoidance_priority = 0.9
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_8vowj")]
 AttackSpeed = 1.0
 Damage = 5.0
+range = 6.0
