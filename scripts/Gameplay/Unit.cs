@@ -12,11 +12,9 @@ namespace RTS.Gameplay
 {
 
 
-    public partial class Unit : Selectable, IComparable<Unit>, IDamagable
+    public partial class Unit : Damageable, IComparable<Unit>
     {
-        [Signal] public delegate void SignalDeadEventHandler();
-        [Signal] public delegate void SignalDamagedEventHandler();
-        [Signal] public delegate void SignalHealthChangedEventHandler();
+        
 
         public enum UnitAction
         {
@@ -24,7 +22,8 @@ namespace RTS.Gameplay
             Attack,
             Idle,
             Stay,
-            Patrol
+            Patrol,
+            Dying
         }
         public NavigationAgent2D NavAgent;
 
@@ -47,9 +46,7 @@ namespace RTS.Gameplay
 
         [ExportGroup("CombatStats")]
         [Export] public int MaxHP { get; set; }
-        private int hp;
-        public int HP { get { return hp; } set { hp = value; HealthChanged(); } }
-        private ProgressBar HealthBar;
+
         private Godot.Collections.Array<Attack> Attacks;
         //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
         //private Attack[] Attacks;
@@ -111,6 +108,8 @@ namespace RTS.Gameplay
         }
         public void Command(Player.ClickMode clickMode, Target target)
         {
+            if (CurrentAction == UnitAction.Dying) return;
+            if (target.type == Target.Type.Selectable && target.selectable == this) return;
             NavAgent.AvoidanceEnabled = true;
             switch (clickMode)
             {
@@ -149,6 +148,7 @@ namespace RTS.Gameplay
                     timer = 0;
                 }
             }
+            if (CurrentAction == UnitAction.Dying) return;
             foreach (var attack in Attacks)
             {
                 if (attack.cooldown < attack.AttackPeriod) attack.cooldown += delta;
@@ -191,8 +191,13 @@ namespace RTS.Gameplay
         }
         public void AttackCommand(Target target)
         {
-            GD.Print("AttackCommand?");
+            //GD.Print("AttackCommand? ",target);
             MoveTo(target);//Moving as base plus extra
+            RetargetAttacks(target);
+        }
+
+        private void RetargetAttacks(Target target)
+        {
             if (Attacks is not null)
             {
                 foreach (var attack in Attacks)
@@ -211,19 +216,30 @@ namespace RTS.Gameplay
 
             }
         }
+        private void DetargetAttacks()
+        {
+            if (Attacks is not null)
+            {
+                foreach (var attack in Attacks)
+                {
+                    attack.Detarget();
+                }
 
+            }
+        }
 
         private void Detarget()
         {
             GoIdle();
+            DetargetAttacks();
             //navAgent.TargetPosition = Position;
-            if (following && target is not null)
+            if (following && target is not null && (target.selectable is Unit unit))
             {
-                if (target.selectable is Unit unit)
-                    unit.SignalDead -= Detarget;
-                target = new();
-                following = false;
+                //GD.Print("DETARGETING!");
+                unit.SignalDead -= Detarget;
             }
+            target = new();
+            following = false;
         }
 #pragma warning disable IDE1006 // Naming Styles
         public void _on_mouse_entered()
@@ -239,6 +255,7 @@ namespace RTS.Gameplay
         }
         public override void _PhysicsProcess(double delta)
         {
+            //if (CurrentAction == UnitAction.Dying) return;
             if (following) NavAgent.TargetPosition = target.Position;
             if (!NavAgent.IsNavigationFinished())
             {
@@ -273,22 +290,19 @@ namespace RTS.Gameplay
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
         }
 
-        public void HealthChanged()
+        public override void Dead()
         {
-            HealthBar.Value = HP;
-            GD.PrintErr(EmitSignal(nameof(SignalHealthChanged)));
-            if (HP <= 0) Dead();
+            //GD.Print("Is this the end?");
+            CurrentAction = UnitAction.Dying;
+            EmitSignal(SignalName.SignalDisablingSelection,this);
+            EmitSignal(SignalName.SignalDead);
+            CleanCommandQueue();
+
+            //leave corpse?
+            Graphics.DeathAnim();//At the end it will remove the unit
+
         }
 
-        public void Dead()
-        {
-            EmitSignal(nameof(SignalDead));
-        }
-
-        public void Damaged()
-        {
-            HealthChanged();
-            EmitSignal(nameof(SignalDamaged));
-        }
+        
     }
 }

@@ -29,6 +29,8 @@ offset_right = 7.0
 offset_bottom = -22.0
 
 [node name="NavAgent" parent="." index="3"]
+radius = 2.0
+neighbor_distance = 50.0
 avoidance_priority = 0.9
 
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_8vowj")]

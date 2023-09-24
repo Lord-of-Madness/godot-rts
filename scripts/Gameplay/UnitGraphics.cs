@@ -2,6 +2,7 @@ using Godot;
 using System;
 using RTS.Gameplay;
 using RTS.mainspace;
+using System.Threading.Tasks;
 
 namespace RTS.Graphics
 {
@@ -107,9 +108,17 @@ namespace RTS.Graphics
         }
         public void NavigationFinished()
         {
+            if (parent.CurrentAction == Unit.UnitAction.Dying) return;
             anim.Play($"Idle{Direction}");
-            path.Points= Array.Empty<Vector2>();
+            path.Points = Array.Empty<Vector2>();
             //Sometimes navigation is finished even when not all points have been passed through
+        }
+
+        public void DeathAnim()
+        {
+            anim.Play("Death");
+            anim.AnimationFinished += (_)=>parent.QueueFree();
+
         }
 
     }

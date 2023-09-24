@@ -7,6 +7,7 @@ using RTS.mainspace;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading.Tasks;
+using static Godot.OpenXRHand;
 
 namespace RTS.Gameplay
 {
@@ -18,7 +19,7 @@ namespace RTS.Gameplay
             Location,
             Selectable
         }
-        public Target(){}
+        public Target() { }
         public Target(Target other)
         {
             type = other.type;
@@ -31,11 +32,19 @@ namespace RTS.Gameplay
         public Selectable selectable;
         //[FieldOffset(sizeof(Type))]
         public Vector2 location;
-        public Vector2 Position { get
+        public Vector2 Position
+        {
+            get
             {
                 if (type == Type.Location) return location;
                 else return selectable.Position;
-            } }
+            }
+        }
+    }
+    public static class Cursors
+    {
+        public static Resource target;
+        public static Resource hand;
     }
     public partial class Player : Node
     {
@@ -83,7 +92,28 @@ namespace RTS.Gameplay
             Patrol,
             Defend
         }
-        private ClickMode clickMode = ClickMode.Move;
+        private ClickMode cm;
+        private ClickMode Clickmode
+        {
+            get { return cm; }
+            set
+            {
+                cm = value;
+                switch (value)
+                {
+                    case ClickMode.Move:
+                        Input.SetCustomMouseCursor(Cursors.hand, hotspot:new Vector2(16,0));
+                        break;
+                    case ClickMode.Attack:
+                        Input.SetCustomMouseCursor(Cursors.target, hotspot: new Vector2(16, 16));
+                        break;
+                    default:
+                        GD.PrintErr("Not implemented cursor thingie - using default");//TODO
+                        Input.SetCustomMouseCursor(Cursors.hand, hotspot: new Vector2(0, 16));
+                        break;
+                }
+            }
+        }
         public override void _Ready()
         {
             hoveringOver = new();
@@ -108,6 +138,9 @@ namespace RTS.Gameplay
                     SizeFlagsVertical = Control.SizeFlags.ExpandFill
                 });
             }
+            Cursors.target = ResourceLoader.Load("res://assets/MouseIcons/target.png");
+            Cursors.hand = ResourceLoader.Load("res://assets/MouseIcons/hand.png");
+            Clickmode = ClickMode.Move;
         }
         public override void _Process(double delta)
         {
@@ -128,6 +161,9 @@ namespace RTS.Gameplay
                 //so I am, after every translation, moving it back into the Topleft corner of the viewport within limits.
                 //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
                 //I mean there has to be a better way I just didn't find it
+
+
+                //Test if if we add a rectangle as a view screen in we can nudge it around.
 
             }
             else if (mouseposition.X <= 0)
@@ -170,9 +206,9 @@ namespace RTS.Gameplay
                         //hoveringOver.location = mousebutton.GlobalPosition+camera.Position;
                         hoveringOver.location = GetViewport().GetMousePosition() + camera.Position;
                     }
-                    else if(hoveringOver.type == Target.Type.Selectable && hoveringOver.selectable.team.IsHostile())
+                    else if (hoveringOver.type == Target.Type.Selectable && hoveringOver.selectable.team.IsHostile())
                     {
-                        clickMode=ClickMode.Attack;
+                        Clickmode = ClickMode.Attack;
                     }
                     /*Parallel.ForEach(selectedUnits, unit => {
                         if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); }
@@ -182,9 +218,9 @@ namespace RTS.Gameplay
                     foreach (Unit unit in selectedUnits)//Can be paralelised
                     {
                         if (!mousebutton.ShiftPressed) { unit.CleanCommandQueue(); }
-                        unit.Command(clickMode, new Target(hoveringOver));
+                        unit.Command(Clickmode, new Target(hoveringOver));
                     }
-                    if (!mousebutton.ShiftPressed) clickMode = ClickMode.Move;
+                    if (!mousebutton.ShiftPressed) Clickmode = ClickMode.Move;
 
 
                 }
@@ -192,7 +228,7 @@ namespace RTS.Gameplay
             {
                 if (key.Keycode == Key.A)
                 {
-                    clickMode = ClickMode.Attack;
+                    Clickmode = ClickMode.Attack;
                 }
             }
             if (selectRectNode.dragging && @event is InputEventMouseMotion mousemotion)
@@ -208,18 +244,14 @@ namespace RTS.Gameplay
                 selectRectNode.start = mousebutton.Position;
                 if (selectedUnits.Count > 0 && !Input.IsKeyPressed(Key.Shift))//The shift key is kinda hardcoded perhaps change that later
                 {
-                    foreach (object shape in selectedUnits)
+                    foreach (Unit unit in selectedUnits)
                     {
-                        if (shape is Unit unit)
-                        {
-                            unit.Deselect();
-
-                        }
+                        unit.Deselect();
+                        unit.SignalDisablingSelection -= DeselectUnit;
+                        //specificaly not using DeselectUnit(unit) cause I want to reset tbe selected units and not remove them one after another
                     }
                     selectedUnits = new();
-                    foreach (TextureRect child in UnitsSelected.GetChildren().Cast<TextureRect>())
-                        child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
-                    UnitPortrait.Texture = null;
+
                 }
             }
             else if (selectRectNode.dragging)//Just released (The mouseevent triggers only when pressing/releasing this just ensures it was dragging before)
@@ -236,11 +268,15 @@ namespace RTS.Gameplay
 
                 foreach (Dictionary shape in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query, MAX_SELECTED_THINGS))
                 {
-                    if (((GodotObject)shape["collider"]) is Unit unit)
+                    if (
+                        ((GodotObject)shape["collider"]) is Unit unit
+                        &&
+                        (unit.CurrentAction != Unit.UnitAction.Dying))
                     {
                         if (selectedUnits.Add(unit))//isn't selected again (shift select) 
                         {
                             unit.Select();//The unit shouldn't care about being selected. This should be handled differently(visibility to the camera I pressume)
+                            unit.SignalDisablingSelection += DeselectUnit;
                         }
                     }
 
@@ -249,16 +285,34 @@ namespace RTS.Gameplay
                 {
                     //TODO select other things than units -> buildings?
                 }
-                var suEnum = selectedUnits.GetEnumerator();
-                for (int i = 0; i < Math.Min(UnitsSelected.Columns, selectedUnits.Count); i++)
-                {
-                    //this feels like the best way to do it while keeping the sortedSet. (Eventually could change it to SortedList I guess and just index into it)
-                    suEnum.MoveNext();
-                    ((TextureRect)UnitsSelected.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>("UnitPortrait").Texture;
-                }
-                if (selectedUnits.Count > 0)
-                    UnitPortrait.Texture = selectedUnits.Min.GetNode<Sprite2D>("UnitPortrait").Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
+                UpdateUnitGridAndPortrait();
+
+
             }
+        }
+        private void DeselectUnit(Unit unit)
+        {
+            GD.Print("UI deselecting", unit.Name);
+            unit.SignalDisablingSelection -= DeselectUnit;
+            GD.PrintErr(selectedUnits.Remove(unit));
+            unit.Deselect();
+            UpdateUnitGridAndPortrait();
+        }
+        private void UpdateUnitGridAndPortrait()
+        {
+            //TODO: IF only one selected then UNITCARD
+            foreach (TextureRect child in UnitsSelected.GetChildren().Cast<TextureRect>())
+                child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
+            UnitPortrait.Texture = null;
+            var suEnum = selectedUnits.GetEnumerator();
+            for (int i = 0; i < Math.Min(UnitsSelected.Columns, selectedUnits.Count); i++)
+            {
+                //this feels like the best way to do it while keeping the sortedSet. (Eventually could change it to SortedList I guess and just index into it)
+                suEnum.MoveNext();
+                ((TextureRect)UnitsSelected.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>("UnitPortrait").Texture;
+            }
+            if (selectedUnits.Count > 0)
+                UnitPortrait.Texture = selectedUnits.Min.GetNode<Sprite2D>("UnitPortrait").Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
         }
 
     }

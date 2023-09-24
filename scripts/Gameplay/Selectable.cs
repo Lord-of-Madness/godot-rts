@@ -1,5 +1,6 @@
 ﻿using Godot;
 using RTS.Graphics;
+using RTS.scripts.Gameplay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace RTS.Gameplay
     }
     public partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {
+        [Signal] public delegate void SignalDisablingSelectionEventHandler(Unit unit);//when dead, loss of control etc.
         public enum Team
         {
 
@@ -43,8 +45,22 @@ namespace RTS.Gameplay
         {
             Graphics = GetNode<UnitGraphics>("Graphics");
         }
+        /// <summary>
+		/// Tries to compare it if its the same type (<c>Unit</c>/<c>Building</c>) Units are above Buildings. Otherwise sorted by Age
+		/// </summary>
         public int CompareTo(Selectable other)
         {
+            if (other is Unit otherunit)
+            {
+                if (this is Building) return -1;
+                else if (this is Unit unit) return unit.CompareTo(otherunit);
+            }
+            else if (other is Building otherbuilding)
+            {
+                if (this is Unit) return 1;
+                else if (this is Building building) return building.CompareTo(otherbuilding);
+            }
+
             //Currently ordered by age in scene tree (should be last resort)
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
 

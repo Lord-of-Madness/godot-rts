@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbma510xjxclo"]
+[gd_scene load_steps=5 format=3 uid="uid://cjhgu6y8fsaba"]
 
-[ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_wtwt1"]
-[ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_5cp66"]
+[ext_resource type="Script" path="res://scripts/Gameplay/Building.cs" id="1_arpdc"]
+[ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_q8lde"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
 radius = 8.0
@@ -9,11 +9,11 @@ radius = 8.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
 radius = 51.0098
 
-[node name="Unit" type="CharacterBody2D"]
+[node name="Building" type="CharacterBody2D"]
 input_pickable = true
 floor_stop_on_slope = false
 safe_margin = 10.0
-script = ExtResource("1_wtwt1")
+script = ExtResource("1_arpdc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -24,7 +24,7 @@ visible = false
 scale = Vector2(0.1, 0.1)
 region_rect = Rect2(18, 24, 39, 39)
 
-[node name="Graphics" parent="." instance=ExtResource("2_5cp66")]
+[node name="Graphics" parent="." instance=ExtResource("2_q8lde")]
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 path_metadata_flags = 5

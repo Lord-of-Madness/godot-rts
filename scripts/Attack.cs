@@ -5,7 +5,7 @@ using RTS.Physics;
 namespace RTS.Gameplay
 {
     [GlobalClass]
-    public partial class Attack : Sprite2D
+    public partial class Attack : Node2D
     {
         /*
          Doing it this way allows me to recycle easier however for full release with own models and everythign this should be part of a Unit solidly.
@@ -29,10 +29,12 @@ namespace RTS.Gameplay
         public double cooldown;
         public double AttackPeriod { get { return 1 / AttackSpeed; } }
         public Unit owner;
+        public Sprite2D Graphic;
         public override void _Ready()
         {
             base._Ready();
-            anim = GetNode<AnimationPlayer>(nameof(AnimationPlayer));
+            Graphic = GetNode<Sprite2D>(nameof(Graphic));
+            anim = Graphic.GetNode<AnimationPlayer>(nameof(AnimationPlayer));
             AttackRange = GetNode<Area2D>(nameof(AttackRange));
             ((CircleShape2D)AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = Range.ToPixels();
             cooldown = AttackPeriod;
@@ -75,18 +77,18 @@ namespace RTS.Gameplay
         {
             if (target is null || owner.CurrentAction != Unit.UnitAction.Attack) return;
 
-            GD.Print(inrangee, " entered");
+            //GD.Print(inrangee.Name, " entered");
             if (inrangee is Selectable selectable
                 && selectable == target.selectable)
             {
                 targetInRange = true;
-                GD.Print("Target in range!");
+                //GD.Print("Target in range!");
             }
         }
         public void TargetLeftRange(Node2D body)
         {
             if (target is null) return;
-            GD.Print(body, " left");
+            //GD.Print(body.Name, " left");
             if (target.type == Target.Type.Selectable && body is Selectable selectable
             && selectable == target.selectable)
             {
@@ -99,6 +101,12 @@ namespace RTS.Gameplay
             if(target.type==Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
                 targetInRange = true;
             else targetInRange = false;
+            GD.Print(targetInRange);
+        }
+        public void Detarget()
+        {
+            target = null;
+            targetInRange = false;
         }
     }
 }
