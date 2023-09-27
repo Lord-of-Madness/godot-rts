@@ -1,19 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjhgu6y8fsaba"]
+[gd_scene load_steps=6 format=3 uid="uid://cjhgu6y8fsaba"]
 
 [ext_resource type="Script" path="res://scripts/Gameplay/Building.cs" id="1_arpdc"]
 [ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_q8lde"]
+[ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3_iircv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
 radius = 8.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
-radius = 51.0098
+radius = 272.007
 
 [node name="Building" type="CharacterBody2D"]
 input_pickable = true
 floor_stop_on_slope = false
 safe_margin = 10.0
 script = ExtResource("1_arpdc")
+MaxHP = 100
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -22,9 +24,23 @@ shape = SubResource("CircleShape2D_422au")
 [node name="UnitPortrait" type="Sprite2D" parent="."]
 visible = false
 scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_iircv")
 region_rect = Rect2(18, 24, 39, 39)
 
 [node name="Graphics" parent="." instance=ExtResource("2_q8lde")]
+
+[node name="Sprite2D" parent="Graphics" index="1"]
+texture = ExtResource("3_iircv")
+
+[node name="HealthBar" parent="Graphics" index="4"]
+offset_left = -30.0
+offset_top = -42.0
+offset_right = 30.0
+offset_bottom = -33.0
+
+[node name="Cross" parent="Graphics" index="5"]
+position = Vector2(2.86102e-06, -2.6226e-06)
+scale = Vector2(0.33125, 0.41875)
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 path_metadata_flags = 5
@@ -42,3 +58,5 @@ shape = SubResource("CircleShape2D_nwlgh")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+
+[editable path="Graphics"]

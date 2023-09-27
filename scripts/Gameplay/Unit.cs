@@ -1,12 +1,7 @@
 using Godot;
 using RTS.Physics;
-using RTS.mainspace;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
-using System.Collections;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RTS.Gameplay
 {
@@ -25,12 +20,7 @@ namespace RTS.Gameplay
             Patrol,
             Dying
         }
-        public NavigationAgent2D NavAgent;
 
-        public Area2D VisionArea;
-        [Export(PropertyHint.Range, "0,10,1,or_greater")]
-        public float visionRange;//in Tilemeters
-        public Tilemeter VisionRange { get => (Tilemeter)visionRange; set { visionRange = (float)value; } }
 
         /// <summary>
         /// Unit movement speed in Tiles per second
@@ -40,12 +30,10 @@ namespace RTS.Gameplay
         private float speed;
         public TilesPerSecond Speed { get => (TilesPerSecond)speed; set { speed = (float)value; } }
 
-        [Export]
-        public Player owner;
+
 
 
         [ExportGroup("CombatStats")]
-        [Export] public int MaxHP { get; set; }
 
         private Godot.Collections.Array<Attack> Attacks;
         //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
@@ -70,6 +58,7 @@ namespace RTS.Gameplay
                     }
 
                 }*/
+                if (CurrentAction == UnitAction.Dying) return;
                 ca = value;
             }
         }
@@ -81,9 +70,6 @@ namespace RTS.Gameplay
         {
 
             base._Ready();
-            HealthBar = Graphics.GetNode<ProgressBar>(nameof(HealthBar));
-            HealthBar.MaxValue = MaxHP;
-            HP = MaxHP;
             Attacks = new();
             foreach (Attack attack in GetNode<Node>(nameof(Attacks)).GetChildren().Cast<Attack>())
             {
@@ -92,9 +78,6 @@ namespace RTS.Gameplay
                 //attack.target = target;
             }
             if (PrimaryAttack >= Attacks.Count) { PrimaryAttack = 0; }
-            NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
-            VisionArea = GetNode<Area2D>(nameof(VisionArea));
-            ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
             NavAgent.VelocityComputed += GetMoving;
             NavAgent.NavigationFinished += TargetReached;
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
@@ -106,7 +89,7 @@ namespace RTS.Gameplay
         {
             Detarget();
         }
-        public void Command(Player.ClickMode clickMode, Target target)
+        public override void Command(Player.ClickMode clickMode, Target target)
         {
             if (CurrentAction == UnitAction.Dying) return;
             if (target.type == Target.Type.Selectable && target.selectable == this) return;
@@ -133,6 +116,7 @@ namespace RTS.Gameplay
         {
             CurrentAction = UnitAction.Idle;
             NavAgent.AvoidanceEnabled = false;
+            NavAgent.TargetPosition=Position;
         }
         private double timer = 0;//for debug purposes
         public override void _Process(double delta)
@@ -158,8 +142,8 @@ namespace RTS.Gameplay
                     {
                         attack.AttackAnim(Graphics.Direction);
                         attack.cooldown = 0;
-                        Unit unit = (Unit)attack.target.selectable;
-                        unit.HP = (int)Math.Round(unit.HP - attack.Damage);//Not the nicest but feels the correctest
+                        Damageable damagableTarget = (Damageable)attack.target.selectable;
+                        damagableTarget.HP = (int)Math.Round(damagableTarget.HP - attack.Damage);//Not the nicest but feels the correctest
                     }
                 }
             }
@@ -182,9 +166,9 @@ namespace RTS.Gameplay
             else
             {
                 following = true;
-                if (target.selectable is Unit unit)
+                if (target.selectable is Damageable damageable)
                 {
-                    unit.SignalDead += Detarget;
+                    damageable.SignalDead += Detarget;
                     //player.VisionArea.BodyExited += Detarget; //TODO when outside vision
                 }
             }
@@ -230,29 +214,20 @@ namespace RTS.Gameplay
 
         private void Detarget()
         {
+            
             GoIdle();
             DetargetAttacks();
             //navAgent.TargetPosition = Position;
-            if (following && target is not null && (target.selectable is Unit unit))
+            if (following && target is not null && (target.selectable is Damageable damageable))
             {
                 //GD.Print("DETARGETING!");
-                unit.SignalDead -= Detarget;
+                damageable.SignalDead -= Detarget;
             }
             target = new();
             following = false;
+            
         }
-#pragma warning disable IDE1006 // Naming Styles
-        public void _on_mouse_entered()
-#pragma warning restore IDE1006 // Naming Styles
-        {
-            owner.JustHovered(this);
-        }
-#pragma warning disable IDE1006 // Naming Styles
-        public void _on_mouse_exited()
-#pragma warning restore IDE1006 // Naming Styles
-        {
-            owner.DeHovered(this);
-        }
+
         public override void _PhysicsProcess(double delta)
         {
             //if (CurrentAction == UnitAction.Dying) return;

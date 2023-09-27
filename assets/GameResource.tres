@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dunacv412p77x"]
+
+[ext_resource type="Texture2D" uid="uid://ch0a8tgj7gkck" path="res://assets/Resources/Scrap.png" id="1_7ody1"]
+[ext_resource type="Script" path="res://scripts/GameResource.cs" id="1_pcmpf"]
+
+[resource]
+script = ExtResource("1_pcmpf")
+icon = ExtResource("1_7ody1")
+name = "SCRAP"

@@ -18,7 +18,10 @@ namespace RTS.Gameplay
                 //Initialize the foggy overlay.(for each player seperately)
 
             }
+
+            
         }
+        
 
     }
 }

@@ -2,5 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>RTS</RootNamespace>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
 </Project>

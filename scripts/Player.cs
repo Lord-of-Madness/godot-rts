@@ -3,11 +3,7 @@ using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using RTS.UI;
-using RTS.mainspace;
-using System.Runtime.InteropServices;
 using System.Linq;
-using System.Threading.Tasks;
-using static Godot.OpenXRHand;
 
 namespace RTS.Gameplay
 {
@@ -72,17 +68,26 @@ namespace RTS.Gameplay
 
         private Target hoveringOver;
 
+        private HBoxContainer ResourceTab;
+        [Export]
+        public Godot.Collections.Array<GameResource> Game_Resources;
+        [ExportGroup("CombatStats")]
+        [Export(PropertyHint.Range, "0,1000,10,or_greater")]
+        float initialResource1 = 0;
+        [Export(PropertyHint.Range, "0,1000,10,or_greater")]
+        float initialResource2 = 0;
+
         public void JustHovered(Selectable target)
         {
             hoveringOver.type = Target.Type.Selectable;
             hoveringOver.selectable = target;
-            ((Unit)target).Graphics.Hover();
+            target.Graphics.Hover();
         }
         public void DeHovered(Selectable target)
         {
             hoveringOver.type = Target.Type.Location;
             hoveringOver.selectable = null;
-            ((Unit)target).Graphics.DeHover();
+            target.Graphics.DeHover();
         }
 
         public enum ClickMode
@@ -123,6 +128,11 @@ namespace RTS.Gameplay
             localLevel = GetParent<Node2D>();
             selectedUnits = new();
             TopBar = HUD.GetNode<ColorRect>(nameof(TopBar));
+            ResourceTab = TopBar.GetNode<HBoxContainer>(nameof(ResourceTab));
+            foreach (var res in Game_Resources)
+            {
+                //ResourceTab.AddChild();
+            }
             BottomBar = HUD.GetNode<ColorRect>(nameof(BottomBar));
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
@@ -141,6 +151,7 @@ namespace RTS.Gameplay
             Cursors.target = ResourceLoader.Load("res://assets/MouseIcons/target.png");
             Cursors.hand = ResourceLoader.Load("res://assets/MouseIcons/hand.png");
             Clickmode = ClickMode.Move;
+            Game_Resources = new () { new(0) };
         }
         public override void _Process(double delta)
         {

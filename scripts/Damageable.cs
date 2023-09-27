@@ -1,8 +1,7 @@
 ﻿using Godot;
-using RTS.Gameplay;
 using System;
 
-namespace RTS.mainspace
+namespace RTS.Gameplay
 {
     public abstract partial class Damageable : Selectable 
     {
@@ -20,6 +19,8 @@ namespace RTS.mainspace
                 HealthChanged();
             }
         }
+        //[ExportGroup("CombatStats")]
+        [Export] public int MaxHP { get; set; }
         protected ProgressBar HealthBar;
         public void HealthChanged()
         {
@@ -32,6 +33,13 @@ namespace RTS.mainspace
         public void Damaged()
         {
             EmitSignal(SignalName.SignalDamaged);
+        }
+        public override void _Ready()
+        {
+            base._Ready();
+            HealthBar = Graphics.GetNode<ProgressBar>(nameof(HealthBar));
+            HealthBar.MaxValue = MaxHP;
+            HP = MaxHP;
         }
     }
 }

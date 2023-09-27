@@ -19,7 +19,7 @@ namespace RTS.Graphics
         public static readonly float SQRT2 = (float)Math.Sqrt(2);
         public NavigationAgent2D navAgent;
         private Line2D path;
-        private Unit parent;
+        private Selectable parent;
         public Direction Direction { get; private set; }
 
 
@@ -32,7 +32,7 @@ namespace RTS.Graphics
             path = GetNode<Line2D>("PathLine");
             path.DefaultColor = new Color(0, 1, 0, 0.3f);
             //GetNode<Sprite2D>("Sprite2D").Frame = 1;//This might be removed later what is this anyway?
-            parent = GetParent<Unit>();
+            parent = GetParent<Selectable>();
             navAgent = parent.GetNode<NavigationAgent2D>("NavAgent");//this has to be this way cause this gets instantiated earlier than parents navagent (making it parent.navagent null)
             selected = false;
         }
@@ -74,6 +74,7 @@ namespace RTS.Graphics
 
         internal void MovingTo(Vector2 direction)
         {
+            if (anim.CurrentAnimation != "Death") return;
             //Sprite:
             if (direction.X > 0.5)
             {
@@ -98,6 +99,9 @@ namespace RTS.Graphics
 
             //Path:
             Vector2[] points = navAgent.GetCurrentNavigationPath();
+
+            if (points.Length == 0) { path.Points = Array.Empty<Vector2>(); return; }
+
             int from = navAgent.GetCurrentNavigationPathIndex();
             Vector2[] pts = new Vector2[points.Length - from];
             for (int i = 0; i < pts.Length; i++) pts[i] = points[i + from];
@@ -108,8 +112,7 @@ namespace RTS.Graphics
         }
         public void NavigationFinished()
         {
-            if (parent.CurrentAction == Unit.UnitAction.Dying) return;
-            anim.Play($"Idle{Direction}");
+            if(anim.CurrentAnimation!= "Death") anim.Play($"Idle{Direction}");
             path.Points = Array.Empty<Vector2>();
             //Sometimes navigation is finished even when not all points have been passed through
         }

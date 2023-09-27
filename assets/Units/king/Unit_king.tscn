@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://b8fpqhh5ad6jf" path="res://scenes/Anims/AttackAnim.tscn" id="5_87v5t"]
 
 [node name="Unit" instance=ExtResource("1_wd507")]
-visionRange = 5.0
 speed = 2.0
 MaxHP = 50
+visionRange = 5.0
 
 [node name="UnitPortrait" parent="." index="1"]
 texture = ExtResource("2_5pi8i")
@@ -22,9 +22,9 @@ vframes = 4
 region_enabled = true
 
 [node name="HealthBar" parent="Graphics" index="4"]
-offset_left = -6.0
+offset_left = -8.0
 offset_top = -26.0
-offset_right = 6.0
+offset_right = 8.0
 offset_bottom = -22.0
 
 [node name="NavAgent" parent="." index="3"]
@@ -34,3 +34,5 @@ radius = 0.01
 AttackSpeed = 5.0
 Damage = 1.0
 range = 2.0
+
+[editable path="Graphics"]

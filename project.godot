@@ -8,6 +8,12 @@
 
 config_version=5
 
+[MonoCustomResourceRegistry]
+
+ClassPrefix="CUSTOM"
+SearchType=0
+ResourceScriptDirectories=["res://scripts"]
+
 [application]
 
 config/name="Rts Zápočťák"
@@ -28,6 +34,15 @@ window/stretch/mode="viewport"
 [dotnet]
 
 project/assembly_name="Rts Zápočťák"
+project/assembly_reload_attempts=5
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/MonoCustomResourceRegistry/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [layer_names]
 

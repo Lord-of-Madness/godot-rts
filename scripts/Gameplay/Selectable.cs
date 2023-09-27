@@ -1,12 +1,7 @@
 ﻿using Godot;
 using RTS.Graphics;
-using RTS.scripts.Gameplay;
+using RTS.Physics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RTS.Gameplay
 {
@@ -17,7 +12,7 @@ namespace RTS.Gameplay
             return false;
         }
     }
-    public partial class Selectable : CharacterBody2D, IComparable<Selectable>
+    public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {
         [Signal] public delegate void SignalDisablingSelectionEventHandler(Unit unit);//when dead, loss of control etc.
         public enum Team
@@ -27,6 +22,14 @@ namespace RTS.Gameplay
 
         public UnitGraphics Graphics;
         public Team team;
+        [Export]
+        public Player owner;
+        public NavigationAgent2D NavAgent;
+
+        public Area2D VisionArea;
+        [Export(PropertyHint.Range, "0,10,1,or_greater")]
+        public float visionRange;//in Tilemeters
+        public Tilemeter VisionRange { get => (Tilemeter)visionRange; set { visionRange = (float)value; } }
         /// <summary>
 		/// Graphicaly shows the selected status.
 		/// </summary>
@@ -41,9 +44,28 @@ namespace RTS.Gameplay
         {
             Graphics.Deselect();
         }
+#pragma warning disable IDE1006 // Naming Styles
+        public void _on_mouse_entered()
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            owner.JustHovered(this);
+        }
+#pragma warning disable IDE1006 // Naming Styles
+        public void _on_mouse_exited()
+#pragma warning restore IDE1006 // Naming Styles
+        {
+            owner.DeHovered(this);
+        }
+        public virtual void Command(Player.ClickMode clickMode, Target target)
+        {
+            //Nothing happens
+        }
         public override void _Ready()
         {
             Graphics = GetNode<UnitGraphics>("Graphics");
+            NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
+            VisionArea = GetNode<Area2D>(nameof(VisionArea));
+            ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
         }
         /// <summary>
 		/// Tries to compare it if its the same type (<c>Unit</c>/<c>Building</c>) Units are above Buildings. Otherwise sorted by Age

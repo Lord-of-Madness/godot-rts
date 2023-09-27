@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bjq028k0i6idh"]
+[gd_scene load_steps=9 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
+[ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Building_Barrack.tscn" id="7_ma2uy"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)
@@ -35,14 +36,14 @@ layer_2/y_sort_origin = 0
 layer_2/z_index = 1
 layer_2/tile_data = PackedInt32Array()
 
-[node name="Main building" type="StaticBody2D" parent="."]
+[node name="Object" type="StaticBody2D" parent="."]
 z_index = 1
 position = Vector2(667, 180)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Main building"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Object"]
 shape = SubResource("1")
 
-[node name="Sprite2D" type="Sprite2D" parent="Main building"]
+[node name="Sprite2D" type="Sprite2D" parent="Object"]
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("3")
 
@@ -74,3 +75,7 @@ owner = NodePath("../../Player")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(0, -1)
+
+[node name="Building" parent="." node_paths=PackedStringArray("owner") instance=ExtResource("7_ma2uy")]
+position = Vector2(661, 426)
+owner = NodePath("../Player")

@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://be7aym5fxoaaf"]
+[gd_scene load_steps=11 format=3 uid="uid://be7aym5fxoaaf"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_l5ckk"]
+[ext_resource type="Resource" uid="uid://dunacv412p77x" path="res://assets/GameResource.tres" id="2_b12p4"]
 [ext_resource type="FontFile" path="res://resources/fonts/new_dynamicfont.tres" id="3"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="4_3ymha"]
 [ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
@@ -25,6 +26,9 @@ noise = SubResource("FastNoiseLite_wovyg")
 
 [node name="Player" type="Node"]
 script = ExtResource("1_l5ckk")
+Game_Resources = Array[Resource]([ExtResource("2_b12p4")])
+initialResource1 = 100.0
+initialResource2 = 200.0
 
 [node name="Selectables" type="Node" parent="."]
 
@@ -46,7 +50,7 @@ anchor_right = 1.0
 anchor_bottom = 0.1
 color = Color(0, 0, 0, 1)
 
-[node name="Resources" type="HBoxContainer" parent="Camera2D/HUD/TopBar"]
+[node name="ResourceTab" type="HBoxContainer" parent="Camera2D/HUD/TopBar"]
 layout_mode = 0
 anchor_left = 0.5
 anchor_right = 1.0

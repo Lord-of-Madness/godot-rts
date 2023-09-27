@@ -6,13 +6,15 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using Godot;
 
-namespace RTS.scripts.Gameplay
+namespace RTS.Gameplay
 {
     public partial class Building : Damageable, IComparable<Building>
     {
-        
 
+        public Vector2 RallyPoint;
+        Line2D RallyPath;//TODO: update when reset (use the navagent we stole from unit)
         public int CompareTo(Building other)
         {
             return GetIndex().CompareTo(other.GetIndex());//For now
@@ -20,7 +22,9 @@ namespace RTS.scripts.Gameplay
 
         public override void Dead()
         {
-            throw new NotImplementedException();
+            EmitSignal(SignalName.SignalDisablingSelection, this);
+            EmitSignal(SignalName.SignalDead);
+            Graphics.DeathAnim();//At the end it will remove the unit
         }
     }
 }
