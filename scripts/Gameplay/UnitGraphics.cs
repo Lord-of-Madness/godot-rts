@@ -74,7 +74,7 @@ namespace RTS.Graphics
 
         internal void MovingTo(Vector2 direction)
         {
-            if (anim.CurrentAnimation != "Death") return;
+            if (anim.CurrentAnimation == "Death") return;
             //Sprite:
             if (direction.X > 0.5)
             {

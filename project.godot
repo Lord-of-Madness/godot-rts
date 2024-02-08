@@ -10,7 +10,7 @@ config_version=5
 
 [MonoCustomResourceRegistry]
 
-ClassPrefix="CUSTOM"
+ClassPrefix="___________________"
 SearchType=0
 ResourceScriptDirectories=["res://scripts"]
 
@@ -18,7 +18,7 @@ ResourceScriptDirectories=["res://scripts"]
 
 config/name="Rts Zápočťák"
 run/main_scene="res://scenes/Menu.tscn"
-config/features=PackedStringArray("4.1", "C#")
+config/features=PackedStringArray("4.2", "C#")
 config/icon="res://resources/icon.png"
 
 [debug]

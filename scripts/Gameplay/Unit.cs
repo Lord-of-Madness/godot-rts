@@ -236,6 +236,7 @@ namespace RTS.Gameplay
             {
                 Vector2 direction = Position.DirectionTo(NavAgent.GetNextPathPosition());
                 NavAgent.Velocity = Speed.GetSpeed() * direction;
+                
                 Graphics.MovingTo(direction);
             }
 

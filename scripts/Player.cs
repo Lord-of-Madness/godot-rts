@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using RTS.UI;
 using System.Linq;
 
+
 namespace RTS.Gameplay
 {
     //[StructLayout(LayoutKind.Explicit)]//Tried making it into C++esque  Variant-like object. Probably silly and completely unecessary. And it didn't even work(even making it a struct broke something somewhere)
@@ -42,6 +43,7 @@ namespace RTS.Gameplay
         public static Resource target;
         public static Resource hand;
     }
+    //[Tool]
     public partial class Player : Node
     {
         public int ID { get; private set; } = 3;
@@ -67,15 +69,33 @@ namespace RTS.Gameplay
         private GridContainer UnitsSelected;
 
         private Target hoveringOver;
+        [Export] private bool EditorPause { get; set; } = true;
 
         private HBoxContainer ResourceTab;
+        private Array<GameResource> gameresources;
         [Export]
-        public Godot.Collections.Array<GameResource> Game_Resources;
-        [ExportGroup("CombatStats")]
-        [Export(PropertyHint.Range, "0,1000,10,or_greater")]
-        float initialResource1 = 0;
-        [Export(PropertyHint.Range, "0,1000,10,or_greater")]
-        float initialResource2 = 0;
+        public Array<GameResource> Game_Resources
+        {
+            get { return gameresources; }
+            set
+            {
+
+                HBoxContainer rtab = GetNode<Camera2D>(nameof(Camera2D)).GetNode<CanvasLayer>(nameof(HUD)).GetNode<ColorRect>(nameof(TopBar)).GetNode<HBoxContainer>(nameof(ResourceTab));
+                gameresources = value;
+                for (int i = 0; i < gameresources.Count; i++)
+                {
+                    if (gameresources[i] == null)
+                    {
+                        gameresources[i] = new GameResource() {
+                            Name = nameof(GameResource) + i.ToString()
+                        };
+                        rtab.AddChild(gameresources[i]);
+                        gameresources[i].Owner = GetTree().EditedSceneRoot;
+                    }
+                }
+            }
+        }
+        //[ExportGroup("CombatStats")]
 
         public void JustHovered(Selectable target)
         {
@@ -107,7 +127,7 @@ namespace RTS.Gameplay
                 switch (value)
                 {
                     case ClickMode.Move:
-                        Input.SetCustomMouseCursor(Cursors.hand, hotspot:new Vector2(16,0));
+                        Input.SetCustomMouseCursor(Cursors.hand, hotspot: new Vector2(16, 0));
                         break;
                     case ClickMode.Attack:
                         Input.SetCustomMouseCursor(Cursors.target, hotspot: new Vector2(16, 16));
@@ -124,14 +144,14 @@ namespace RTS.Gameplay
             hoveringOver = new();
             camera = GetNode<Camera2D>(nameof(Camera2D));
             HUD = camera.GetNode<CanvasLayer>(nameof(HUD));
-            selectRectNode = HUD.GetNode<SelectRect>(nameof(SelectRect));
             localLevel = GetParent<Node2D>();
-            selectedUnits = new();
+            selectRectNode = HUD.GetNode<SelectRect>(nameof(SelectRect));
             TopBar = HUD.GetNode<ColorRect>(nameof(TopBar));
             ResourceTab = TopBar.GetNode<HBoxContainer>(nameof(ResourceTab));
+            selectedUnits = new();
             foreach (var res in Game_Resources)
             {
-                //ResourceTab.AddChild();
+                ResourceTab.AddChild(res);
             }
             BottomBar = HUD.GetNode<ColorRect>(nameof(BottomBar));
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
@@ -151,46 +171,55 @@ namespace RTS.Gameplay
             Cursors.target = ResourceLoader.Load("res://assets/MouseIcons/target.png");
             Cursors.hand = ResourceLoader.Load("res://assets/MouseIcons/hand.png");
             Clickmode = ClickMode.Move;
-            Game_Resources = new () { new(0) };
         }
         public override void _Process(double delta)
         {
             base._Process(delta);
-            var mouseposition = GetViewport().GetMousePosition();
-            var screenSize = GetViewport().GetVisibleRect().Size;
-            //GD.Print(screenSize);
-            //GD.Print(mouseposition);
-
-            if (mouseposition.X >= screenSize.X - 1)
+            if (Engine.IsEditorHint())
             {
-                camera.Translate(Vector2.Right * ScrollSpeed);
-                camera.Position = new Vector2(Math.Min(camera.Position.X, camera.LimitRight - camera.GetViewportRect().Size.X), camera.Position.Y);
-
-                //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
-                //These coordinates are being translated by pushing mouse to the sides of the screen.
-                //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top left corner of the viewport.
-                //so I am, after every translation, moving it back into the Topleft corner of the viewport within limits.
-                //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
-                //I mean there has to be a better way I just didn't find it
-
-
-                //Test if if we add a rectangle as a view screen in we can nudge it around.
-
+                if (!EditorPause)
+                {
+                    GD.Print(GetNode<CanvasLayer>(nameof(Camera2D)+"/"+nameof(HUD)).GetNode<ColorRect>(nameof(TopBar)).GetNode<HBoxContainer>(nameof(ResourceTab)));
+                }
             }
-            else if (mouseposition.X <= 0)
+            else
             {
-                camera.Translate(Vector2.Left * ScrollSpeed);
-                camera.Position = new Vector2(Math.Max(camera.Position.X, camera.LimitLeft), camera.Position.Y);
-            }
-            if (mouseposition.Y >= screenSize.Y - 1)
-            {
-                camera.Translate(Vector2.Down * ScrollSpeed);
-                camera.Position = new Vector2(camera.Position.X, Math.Min(camera.Position.Y, camera.LimitBottom - camera.GetViewportRect().Size.Y));
-            }
-            else if (mouseposition.Y <= 0)
-            {
-                camera.Translate(Vector2.Up * ScrollSpeed);
-                camera.Position = new Vector2(camera.Position.X, Math.Max(camera.Position.Y, camera.LimitTop));
+                var mouseposition = GetViewport().GetMousePosition();
+                var screenSize = GetViewport().GetVisibleRect().Size;
+                //GD.Print(screenSize);
+                //GD.Print(mouseposition);
+
+                if (mouseposition.X >= screenSize.X - 1)
+                {
+                    camera.Translate(Vector2.Right * ScrollSpeed);
+                    camera.Position = new Vector2(Math.Min(camera.Position.X, camera.LimitRight - camera.GetViewportRect().Size.X), camera.Position.Y);
+
+                    //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
+                    //These coordinates are being translated by pushing mouse to the sides of the screen.
+                    //However the nodes actual coordinates aren't confined to the Limits of the camera. And not even to the top left corner of the viewport.
+                    //so I am, after every translation, moving it back into the Topleft corner of the viewport within limits.
+                    //For some reason GloabalPosition of anything is just Position and this is the only way of getting them real numbers.
+                    //I mean there has to be a better way I just didn't find it
+
+
+                    //Test if if we add a rectangle as a view screen in we can nudge it around.
+
+                }
+                else if (mouseposition.X <= 0)
+                {
+                    camera.Translate(Vector2.Left * ScrollSpeed);
+                    camera.Position = new Vector2(Math.Max(camera.Position.X, camera.LimitLeft), camera.Position.Y);
+                }
+                if (mouseposition.Y >= screenSize.Y - 1)
+                {
+                    camera.Translate(Vector2.Down * ScrollSpeed);
+                    camera.Position = new Vector2(camera.Position.X, Math.Min(camera.Position.Y, camera.LimitBottom - camera.GetViewportRect().Size.Y));
+                }
+                else if (mouseposition.Y <= 0)
+                {
+                    camera.Translate(Vector2.Up * ScrollSpeed);
+                    camera.Position = new Vector2(camera.Position.X, Math.Max(camera.Position.Y, camera.LimitTop));
+                }
             }
 
         }
