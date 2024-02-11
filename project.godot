@@ -12,7 +12,7 @@ config_version=5
 
 ClassPrefix="___________________"
 SearchType=0
-ResourceScriptDirectories=["res://scripts"]
+ResourceScriptDirectories=["res://scripts", "res://assets"]
 
 [application]
 
@@ -20,10 +20,6 @@ config/name="Rts Zápočťák"
 run/main_scene="res://scenes/Menu.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://resources/icon.png"
-
-[debug]
-
-settings/stdout/verbose_stdout=true
 
 [display]
 
@@ -35,10 +31,6 @@ window/stretch/mode="viewport"
 
 project/assembly_name="Rts Zápočťák"
 project/assembly_reload_attempts=5
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/MonoCustomResourceRegistry/plugin.cfg")
 
 [filesystem]
 

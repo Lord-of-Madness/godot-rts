@@ -15,14 +15,11 @@ namespace RTS.mainspace
 		{
 			Input.MouseMode = Input.MouseModeEnum.Confined;
 
-            MainMenu = GetNode<Control>("MainMenu");
-			ChapterMenu = GetNode<Control>("ChapterMenu");
+            MainMenu = GetNode<Control>(nameof(MainMenu));
+			ChapterMenu = GetNode<Control>(nameof(ChapterMenu));
 			MainMenu.GetNode<Button>("ButtonCampaign").Pressed += Campaign;
-
-            Button buttonChapters = GetNode<Button>("MainMenu/ButtonChapters");
-			buttonChapters.Pressed += Chapters;
-            Button buttonExit = GetNode<Button>("MainMenu/ButtonExit");
-			buttonExit.Pressed += ExitGame;
+            MainMenu.GetNode<Button>("ButtonChapters").Pressed += Chapters;
+            MainMenu.GetNode<Button>("ButtonExit").Pressed += ExitGame;
 
 			DirAccess directory = DirAccess.Open("res://scenes/Levels");
 			//TODO could add error checking and file validity ahead (currently we are doing it upon trying to click said button.)

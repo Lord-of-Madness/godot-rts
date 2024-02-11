@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
-[ext_resource type="Script" path="res://scripts/Player.cs" id="3_wxev4"]
+[ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="3_edfn5"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
 [ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Building_Barrack.tscn" id="7_ma2uy"]
@@ -16,7 +16,8 @@ size = Vector2(46, 46)
 script = ExtResource("1_8ua6g")
 
 [node name="Player" parent="." node_paths=PackedStringArray("Game_Resources") instance=ExtResource("1")]
-script = ExtResource("3_wxev4")
+script = ExtResource("3_edfn5")
+ScrollSpeed = 5.0
 Game_Resources = []
 
 [node name="Ground" type="TileMap" parent="."]
@@ -44,33 +45,30 @@ texture = ExtResource("3")
 
 [node name="units" type="Node" parent="."]
 
-[node name="Unit" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("4_b23cp")]
+[node name="Unit" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(173.322, 287.648)
 floor_stop_on_slope = true
 safe_margin = 0.1
-owner = NodePath("../../Player")
 
-[node name="Unit2" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("4_b23cp")]
+[node name="Unit2" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(315.349, 295.123)
 floor_stop_on_slope = true
 safe_margin = 0.1
-owner = NodePath("../../Player")
 
-[node name="Unit3" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("6_5q6jk")]
+[node name="Unit3" parent="units" instance=ExtResource("6_5q6jk")]
 position = Vector2(179.73, 368.806)
 floor_stop_on_slope = true
 safe_margin = 0.1
-owner = NodePath("../../Player")
 
-[node name="Unit4" parent="units" node_paths=PackedStringArray("owner") instance=ExtResource("6_5q6jk")]
+[node name="Unit4" parent="units" instance=ExtResource("6_5q6jk")]
 position = Vector2(304.563, 376.706)
 floor_stop_on_slope = true
 safe_margin = 0.1
-owner = NodePath("../../Player")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(0, -1)
 
-[node name="Building" parent="." node_paths=PackedStringArray("owner") instance=ExtResource("7_ma2uy")]
+[node name="Building" parent="." instance=ExtResource("7_ma2uy")]
 position = Vector2(661, 426)
-owner = NodePath("../Player")
+
+[editable path="Player"]

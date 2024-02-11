@@ -1,4 +1,4 @@
-﻿using RTS.Gameplay;
+using RTS.Gameplay;
 using RTS.mainspace;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,12 @@ namespace RTS.Gameplay
 
         public Vector2 RallyPoint;
         Line2D RallyPath;//TODO: update when reset (use the navagent we stole from unit)
+
+        public override void CleanCommandQueue()
+        {
+            throw new NotImplementedException();
+        }
+
         public int CompareTo(Building other)
         {
             return GetIndex().CompareTo(other.GetIndex());//For now
@@ -26,5 +32,9 @@ namespace RTS.Gameplay
             EmitSignal(SignalName.SignalDead);
             Graphics.DeathAnim();//At the end it will remove the unit
         }
+        /*public override void _Ready()
+        {
+            base._Ready();
+        }*/
     }
 }

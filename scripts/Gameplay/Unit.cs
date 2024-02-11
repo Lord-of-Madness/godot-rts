@@ -85,7 +85,7 @@ namespace RTS.Gameplay
             Deselect();
             following = false;
         }
-        public void CleanCommandQueue()
+        public override void CleanCommandQueue()
         {
             Detarget();
         }
@@ -127,8 +127,7 @@ namespace RTS.Gameplay
                 timer += delta;
                 if (timer >= 1)
                 {
-                    if (CurrentAction != UnitAction.Idle)
-                        GD.Print(CurrentAction);
+                    //if (CurrentAction != UnitAction.Idle)GD.Print(CurrentAction);
                     timer = 0;
                 }
             }
@@ -214,7 +213,6 @@ namespace RTS.Gameplay
 
         private void Detarget()
         {
-            
             GoIdle();
             DetargetAttacks();
             //navAgent.TargetPosition = Position;
@@ -272,13 +270,10 @@ namespace RTS.Gameplay
             CurrentAction = UnitAction.Dying;
             EmitSignal(SignalName.SignalDisablingSelection,this);
             EmitSignal(SignalName.SignalDead);
-            CleanCommandQueue();
-
+            //CleanCommandQueue();
             //leave corpse?
             Graphics.DeathAnim();//At the end it will remove the unit
 
         }
-
-        
     }
 }

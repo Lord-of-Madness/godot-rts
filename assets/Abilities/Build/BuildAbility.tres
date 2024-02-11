@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bf0xj0vv4rf5p"]
+
+[ext_resource type="Script" path="res://assets/Abilities/Build/BuildAbility.cs" id="1_vy6wa"]
+
+[resource]
+script = ExtResource("1_vy6wa")

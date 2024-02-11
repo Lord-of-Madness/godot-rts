@@ -101,7 +101,7 @@ namespace RTS.Gameplay
             if(target.type==Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
                 targetInRange = true;
             else targetInRange = false;
-            GD.Print(targetInRange);
+            //GD.Print(targetInRange);
         }
         public void Detarget()
         {

@@ -34,7 +34,7 @@ namespace RTS.UI
             switch ((Buttons)id)
             {
                 case Buttons.Save:
-                    SavingLoading.Save();
+                    SavingLoading.Save(((Player)Owner).localLevel);
                     break;
                 case Buttons.Load:
                     SavingLoading.Load();

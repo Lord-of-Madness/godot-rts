@@ -24,9 +24,9 @@ namespace RTS.Gameplay
         protected ProgressBar HealthBar;
         public void HealthChanged()
         {
-            GD.Print(HP, " ", Name);
+            //GD.Print(HP, " ", Name);
             HealthBar.Value = Math.Max(0, HP);
-            GD.PrintErr(EmitSignal(SignalName.SignalHealthChanged));
+            EmitSignal(SignalName.SignalHealthChanged);
             if (HP <= 0) Dead();
         }
         public abstract void Dead();

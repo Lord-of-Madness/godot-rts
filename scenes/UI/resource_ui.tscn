@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://ex6vndrp1hbs"]
+
+[ext_resource type="Script" path="res://scripts/UI/GameResource.cs" id="1_h12dt"]
+[ext_resource type="Texture2D" uid="uid://ch0a8tgj7gkck" path="res://assets/Resources/Scrap.png" id="2_4kdxr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_gwltg"]
+
+[node name="ResourceUI" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+script = ExtResource("1_h12dt")
+
+[node name="Icon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+texture = ExtResource("2_4kdxr")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="ValueLabel" type="Label" parent="."]
+layout_mode = 2
+text = "100"
+label_settings = SubResource("LabelSettings_gwltg")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
