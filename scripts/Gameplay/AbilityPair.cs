@@ -8,12 +8,6 @@ namespace RTS.Gameplay
         [Export]
         public int pos;
         [Export]
-        public Ability ability;
-        /*
-        public AbilityPair(int pos, Ability ability)
-        {
-            this.pos = pos;
-            this.ability = ability;
-        }*/
+        public PackedScene ability;
     }
 }

@@ -1,14 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cg1bn2ipijxef"]
+[gd_scene load_steps=4 format=3 uid="uid://cg1bn2ipijxef"]
 
-[ext_resource type="PackedScene" uid="uid://cjhgu6y8fsaba" path="res://scenes/Gameplay/Building.tscn" id="1_1qpst"]
+[ext_resource type="PackedScene" uid="uid://cjhgu6y8fsaba" path="res://scenes/Gameplay/Building.tscn" id="1_m2r6f"]
+[ext_resource type="Script" path="res://assets/Buildings/Barack/Building_Barrack.cs" id="2_dfrfr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sdjb5"]
 size = Vector2(144.001, 144.999)
 
-[node name="Building" instance=ExtResource("1_1qpst")]
+[node name="Barrack" instance=ExtResource("1_m2r6f")]
+script = ExtResource("2_dfrfr")
 
 [node name="CollisionShape2D" parent="." index="0"]
 shape = SubResource("RectangleShape2D_sdjb5")
+
+[node name="Selected" parent="Graphics" index="0"]
+position = Vector2(2.01871, -15.2647)
+scale = Vector2(1.25936, 1.16176)
 
 [node name="Sprite2D" parent="Graphics" index="1"]
 scale = Vector2(2.32813, 2.32813)

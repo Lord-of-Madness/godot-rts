@@ -38,14 +38,14 @@ namespace RTS.scripts.Gameplay
         private ColorRect BottomBar;
         private TextureRect UnitPortrait;
         private GridContainer UnitsSelected;
-        private GridContainer UnitActions;
+        private UnitActions UnitActions;
         [Export(PropertyHint.Range, "0,20,1,or_greater")]
         public float ScrollSpeed = 5;
         private Target hoveringOver;
         private HBoxContainer ResourceTab;
 
         private ClickMode cm;
-        protected ClickMode Clickmode
+        public ClickMode Clickmode
         {
             get { return cm; }
             set
@@ -57,6 +57,7 @@ namespace RTS.scripts.Gameplay
                         Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new Vector2(16, 0));
                         break;
                     case ClickMode.Attack:
+                    case ClickMode.UseAbility:
                         Input.SetCustomMouseCursor(Cursors.Target, hotspot: new Vector2(16, 16));
                         break;
                     default:
@@ -108,9 +109,7 @@ namespace RTS.scripts.Gameplay
                     SizeFlagsVertical = Control.SizeFlags.ExpandFill
                 });
             }
-            UnitActions = BottomBar.GetNode<GridContainer>(nameof(UnitActions));
-            //Cursors.target = ResourceLoader.Load("res://assets/MouseIcons/target.png");
-            //Cursors.hand = ResourceLoader.Load("res://assets/MouseIcons/hand.png");
+            UnitActions = BottomBar.GetNode<UnitActions>(nameof(UnitActions));
         }
         private void CameraMovement()
         {
@@ -299,39 +298,23 @@ namespace RTS.scripts.Gameplay
                 suEnum.MoveNext();
                 ((TextureRect)UnitsSelected.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;
             }
+
+
             if (Selection.Count > 0)
             {
                 Selectable HighlightedUnit = Selection.Min;//TODO: It is the smallest for now but that is only default it should be Tabed through
                 UnitPortrait.Texture = HighlightedUnit.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
-
-                
-
-                int buttoncount = UnitActions.GetChildCount();
-                foreach (var ability in UnitActions.GetChildren())//Clean up the old buttons
-                {
-                    UnitActions.RemoveChild(ability);
-                    ability.QueueFree();
-                }
-                for (int i = 0; i < buttoncount; i++)
-                {
-                    Button button = new()
-                    {
-                        Disabled = true,
-                        SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-                        SizeFlagsVertical = Control.SizeFlags.ExpandFill
-                    };//This feels wasteful but safer. I know not of a way to otherwise clean up the buttons safely.
-                    if (HighlightedUnit.Abilities.TryGetValue(i, out Ability ability))
-                    {
-                        button.Pressed += ability.OnClick;//Attatch unit abilities to them
-                        button.Icon = ability.Icon;
-                        button.Disabled = false;
-                        button.Text = ability.Text;
-                    }
-                    UnitActions.AddChild(button);
-                }
-
-
+                UnitActions.FillGridButtons(HighlightedUnit.Abilities,this);
+}
+            else
+            {
+                UnitActions.DestroyChildren();
             }
+
+
+
+            
         }
+        
     }
 }

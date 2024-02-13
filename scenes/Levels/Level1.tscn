@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="3_edfn5"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
-[ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Building_Barrack.tscn" id="7_ma2uy"]
+[ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Barack/Building_Barrack.tscn" id="7_ma2uy"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)

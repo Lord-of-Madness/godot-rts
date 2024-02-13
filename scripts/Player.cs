@@ -89,7 +89,8 @@ namespace RTS.Gameplay
             Move,
             Attack,
             Patrol,
-            Defend
+            Defend,
+            UseAbility
         }
 
         public override void _Ready()

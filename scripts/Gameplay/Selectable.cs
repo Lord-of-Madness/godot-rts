@@ -34,6 +34,7 @@ namespace RTS.Gameplay
         [Export]
         public Array<AbilityPair> ExportAbilities = new();
 
+        public Node AbilityNode;
         public Dictionary<int, Ability> Abilities = new();
 
         public Area2D VisionArea;
@@ -76,11 +77,14 @@ namespace RTS.Gameplay
             Graphics = GetNode<UnitGraphics>(nameof(Graphics));
             NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
             VisionArea = GetNode<Area2D>(nameof(VisionArea));
+            AbilityNode = GetNode<Node>(nameof(Abilities));
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
             Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>("Player");
             foreach (var abilityPair in ExportAbilities)//Dictionaries don't work in Export so gotta hack it in like this to get a proper Dict
             {
-                Abilities.Add(abilityPair.pos, abilityPair.ability);
+                var ab = abilityPair.ability.Instantiate<Ability>();
+                Abilities.Add(abilityPair.pos, ab);
+                AbilityNode.AddChild(ab);
             }
         }
         /// <summary>

@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://dwsji62gj53dj"]
 
 [ext_resource type="PackedScene" uid="uid://cbma510xjxclo" path="res://scenes/Gameplay/Unit.tscn" id="1_4rkn0"]
+[ext_resource type="PackedScene" uid="uid://cwmv2dg1c8pkm" path="res://assets/Abilities/Build/BuildAbility.tscn" id="2_lqrmv"]
 [ext_resource type="Texture2D" uid="uid://bd7elt3debrsf" path="res://assets/Units/knight/Portrait.png" id="2_qo5nv"]
-[ext_resource type="Resource" uid="uid://bf0xj0vv4rf5p" path="res://assets/Abilities/Build/BuildAbility.tres" id="2_vgswc"]
 [ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="2_wqkhd"]
 [ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="3_y7r6o"]
 [ext_resource type="PackedScene" uid="uid://b8fpqhh5ad6jf" path="res://scenes/Anims/AttackAnim.tscn" id="5_8vowj"]
@@ -10,7 +10,7 @@
 [sub_resource type="Resource" id="Resource_yx28d"]
 script = ExtResource("2_wqkhd")
 pos = 7
-ability = ExtResource("2_vgswc")
+ability = ExtResource("2_lqrmv")
 
 [node name="Unit" instance=ExtResource("1_4rkn0")]
 speed = 5.0

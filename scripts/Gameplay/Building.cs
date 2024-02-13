@@ -10,6 +10,7 @@ using Godot;
 
 namespace RTS.Gameplay
 {
+    [GlobalClass]
     public partial class Building : Damageable, IComparable<Building>
     {
 

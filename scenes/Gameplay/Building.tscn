@@ -29,6 +29,9 @@ region_rect = Rect2(18, 24, 39, 39)
 
 [node name="Graphics" parent="." instance=ExtResource("2_q8lde")]
 
+[node name="Selected" parent="Graphics" index="0"]
+polygon = PackedVector2Array(-55.1666, -52, -62.5, -44, -64.3333, 68, -53.3333, 82, 49.3333, 82, 60.3333, 72, 60.3333, -40, 51.1666, -54, -2, -54)
+
 [node name="Sprite2D" parent="Graphics" index="1"]
 texture = ExtResource("3_iircv")
 
@@ -55,6 +58,8 @@ max_speed = 85235.1
 shape = SubResource("CircleShape2D_nwlgh")
 
 [node name="Attacks" type="Node2D" parent="."]
+
+[node name="Abilities" type="Node" parent="."]
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

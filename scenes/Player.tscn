@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://be7aym5fxoaaf"]
+[gd_scene load_steps=14 format=3 uid="uid://be7aym5fxoaaf"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_xjmmm"]
 [ext_resource type="PackedScene" uid="uid://ex6vndrp1hbs" path="res://scenes/UI/resource_ui.tscn" id="2_c6qj7"]
@@ -7,6 +7,8 @@
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="4_3ymha"]
 [ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
 [ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
+[ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
+[ext_resource type="Script" path="res://scripts/Gameplay/AbilityButton.cs" id="8_pkmlo"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
 keycode = 4194305
@@ -149,12 +151,14 @@ offset_top = 8.0
 offset_right = -0.00256348
 offset_bottom = 0.391968
 columns = 6
+script = ExtResource("7_tqpuo")
 
 [node name="Button1" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 disabled = true
+script = ExtResource("8_pkmlo")
 
 [node name="Button2" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
 layout_mode = 2

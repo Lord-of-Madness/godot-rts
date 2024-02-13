@@ -40,5 +40,7 @@ shape = SubResource("CircleShape2D_nwlgh")
 
 [node name="Attacks" type="Node2D" parent="."]
 
+[node name="Abilities" type="Node" parent="."]
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
