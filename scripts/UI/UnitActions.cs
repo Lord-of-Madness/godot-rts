@@ -9,7 +9,7 @@ namespace RTS.Gameplay
     {
         [Export]
         int rows = 4;
-        int BUTTON_COUNT { get => rows * Columns; }
+        public int BUTTON_COUNT { get => rows * Columns; }
         public void DestroyChildren()
         {
             foreach (var ability in GetChildren())//Clean up the old buttons
@@ -18,8 +18,14 @@ namespace RTS.Gameplay
                 ability.QueueFree();
             }
         }
+        HumanPlayer player;
+        public override void _Ready()
+        {
+            base._Ready();
+            player = GetParent().GetParent().GetParent().GetParent<HumanPlayer>();
+        }
 
-        public void FillGridButtons(Godot.Collections.Dictionary<int, Ability> abilities, HumanPlayer player)
+        public void FillGridButtons(Godot.Collections.Dictionary<int, Ability> abilities)
         {
             DestroyChildren();
             for (int i = 0; i < BUTTON_COUNT; i++)
@@ -29,10 +35,10 @@ namespace RTS.Gameplay
                 if (abilities.TryGetValue(i, out Ability ability))
                 {
                     button.Ability = ability;
-                    if (ability.Targeted) {
+                    if (ability is TargetedAbility targetedAbility) {
                         button.Pressed += () => {
                             player.Clickmode = Player.ClickMode.UseAbility;
-                            //TODO: player.ActiveAbility = ability ???
+                            player.HangingAbility = targetedAbility;
                             //We have to give the Selectable in charge of this Ability the order to perform it. Through the player somehow. Also handle things like the Unit's death etc. 
                         };
                     }

@@ -1,4 +1,6 @@
 using Godot;
+using System;
+using System.Numerics;
 
 namespace RTS.Physics
 {
@@ -6,26 +8,34 @@ namespace RTS.Physics
     {
         public const int TILESIZE = 16;
     }
-    public class PhysicsValues
+    public static class PhysicsValues
     {
-        public float Gamespeed { get; set; }
+        public static float Gamespeed { get; set; }
     }
-    public record struct TilesPerSecond
+    public record struct TilesPerSecond:
+        IMultiplyOperators<TilesPerSecond,float,TilesPerSecond>
     {
-        public static PhysicsValues physicsValues;
+        //private static PhysicsValues physicsValues;
         public float value;
+
+        //public static PhysicsValues PhysicsValues { get => physicsValues; set => physicsValues = value; }
+
         public TilesPerSecond(float value)
         {
             this.value = value * PhysicsConsts.TILESIZE;
         }
+        public TilesPerSecond(double value)
+        {
+            this.value = (float)(value * PhysicsConsts.TILESIZE);
+        }
         public static explicit operator TilesPerSecond(float value) => new(value);
         public static explicit operator float(TilesPerSecond value) => value.value;
-        public float GetSpeed() => value * physicsValues.Gamespeed;
+        public readonly float Speed=> value * PhysicsValues.Gamespeed;
         public static TilesPerSecond operator *(TilesPerSecond tps, float mult) => new(tps.value * mult);
         public static TilesPerSecond operator *(float mult, TilesPerSecond tps) => tps * mult;
-        public static Vector2 operator *(TilesPerSecond tps, Vector2 direction) => direction * tps.GetSpeed();
-        public static Vector2 operator *(Vector2 direction, TilesPerSecond tps) => direction * tps;
-        public static Tilemeter operator *(TilesPerSecond tps, Second s) => new(tps.value * s.value);
+        public static Godot.Vector2 operator *(TilesPerSecond tps, Godot.Vector2 direction) => direction * tps.Speed;
+        public static Godot.Vector2 operator *(Godot.Vector2 direction, TilesPerSecond tps) => tps * direction;
+        public static Tilemeter operator *(TilesPerSecond tps, Second s) => new(tps.value * s.Value);
         public static Tilemeter operator *(Second s, TilesPerSecond tps) => tps * s;
     }
     /// <summary>
@@ -33,29 +43,62 @@ namespace RTS.Physics
     /// </summary>
     public readonly record struct Persec
     {
-        public static PhysicsValues physicsValues;
+        //public static PhysicsValues physicsValues;
         private readonly float value;
         public Persec(float value)
         {
             this.value = value;
         }
-        public float GetActionsPerSecond() =>value*physicsValues.Gamespeed;
+        public float ActionsPerSecond => value * PhysicsValues.Gamespeed;
     }
-    public record struct Tilemeter//Tile on its own doesn't sound like a unit of distance.
+    public readonly record struct Tilemeter//Tile on its own doesn't sound like a unit of distance.
     {
-        public float value;
+        public readonly float value;
         public Tilemeter(float value) { this.value = value; }
-        public static TilesPerSecond operator /(Tilemeter t, Second s) => new(t.value / s.value);
+        public Tilemeter(double value) { this.value = (float)value; }
+        public static TilesPerSecond operator /(Tilemeter t, Second s) => new(t.value / s.Value);
 
         public static explicit operator Tilemeter(float value) => new(value);
         public static explicit operator float(Tilemeter value) => value.value;
-        public float ToPixels() => value * PhysicsConsts.TILESIZE;
+        public readonly float Pixels => value * PhysicsConsts.TILESIZE;
 
     }
-    public record struct Second
+    public record struct Second : 
+        IComparable<float>,
+        IAdditionOperators<Second,float,Second>,
+        IAdditionOperators<Second, double, Second>,
+        ISubtractionOperators<Second,float,Second>,
+        ISubtractionOperators<Second, double, Second>,
+        IComparable<Second>
     {
-        public float value;
+        //private static PhysicsValues physicsValues;
+        private readonly double value;
+        public readonly double Value { get => value; }
         public Second(float value) { this.value = value; }
+        public Second(double value) { this.value = value; }
+        public static bool operator ==(Second s1, float s2) => s1.value == s2;
+        public static bool operator !=(Second s1, float s2) => s1.value != s2;
+        public static bool operator <=(Second s1, float s2) => s1.value <= s2;
+        public static bool operator >=(Second s1, float s2) => s1.value >= s2;
+        public static bool operator <(Second s1, float s2) => s1.value < s2;
+        public static bool operator >(Second s1, float s2) => s1.value > s2;
+
+        public static bool operator <=(Second s1, Second s2) => s1.value <= s2.value;
+        public static bool operator >=(Second s1, Second s2) => s1.value >= s2.value;
+        public static bool operator <(Second s1, Second s2) => s1.value < s2.value;
+        public static bool operator >(Second s1, Second s2) => s1.value > s2.value;
+
+
+        public static Second operator -(Second s1, float s2) => new(s1.value - s2 * PhysicsValues.Gamespeed);
+        public static Second operator +(Second s1, float s2) => new(s1.value + s2 * PhysicsValues.Gamespeed);
+        public static Second operator +(Second s1, double s2)=>new(s1.value + s2 * PhysicsValues.Gamespeed);
+        public static Second operator -(Second s1, double s2) => new(s1.value - s2 * PhysicsValues.Gamespeed);
+
+        public static implicit operator Second(float v) => new(v);
+
+        public readonly int CompareTo(float other) => value.CompareTo(other);
+
+        public int CompareTo(Second other) => value.CompareTo(other.value);
     }
     public static class PhysicsExtensions
     {

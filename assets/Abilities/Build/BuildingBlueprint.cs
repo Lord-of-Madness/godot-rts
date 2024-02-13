@@ -8,24 +8,22 @@ namespace RTS.Gameplay
     {
         PackedScene packed;
         Building building;
-        [Export]
-        PackedScene PackedBuilding { get; set;
-            /*{
-                var node = value.Instantiate<CharacterBody2D>();
-                //GD.Print(((CSharpScript)node.GetScript()).SourceCode);
-                GD.Print(node.GetChildCount());
-
-                GD.Print(GD.Load<PackedScene>("res://assets/Buildings/Barack/Building_Barrack.tscn").Instantiate<Building>().Name);
-
-
-                building = value.Instantiate<Building>();
-                GD.Print(building.Name);
-                packed = value;
-            }*/
-        }
-        public Building GetBuilding()
+        public Building Building
         {
-            return PackedBuilding.Instantiate<Building>();
+            get { 
+                building ??= PackedBuilding.Instantiate<Building>();//this Typechecks at runtime.
+                return building;
+            }
+        }
+        [Export]
+        PackedScene PackedBuilding { get=>packed; set
+            //The following makes sense only in Toolmode. But it also needs Building to exist in Toolmode otherwise Building class doesn't exist yet and Instantiate wouldn't instantiate into Building but CharacterBody2D
+            //Note: Just making Building into a Toolscript isn't enough. Perhaps C++?
+            //Its purpose is to Typecheck the PackedScene for PackedScenes are untyped
+            {
+                //building = value.Instantiate<Building>();
+                packed = value;
+            }
         }
     }
 }

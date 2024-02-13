@@ -1,6 +1,7 @@
 using Godot;
 using RTS.Physics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RTS.Gameplay
@@ -9,7 +10,19 @@ namespace RTS.Gameplay
 
     public partial class Unit : Damageable, IComparable<Unit>
     {
-        
+        /// <summary>
+        /// <para>This should Calculate the value of a Unit usefull for ordering and for AI simulations</para>
+        /// <para>
+        /// It oughta be a combination of: ammount of abilities, Cost, HP, DPS etc.
+        /// </para>
+        /// </summary>
+        public double UnitValue { get; set; }
+        /// <summary>
+        /// <para>This oughta give us a Value of a freshly recruted unit or in its prime. (freshly recruited units might not start with max Energy/Cooldowns for balancing reasons)</para>
+        /// <para>Should be similar to <c>UnitValue</c> but use MAXHP instead of HP etc. </para>
+        /// <para>Have to ensure that no two Units have the same <c>BaseUnitValue</c> so that they are always sorted toghther in the UI</para>
+        /// </summary>
+        public double BaseUnitValue { get; set; }
 
         public enum UnitAction
         {
@@ -31,7 +44,13 @@ namespace RTS.Gameplay
         public TilesPerSecond Speed { get => (TilesPerSecond)speed; set { speed = (float)value; } }
 
 
-
+        private Queue<UnitAction> CommandQueue = new();
+        /*
+         * TODO: Implement Queuing of Commands. (UnitAction might not be the thing)
+         * I am considering making some kind of Command Class cause we need to store a bunch of data about different Commands.
+         * Well technicaly we need to store what is the UnitAction for the duration of this here Command
+         * And in case of Abilities we need to ensure we know what ability does the thing.         
+         */
 
         [ExportGroup("CombatStats")]
 
@@ -64,7 +83,7 @@ namespace RTS.Gameplay
         }
 
         public Target target;
-        private bool following;
+        private bool following = false;
 
         public override void _Ready()
         {
@@ -83,13 +102,14 @@ namespace RTS.Gameplay
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
             GoIdle();
             Deselect();
-            following = false;
         }
         public override void CleanCommandQueue()
         {
+            CommandQueue = new();
             Detarget();
         }
-        public override void Command(Player.ClickMode clickMode, Target target)
+        public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
+            //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
         {
             if (CurrentAction == UnitAction.Dying) return;
             if (target.type == Target.Type.Selectable && target.selectable == this) return;
@@ -103,6 +123,10 @@ namespace RTS.Gameplay
                 case Player.ClickMode.Attack:
                     CurrentAction = UnitAction.Attack;
                     AttackCommand(target);
+                    break;
+                case Player.ClickMode.UseAbility:
+                    //TODO:CurentAction = UnitAction.?
+                    UseAbility(target,ability);
                     break;
             }
         }
@@ -178,6 +202,14 @@ namespace RTS.Gameplay
             MoveTo(target);//Moving as base plus extra
             RetargetAttacks(target);
         }
+        public void UseAbility(Target target,Ability ability)
+        {
+            MoveTo(target);
+            if(ability is TargetedAbility targetedAbility)
+            {
+                targetedAbility.OnTargetRecieved(target);//TODO: this is clearly kinda wrong and all
+            }
+        }
 
         private void RetargetAttacks(Target target)
         {
@@ -233,7 +265,7 @@ namespace RTS.Gameplay
             if (!NavAgent.IsNavigationFinished())
             {
                 Vector2 direction = Position.DirectionTo(NavAgent.GetNextPathPosition());
-                NavAgent.Velocity = Speed.GetSpeed() * direction;
+                NavAgent.Velocity = Speed.Speed * direction;
                 
                 Graphics.MovingTo(direction);
             }
@@ -260,7 +292,12 @@ namespace RTS.Gameplay
         /// </returns>
         public int CompareTo(Unit other)
         {
-            //Currently ordered by age in scene tree (should be last resort)
+            if (BaseUnitValue != other.BaseUnitValue) return BaseUnitValue.CompareTo(other.BaseUnitValue);
+            if (UnitValue != other.UnitValue) return UnitValue.CompareTo(other.UnitValue);
+
+            if(HP != other.HP) { return HP.CompareTo(other.HP); }//This is a neat sorting to see who needs the least and the most healing (Oughta delete it once we implement UnitValue)
+
+            //Ordered by age in scene tree (should be last resort)
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
         }
 

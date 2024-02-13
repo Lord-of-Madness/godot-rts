@@ -10,8 +10,7 @@ namespace RTS.Gameplay
         [Export] bool fogofwar;
         public override void _Ready()
         {
-            TilesPerSecond.physicsValues = new() { Gamespeed = Gamespeed };
-            Persec.physicsValues = new() { Gamespeed = Gamespeed };
+            PhysicsValues.Gamespeed = Gamespeed;
             if (fogofwar)
             {
 

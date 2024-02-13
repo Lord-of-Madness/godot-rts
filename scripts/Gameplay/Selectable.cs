@@ -55,7 +55,7 @@ namespace RTS.Gameplay
         {
             Graphics.Deselect();
         }
-#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles (Godot uses GDScripts naming conventions and VisualStudio doesn't like it at all)
         public void _on_mouse_entered()
 #pragma warning restore IDE1006 // Naming Styles
         {
@@ -67,10 +67,7 @@ namespace RTS.Gameplay
         {
             Beholder.DeHovered(this);
         }
-        public virtual void Command(Player.ClickMode clickMode, Target target)
-        {
-            //Nothing happens
-        }
+        public abstract void Command(Player.ClickMode clickMode, Target target, Ability ability = null);
         public abstract void CleanCommandQueue();
         public override void _Ready()
         {
@@ -78,11 +75,12 @@ namespace RTS.Gameplay
             NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
             VisionArea = GetNode<Area2D>(nameof(VisionArea));
             AbilityNode = GetNode<Node>(nameof(Abilities));
-            ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.ToPixels();
+            ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.Pixels;
             Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>("Player");
             foreach (var abilityPair in ExportAbilities)//Dictionaries don't work in Export so gotta hack it in like this to get a proper Dict
             {
                 var ab = abilityPair.ability.Instantiate<Ability>();
+                ab.OwningSelectable = this;//Can't use constructors cause Instantiate doesn't work with em
                 Abilities.Add(abilityPair.pos, ab);
                 AbilityNode.AddChild(ab);
             }
@@ -95,7 +93,7 @@ namespace RTS.Gameplay
             if (other is Unit otherunit)
             {
                 if (this is Building) return -1;
-                else if (this is Unit unit) return unit.CompareTo(otherunit);
+                else if (this is Unit unit) return unit.CompareTo(otherunit);//Not certain if these can even be called. Wouldn't the tighter Comparer be used anyway?
             }
             else if (other is Building otherbuilding)
             {
@@ -103,8 +101,8 @@ namespace RTS.Gameplay
                 else if (this is Building building) return building.CompareTo(otherbuilding);
             }
 
-            //Currently ordered by age in scene tree (should be last resort)
-            return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
+            //Ordering by age in SceneTree-> only happens if we haven't implemented better ordering
+            return GetIndex().CompareTo(other.GetIndex());
 
         }
     }

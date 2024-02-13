@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://be7aym5fxoaaf"]
+[gd_scene load_steps=13 format=3 uid="uid://be7aym5fxoaaf"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_xjmmm"]
 [ext_resource type="PackedScene" uid="uid://ex6vndrp1hbs" path="res://scenes/UI/resource_ui.tscn" id="2_c6qj7"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
 [ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
 [ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
-[ext_resource type="Script" path="res://scripts/Gameplay/AbilityButton.cs" id="8_pkmlo"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
 keycode = 4194305
@@ -152,151 +151,6 @@ offset_right = -0.00256348
 offset_bottom = 0.391968
 columns = 6
 script = ExtResource("7_tqpuo")
-
-[node name="Button1" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-script = ExtResource("8_pkmlo")
-
-[node name="Button2" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button3" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button4" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button5" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button6" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button7" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button8" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button9" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button10" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button11" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button12" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button13" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button14" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button15" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button16" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button17" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button18" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button19" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button20" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button21" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button22" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button23" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
-
-[node name="Button24" type="Button" parent="Camera2D/HUD/BottomBar/UnitActions"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-disabled = true
 
 [node name="UnitPortrait" type="TextureRect" parent="Camera2D/HUD/BottomBar"]
 layout_mode = 1

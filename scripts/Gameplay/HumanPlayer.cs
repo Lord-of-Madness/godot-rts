@@ -32,6 +32,9 @@ namespace RTS.scripts.Gameplay
 
         private SelectRect selectRectNode;
         private Camera2D camera;
+        /// <summary>
+        /// Specifies how many objects will the SelecRect return. Technicaly We want infinty so we can grab all and any unit but... 
+        /// </summary>
         public int MAX_SELECTED_THINGS = 99999;
         private CanvasLayer HUD;
         private ColorRect TopBar;
@@ -44,7 +47,11 @@ namespace RTS.scripts.Gameplay
         private Target hoveringOver;
         private HBoxContainer ResourceTab;
 
+        public TargetedAbility HangingAbility = null;
         private ClickMode cm;
+        /// <summary>
+        /// Specifies what action are we currently giving the Selected Selectables.
+        /// </summary>
         public ClickMode Clickmode
         {
             get { return cm; }
@@ -54,15 +61,15 @@ namespace RTS.scripts.Gameplay
                 switch (value)
                 {
                     case ClickMode.Move:
-                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new Vector2(16, 0));
+                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new (16, 0));
                         break;
                     case ClickMode.Attack:
                     case ClickMode.UseAbility:
-                        Input.SetCustomMouseCursor(Cursors.Target, hotspot: new Vector2(16, 16));
+                        Input.SetCustomMouseCursor(Cursors.Target, hotspot: new(16, 16));
                         break;
                     default:
                         GD.PrintErr("Not implemented cursor thingie - using default");
-                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new Vector2(0, 16));
+                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new(0, 16));
                         break;
                 }
             }
@@ -111,6 +118,9 @@ namespace RTS.scripts.Gameplay
             }
             UnitActions = BottomBar.GetNode<UnitActions>(nameof(UnitActions));
         }
+        /// <summary>
+        /// Handles the movements of camera when mouse approaches the sides of the screen
+        /// </summary>
         private void CameraMovement()
         {
             var mouseposition = GetViewport().GetMousePosition();
@@ -190,6 +200,11 @@ namespace RTS.scripts.Gameplay
                         unit.Command(clickMode, hoveringOver);
                     });*/
                     //Throws odd errors
+                    if(Clickmode == ClickMode.UseAbility)
+                    {
+                        HighlightedSelectable.Command(ClickMode.UseAbility,new Target(hoveringOver),HangingAbility);
+                        Clickmode = ClickMode.Move;
+                    }
                     foreach (Selectable selectable in Selection)//Can be paralelised
                     {
                         if (!mousebutton.ShiftPressed) { selectable.CleanCommandQueue(); }
@@ -302,9 +317,8 @@ namespace RTS.scripts.Gameplay
 
             if (Selection.Count > 0)
             {
-                Selectable HighlightedUnit = Selection.Min;//TODO: It is the smallest for now but that is only default it should be Tabed through
-                UnitPortrait.Texture = HighlightedUnit.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
-                UnitActions.FillGridButtons(HighlightedUnit.Abilities,this);
+                UnitPortrait.Texture = HighlightedSelectable.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
+                UnitActions.FillGridButtons(HighlightedSelectable.Abilities);
 }
             else
             {

@@ -52,6 +52,7 @@ namespace RTS.Gameplay
         public string name = "Player";
 
         protected SortedSet<Selectable> Selection = new();
+        protected Selectable HighlightedSelectable { get => Selection.Min; }//TODO: Tabing through groups etc.
         public Map localLevel;
 
 

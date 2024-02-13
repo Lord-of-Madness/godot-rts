@@ -26,8 +26,8 @@ namespace RTS.Gameplay
         public Area2D AttackRange;
         public Target target;
         public bool targetInRange = false;
-        public double cooldown;
-        public double AttackPeriod { get { return 1 / AttackSpeed; } }
+        public Second cooldown;
+        public Second AttackPeriod { get { return 1 / AttackSpeed; } }
         public Unit owner;
         public Sprite2D Graphic;
         public override void _Ready()
@@ -36,7 +36,7 @@ namespace RTS.Gameplay
             Graphic = GetNode<Sprite2D>(nameof(Graphic));
             anim = Graphic.GetNode<AnimationPlayer>(nameof(AnimationPlayer));
             AttackRange = GetNode<Area2D>(nameof(AttackRange));
-            ((CircleShape2D)AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = Range.ToPixels();
+            ((CircleShape2D)AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = Range.Pixels;
             cooldown = AttackPeriod;
             AttackRange.BodyEntered += TargetEnteredRange;
             AttackRange.BodyExited += TargetLeftRange;

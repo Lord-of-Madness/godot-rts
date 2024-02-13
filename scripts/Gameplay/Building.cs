@@ -14,12 +14,41 @@ namespace RTS.Gameplay
     public partial class Building : Damageable, IComparable<Building>
     {
 
-        public Vector2 RallyPoint;
+        public Target RallyPoint;
+        private bool following = false;
         Line2D RallyPath;//TODO: update when reset (use the navagent we stole from unit)
 
         public override void CleanCommandQueue()
         {
-            throw new NotImplementedException();
+            return;//Buildings don't have commmand queues
+            //TODO: Ponder moving CleanCommandQueue only to Unit away from Selectables
+        }
+
+        public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
+        {
+            switch (clickMode)
+            {
+                case Player.ClickMode.Move:
+                    SetRally(target);
+                    break;
+            }
+        }
+        public void SetRally(Target target)
+        {
+            RallyPoint = target;
+            if (target.type == Target.Type.Location)
+            {
+                NavAgent.TargetPosition = target.location;
+            }
+            else
+            {
+                following = true;
+                if (target.selectable is Damageable damageable)//TODO: The damageable should perhaps be Selectable and it should deRally even on disapearing into the fog of war if its not our Selectable
+                {
+                    damageable.SignalDead += () => SetRally(new() { type = Target.Type.Location, location = damageable.Position });//This oughta mean that the Rally point stays where the unit died
+                    //player.VisionArea.BodyExited += Detarget; //TODO when outside vision
+                }
+            }
         }
 
         public int CompareTo(Building other)

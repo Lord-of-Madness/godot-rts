@@ -1,77 +1,100 @@
 using Godot;
 using Godot.Collections;
-
 //using MonoCustomResourceRegistry;
 using RTS.Gameplay;
+using RTS.Physics;
 using RTS.scripts.Gameplay;
 using System;
 namespace RTS.Gameplay
 {
-    public partial class BuildBuildingAbility : Ability
+
+    public partial class BuildBuildingAbility : TargetedAbility
     {
         private string text = "Build _missing_";
         public override string Text { get => text; set =>text=value; }
 
-        public override double Cooldown => 0f;
+        public override Second Cooldown => new(0f);
 
-        public override bool Targeted => true;
+        public override bool Active => true;
+
         public Building building;
-        public BuildBuildingAbility(Building building)
+        public BuildBuildingAbility(Building building, Selectable owner)
         {
+            OwningSelectable = owner;
             this.building = building;
-            this.Text = "Build " + building.Name;
+            Text = "Build " + building.Name;
         }
-        public override void OnClick(Button button)
+        public override void OnClick(AbilityButton button)
         {
             base.OnClick(button);
-            GD.Print(Text);
+            GD.Print("TODO: Display building wireframe at the mouseposition");
+        }
+
+        public override void OnTargetRecieved(Target target)
+        {
+            Building newBuilding = (Building)building.Duplicate();
+            newBuilding.Position = target.Position;
+            OwningSelectable.AddSibling(newBuilding);
+        }
+    }
+    public partial class BackAbility : Ability
+    {
+        public BackAbility(Selectable owner){
+            OwningSelectable = owner;
+        }
+
+        public override string Text { get => "Back"; set => throw new Exception("This ought not be assigned to"); }
+
+        public override Second Cooldown => 0;
+
+        public override bool Active => true;
+
+        public override void OnClick(AbilityButton button)
+        {
+            base.OnClick(button);
+            button.GetParent<UnitActions>().FillGridButtons(OwningSelectable.Abilities);
+
         }
     }
     //    [RegisteredType(nameof(BuildAbility),"",nameof(Resource))]//
     [GlobalClass]
     public partial class BuildAbility : Ability
     {
-        public override void OnClick(Button button)
+        public override void OnClick(AbilityButton button)
         {
             base.OnClick(button);
             UnitActions original = button.GetParent<UnitActions>();
-            //UnitActions gc = (UnitActions)original.Duplicate();
 
             Dictionary<int, Ability> abilities = new();
             for (int i =0;i< buildings.Count;i++)
             {
                 Building item = buildings[i];
-                BuildBuildingAbility ability = new(item);
-                var b = new AbilityButton()
-                {
-                    Ability = ability
-                };
+                BuildBuildingAbility ability = new(item, OwningSelectable);
                 AddChild(ability);
-                //gc.AddChild(b);
-                
                 abilities.Add(i, ability);
             }
-            original.FillGridButtons(abilities, original.GetTree().CurrentScene.GetNode<HumanPlayer>("Player"));
-            //original.Visible = false;
-            //original.GetParent().AddChild(gc);
+            BackAbility backAbility = new(OwningSelectable);
+            AddChild(backAbility);
+            abilities.Add(original.BUTTON_COUNT - 1, backAbility);
+            original.FillGridButtons(abilities);
         }
         [Export]
         public Array<BuildingBlueprint> BuildList { get; set; }
         private Array<Building> buildings = new();
+
         public override void _Ready()
         {
             base._Ready();
             foreach (var blueprint in BuildList)
             {
-                GD.Print("Hmm");
-                buildings.Add(blueprint.GetBuilding());
+                buildings.Add(blueprint.Building);
             }
         }
 
-        public override double Cooldown => 0f;
-
-        public override bool Targeted => false;
+        public override Second Cooldown => new(0f);
 
         public override string Text { get => "Build"; set => throw new Exception("This ought not be assigned to"); }
+
+        public override bool Active => true;
     }
 }
