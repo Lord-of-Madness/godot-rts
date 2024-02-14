@@ -14,7 +14,7 @@ ability = ExtResource("2_lqrmv")
 
 [node name="Unit" instance=ExtResource("1_4rkn0")]
 speed = 5.0
-MaxHP = 10
+MaxHP = 11
 ExportAbilities = [SubResource("Resource_yx28d")]
 visionRange = 6.0
 
@@ -40,6 +40,9 @@ offset_bottom = -21.0
 radius = 2.0
 neighbor_distance = 50.0
 avoidance_priority = 0.9
+
+[node name="Attacks" parent="." index="5" node_paths=PackedStringArray("PrimaryAttack")]
+PrimaryAttack = NodePath("MeleeAttack")
 
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_8vowj")]
 AttackSpeed = 1.0

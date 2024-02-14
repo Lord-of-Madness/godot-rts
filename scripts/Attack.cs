@@ -28,10 +28,11 @@ namespace RTS.Gameplay
         public bool targetInRange = false;
         public Second cooldown;
         public Second AttackPeriod { get { return 1 / AttackSpeed; } }
-        public Unit owner;
+        public Selectable owner;
         public Sprite2D Graphic;
         public override void _Ready()
         {
+            owner = GetParent().GetParent<Selectable>();
             base._Ready();
             Graphic = GetNode<Sprite2D>(nameof(Graphic));
             anim = Graphic.GetNode<AnimationPlayer>(nameof(AnimationPlayer));
@@ -75,7 +76,7 @@ namespace RTS.Gameplay
         }
         public void TargetEnteredRange(Node2D inrangee)
         {
-            if (target is null || owner.CurrentAction != Unit.UnitAction.Attack) return;
+            if (target is null || owner.CurrentAction != Selectable.SelectableAction.Attack) return;
 
             //GD.Print(inrangee.Name, " entered");
             if (inrangee is Selectable selectable

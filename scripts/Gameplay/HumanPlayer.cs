@@ -271,7 +271,7 @@ namespace RTS.scripts.Gameplay
                         if (
                             selectable is Unit unit
                             &&
-                            (unit.CurrentAction != Unit.UnitAction.Dying)
+                            (unit.CurrentAction != Unit.SelectableAction.Dying)
                             &&
                             Selection.Add(unit)//isn't selected again (shift select) 
                             &&

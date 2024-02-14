@@ -24,15 +24,7 @@ namespace RTS.Gameplay
         /// </summary>
         public double BaseUnitValue { get; set; }
 
-        public enum UnitAction
-        {
-            Move,
-            Attack,
-            Idle,
-            Stay,
-            Patrol,
-            Dying
-        }
+        
 
 
         /// <summary>
@@ -44,43 +36,7 @@ namespace RTS.Gameplay
         public TilesPerSecond Speed { get => (TilesPerSecond)speed; set { speed = (float)value; } }
 
 
-        private Queue<UnitAction> CommandQueue = new();
-        /*
-         * TODO: Implement Queuing of Commands. (UnitAction might not be the thing)
-         * I am considering making some kind of Command Class cause we need to store a bunch of data about different Commands.
-         * Well technicaly we need to store what is the UnitAction for the duration of this here Command
-         * And in case of Abilities we need to ensure we know what ability does the thing.         
-         */
 
-        [ExportGroup("CombatStats")]
-
-        private Godot.Collections.Array<Attack> Attacks;
-        //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
-        //private Attack[] Attacks;
-        [Export] private int PrimaryAttack;//Changeable by the player. Will change to which position will the unit try to get if it has more than 1 attack available.
-        //Could write a Tool script to make this smoother (at the moment I cannot know how many attacks exist when setting PrimaryAttack and therefore cannot add bounds)
-
-
-        //This will be action queue later now it shall be just one command.
-        private UnitAction ca;
-        public UnitAction CurrentAction
-        {
-            get { return ca; }
-            set
-            {
-                /*if (ca == UnitAction.Attack && value != UnitAction.Attack)
-                {
-                    GD.Print("Undoing");
-                    foreach (Attack attack in Attacks)
-                    {
-                        attack.AttackRange.BodyEntered -= AttackTargetInRange;
-                    }
-
-                }*/
-                if (CurrentAction == UnitAction.Dying) return;
-                ca = value;
-            }
-        }
 
         public Target target;
         private bool following = false;
@@ -89,14 +45,7 @@ namespace RTS.Gameplay
         {
 
             base._Ready();
-            Attacks = new();
-            foreach (Attack attack in GetNode<Node>(nameof(Attacks)).GetChildren().Cast<Attack>())
-            {
-                Attacks.Add(attack);
-                attack.owner = this;
-                //attack.target = target;
-            }
-            if (PrimaryAttack >= Attacks.Count) { PrimaryAttack = 0; }
+            Attacks = GetNode<AttacksNode>(nameof(Attacks)).Attacks;
             NavAgent.VelocityComputed += GetMoving;
             NavAgent.NavigationFinished += TargetReached;
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
@@ -105,23 +54,23 @@ namespace RTS.Gameplay
         }
         public override void CleanCommandQueue()
         {
-            CommandQueue = new();
+            base.CleanCommandQueue();
             Detarget();
         }
         public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
             //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
         {
-            if (CurrentAction == UnitAction.Dying) return;
+            if (CurrentAction == SelectableAction.Dying) return;
             if (target.type == Target.Type.Selectable && target.selectable == this) return;
             NavAgent.AvoidanceEnabled = true;
             switch (clickMode)
             {
                 case Player.ClickMode.Move:
-                    CurrentAction = UnitAction.Move;
+                    CurrentAction = SelectableAction.Move;
                     MoveTo(target);
                     break;
                 case Player.ClickMode.Attack:
-                    CurrentAction = UnitAction.Attack;
+                    CurrentAction = SelectableAction.Attack;
                     AttackCommand(target);
                     break;
                 case Player.ClickMode.UseAbility:
@@ -133,12 +82,12 @@ namespace RTS.Gameplay
         private void TargetReached()
         {
             if (following) return;
-            if (CurrentAction == UnitAction.Move) GoIdle();
+            if (CurrentAction == SelectableAction.Move) GoIdle();
             Detarget();
         }
         private void GoIdle()
         {
-            CurrentAction = UnitAction.Idle;
+            CurrentAction = SelectableAction.Idle;
             NavAgent.AvoidanceEnabled = false;
             NavAgent.TargetPosition=Position;
         }
@@ -155,8 +104,8 @@ namespace RTS.Gameplay
                     timer = 0;
                 }
             }
-            if (CurrentAction == UnitAction.Dying) return;
-            foreach (var attack in Attacks)
+            if (CurrentAction == SelectableAction.Dying) return;
+            foreach (Attack attack in Attacks)
             {
                 if (attack.cooldown < attack.AttackPeriod) attack.cooldown += delta;
                 if (attack.targetInRange)
@@ -304,10 +253,10 @@ namespace RTS.Gameplay
         public override void Dead()
         {
             //GD.Print("Is this the end?");
-            CurrentAction = UnitAction.Dying;
+            CurrentAction = SelectableAction.Dying;
             EmitSignal(SignalName.SignalDisablingSelection,this);
             EmitSignal(SignalName.SignalDead);
-            //CleanCommandQueue();
+            CleanCommandQueue();
             //leave corpse?
             Graphics.DeathAnim();//At the end it will remove the unit
 

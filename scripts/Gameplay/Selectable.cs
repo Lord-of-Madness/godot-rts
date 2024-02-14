@@ -4,6 +4,7 @@ using RTS.Physics;
 using RTS.scripts.Gameplay;
 using Godot.Collections;
 using System;
+using System.Collections.Generic;
 
 namespace RTS.Gameplay
 {
@@ -20,10 +21,55 @@ namespace RTS.Gameplay
         Team2,
         Team3
     }
+    public interface IHasAttack//Might come in handy
+    {
+        public AttacksNode AttacksNode { get; set; }
+
+    }
     public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {
         [Signal] public delegate void SignalDisablingSelectionEventHandler(Unit unit);//when dead, loss of control etc.
+        public enum SelectableAction
+        {
+            Move,
+            Attack,
+            Idle,
+            Stay,
+            Patrol,
+            Dying
+        }
+        private Queue<SelectableAction> CommandQueue = new();
+        /*
+         * TODO: Implement Queuing of Commands. (UnitAction might not be the thing)
+         * I am considering making some kind of Command Class cause we need to store a bunch of data about different Commands.
+         * Well technicaly we need to store what is the UnitAction for the duration of this here Command
+         * And in case of Abilities we need to ensure we know what ability does the thing.         
+         */
 
+        protected Godot.Collections.Array<Attack> Attacks;
+        //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
+
+
+        //This will be action queue later now it shall be just one command.
+        private SelectableAction ca;
+        public SelectableAction CurrentAction
+        {
+            get { return ca; }
+            set
+            {
+                /*if (ca == UnitAction.Attack && value != UnitAction.Attack)
+                {
+                    GD.Print("Undoing");
+                    foreach (Attack attack in Attacks)
+                    {
+                        attack.AttackRange.BodyEntered -= AttackTargetInRange;
+                    }
+
+                }*/
+                if (CurrentAction == SelectableAction.Dying) return;
+                ca = value;
+            }
+        }
 
         public UnitGraphics Graphics;
         public Team team = Team.Team1;
@@ -35,7 +81,7 @@ namespace RTS.Gameplay
         public Array<AbilityPair> ExportAbilities = new();
 
         public Node AbilityNode;
-        public Dictionary<int, Ability> Abilities = new();
+        public Godot.Collections.Dictionary<int, Ability> Abilities = new();
 
         public Area2D VisionArea;
         [Export(PropertyHint.Range, "0,10,1,or_greater")]
@@ -68,7 +114,10 @@ namespace RTS.Gameplay
             Beholder.DeHovered(this);
         }
         public abstract void Command(Player.ClickMode clickMode, Target target, Ability ability = null);
-        public abstract void CleanCommandQueue();
+        public virtual void CleanCommandQueue()
+        {
+            CommandQueue = new();
+        }
         public override void _Ready()
         {
             Graphics = GetNode<UnitGraphics>(nameof(Graphics));

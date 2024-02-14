@@ -17,9 +17,11 @@ namespace RTS.Graphics
 
         private AnimationPlayer anim;
         public static readonly float SQRT2 = (float)Math.Sqrt(2);
-        public NavigationAgent2D navAgent;
-        private Line2D path;
+        public NavigationAgent2D NavAgent;
+        private Line2D PathLine;
         private Selectable parent;
+        private const string DEATH = "Death";
+        private bool IsDead { get =>anim.CurrentAnimation==DEATH; }
         public Direction Direction { get; private set; }
 
 
@@ -28,12 +30,11 @@ namespace RTS.Graphics
         {
             SelectionVisual = GetNode<Node2D>("Selected");
             selectionSelfModulateColor = SelectionVisual.SelfModulate;
-            anim = GetNode<AnimationPlayer>("AnimationPlayer");
-            path = GetNode<Line2D>("PathLine");
-            path.DefaultColor = new Color(0, 1, 0, 0.3f);
-            //GetNode<Sprite2D>("Sprite2D").Frame = 1;//This might be removed later what is this anyway?
+            anim = GetNode<AnimationPlayer>(nameof(AnimationPlayer));
+            PathLine = GetNode<Line2D>(nameof(PathLine));
+            PathLine.DefaultColor = new Color(0, 1, 0, 0.3f);
             parent = GetParent<Selectable>();
-            navAgent = parent.GetNode<NavigationAgent2D>("NavAgent");//this has to be this way cause this gets instantiated earlier than parents navagent (making it parent.navagent null)
+            NavAgent = parent.GetNode<NavigationAgent2D>(nameof(NavAgent));//this has to be this way cause this gets instantiated earlier than parents navagent (making it parent.navagent null)
             selected = false;
         }
 
@@ -61,20 +62,20 @@ namespace RTS.Graphics
             DeHover();
             selected = true;
             SelectionVisual.Visible = true;
-            path.Visible = true;
+            PathLine.Visible = true;
 
         }
         public void Deselect()
         {
             selected = false;
             SelectionVisual.Visible = false;
-            path.Visible = false;
+            PathLine.Visible = false;
 
         }
 
         internal void MovingTo(Vector2 direction)
         {
-            if (anim.CurrentAnimation == "Death") return;
+            if (IsDead) return;
             //Sprite:
             if (direction.X > 0.5)
             {
@@ -98,30 +99,29 @@ namespace RTS.Graphics
             }
 
             //Path:
-            Vector2[] points = navAgent.GetCurrentNavigationPath();
+            Vector2[] points = NavAgent.GetCurrentNavigationPath();
 
-            if (points.Length == 0) { path.Points = Array.Empty<Vector2>(); return; }
+            if (points.Length == 0) { PathLine.Points = Array.Empty<Vector2>(); return; }
 
-            int from = navAgent.GetCurrentNavigationPathIndex();
+            int from = NavAgent.GetCurrentNavigationPathIndex();
             Vector2[] pts = new Vector2[points.Length - from];
             for (int i = 0; i < pts.Length; i++) pts[i] = points[i + from];
-            path.GlobalPosition = Vector2.Zero;//So path doesn't move with player
+            PathLine.GlobalPosition = Vector2.Zero;//So path doesn't move with player
             if (points.Length != 0) pts[0] = parent.GlobalPosition;//We don't want to keep drawing the location behind us
-            path.Points = pts;
+            PathLine.Points = pts;
 
         }
         public void NavigationFinished()
         {
-            if(anim.CurrentAnimation!= "Death") anim.Play($"Idle{Direction}");
-            path.Points = Array.Empty<Vector2>();
+            if(!IsDead) anim.Play($"Idle{Direction}");
+            PathLine.Points = Array.Empty<Vector2>();
             //Sometimes navigation is finished even when not all points have been passed through
         }
 
         public void DeathAnim()
         {
-            anim.Play("Death");
+            anim.Play(DEATH);
             anim.AnimationFinished += (_)=>parent.QueueFree();
-
         }
 
     }

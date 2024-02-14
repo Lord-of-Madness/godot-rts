@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbma510xjxclo"]
+[gd_scene load_steps=6 format=3 uid="uid://cbma510xjxclo"]
 
 [ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_wtwt1"]
 [ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_5cp66"]
+[ext_resource type="Script" path="res://scripts/Gameplay/AttacksNode.cs" id="3_18rhb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
 radius = 8.0
@@ -39,6 +40,7 @@ max_speed = 85235.1
 shape = SubResource("CircleShape2D_nwlgh")
 
 [node name="Attacks" type="Node2D" parent="."]
+script = ExtResource("3_18rhb")
 
 [node name="Abilities" type="Node" parent="."]
 
