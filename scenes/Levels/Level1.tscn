@@ -21,6 +21,9 @@ script = ExtResource("3_edfn5")
 ScrollSpeed = 5.0
 Game_Resources = []
 
+[node name="UnitActions" parent="Player/Camera2D/HUD/BottomBar" index="1"]
+rows = 4
+
 [node name="Ground" type="TileMap" parent="."]
 tile_set = ExtResource("2")
 format = 2
@@ -48,21 +51,31 @@ texture = ExtResource("3")
 
 [node name="Unit" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(173.322, 287.648)
+motion_mode = 0
+wall_min_slide_angle = 0.261799
 floor_stop_on_slope = true
 safe_margin = 0.1
+ExportAbilities = []
 
 [node name="Unit2" parent="units" instance=ExtResource("4_b23cp")]
 position = Vector2(315.349, 295.123)
+motion_mode = 0
+wall_min_slide_angle = 0.261799
 floor_stop_on_slope = true
 safe_margin = 0.1
+ExportAbilities = []
 
 [node name="Unit3" parent="units" instance=ExtResource("6_5q6jk")]
 position = Vector2(179.73, 368.806)
+motion_mode = 0
+wall_min_slide_angle = 0.261799
 floor_stop_on_slope = true
 safe_margin = 0.1
 
 [node name="Unit4" parent="units" instance=ExtResource("6_5q6jk")]
 position = Vector2(304.563, 376.706)
+motion_mode = 0
+wall_min_slide_angle = 0.261799
 floor_stop_on_slope = true
 safe_margin = 0.1
 
@@ -71,6 +84,7 @@ position = Vector2(0, -1)
 
 [node name="Building" parent="." instance=ExtResource("7_ma2uy")]
 position = Vector2(661, 426)
+motion_mode = 0
 MaxHP = 100
 
 [editable path="Player"]

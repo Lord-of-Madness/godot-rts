@@ -13,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
 script = ExtResource("1_h12dt")
+Texture = ExtResource("2_4kdxr")
 
 [node name="Icon" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(10, 0)
@@ -23,6 +24,7 @@ stretch_mode = 4
 
 [node name="ValueLabel" type="Label" parent="."]
 layout_mode = 2
+tooltip_text = "ResourceUI"
 text = "100"
 label_settings = SubResource("LabelSettings_gwltg")
 horizontal_alignment = 1

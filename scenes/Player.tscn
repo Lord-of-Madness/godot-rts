@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://be7aym5fxoaaf"]
+[gd_scene load_steps=14 format=3 uid="uid://be7aym5fxoaaf"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_xjmmm"]
 [ext_resource type="PackedScene" uid="uid://ex6vndrp1hbs" path="res://scenes/UI/resource_ui.tscn" id="2_c6qj7"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
 [ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
 [ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
+[ext_resource type="Script" path="res://scripts/UI/UnitsSelected.cs" id="7_w6rp2"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
 keycode = 4194305
@@ -56,6 +57,7 @@ anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
+alignment = 2
 
 [node name="Scrap" parent="Camera2D/HUD/TopBar/ResourceTab" instance=ExtResource("2_c6qj7")]
 layout_mode = 2
@@ -130,6 +132,7 @@ grow_vertical = 0
 color = Color(0, 0, 0, 1)
 
 [node name="UnitsSelected" type="GridContainer" parent="Camera2D/HUD/BottomBar"]
+clip_contents = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -138,6 +141,7 @@ anchor_bottom = 1.0
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 10
+script = ExtResource("7_w6rp2")
 
 [node name="UnitActions" type="GridContainer" parent="Camera2D/HUD/BottomBar"]
 layout_mode = 1

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbma510xjxclo"]
+[gd_scene load_steps=7 format=3 uid="uid://cbma510xjxclo"]
 
 [ext_resource type="Script" path="res://scripts/Gameplay/Unit.cs" id="1_wtwt1"]
 [ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_5cp66"]
 [ext_resource type="Script" path="res://scripts/Gameplay/AttacksNode.cs" id="3_18rhb"]
+[ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_tdtbp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
 radius = 8.0
@@ -12,6 +13,8 @@ radius = 51.0098
 
 [node name="Unit" type="CharacterBody2D"]
 input_pickable = true
+motion_mode = 1
+wall_min_slide_angle = 0.0
 floor_stop_on_slope = false
 safe_margin = 10.0
 script = ExtResource("1_wtwt1")
@@ -26,13 +29,17 @@ scale = Vector2(0.1, 0.1)
 region_rect = Rect2(18, 24, 39, 39)
 
 [node name="Graphics" parent="." instance=ExtResource("2_5cp66")]
+script = ExtResource("3_tdtbp")
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
-path_metadata_flags = 5
+target_desired_distance = 16.0
+path_postprocessing = 1
 avoidance_enabled = true
-radius = 20.0
+neighbor_distance = 750.0
 max_neighbors = 100
+time_horizon_obstacles = 1.0
 max_speed = 85235.1
+avoidance_priority = 0.9
 
 [node name="VisionArea" type="Area2D" parent="."]
 

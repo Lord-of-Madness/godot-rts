@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://dtfhxu0l7blxf"]
 
-[ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="1_delae"]
+[ext_resource type="Script" path="res://scripts/Gameplay/SelectableGraphics.cs" id="1_k7abx"]
 [ext_resource type="Texture2D" uid="uid://du1w0ti6c2k2k" path="res://assets/Units/red-cross-png-33.png" id="2_xkji6"]
 
 [sub_resource type="Animation" id="2"]
@@ -293,7 +293,7 @@ _data = {
 }
 
 [node name="Graphics" type="Node2D"]
-script = ExtResource("1_delae")
+script = ExtResource("1_k7abx")
 
 [node name="Selected" type="Polygon2D" parent="."]
 visible = false

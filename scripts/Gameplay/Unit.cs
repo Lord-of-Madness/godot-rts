@@ -1,4 +1,5 @@
 using Godot;
+using RTS.Graphics;
 using RTS.Physics;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,8 @@ namespace RTS.Gameplay
         public TilesPerSecond Speed { get => (TilesPerSecond)speed; set { speed = (float)value; } }
 
 
-
-
+        public new UnitGraphics Graphics;
+        public NavigationAgent2D NavAgent;
         public Target target;
         private bool following = false;
 
@@ -45,10 +46,13 @@ namespace RTS.Gameplay
         {
 
             base._Ready();
+            Graphics = GetNode<UnitGraphics>(nameof(Graphics));
             Attacks = GetNode<AttacksNode>(nameof(Attacks)).Attacks;
+            NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
             NavAgent.VelocityComputed += GetMoving;
             NavAgent.NavigationFinished += TargetReached;
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
+            NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius + 1;//So that its always somewhat accurate
             GoIdle();
             Deselect();
         }
@@ -62,7 +66,7 @@ namespace RTS.Gameplay
         {
             if (CurrentAction == SelectableAction.Dying) return;
             if (target.type == Target.Type.Selectable && target.selectable == this) return;
-            NavAgent.AvoidanceEnabled = true;
+            //NavAgent.AvoidanceEnabled = true;
             switch (clickMode)
             {
                 case Player.ClickMode.Move:
@@ -88,7 +92,7 @@ namespace RTS.Gameplay
         private void GoIdle()
         {
             CurrentAction = SelectableAction.Idle;
-            NavAgent.AvoidanceEnabled = false;
+            //NavAgent.AvoidanceEnabled = false;
             NavAgent.TargetPosition=Position;
         }
         private double timer = 0;//for debug purposes

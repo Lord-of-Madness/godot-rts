@@ -46,7 +46,7 @@ namespace RTS.Gameplay
          * And in case of Abilities we need to ensure we know what ability does the thing.         
          */
 
-        protected Godot.Collections.Array<Attack> Attacks;
+        public Godot.Collections.Array<Attack> Attacks;
         //this was supposed to be done from the inspector but the Attacks weren't unique (It kept interacting with just the last attack on screen so now its a special node in the scene tree under which the attacks are.)
 
 
@@ -71,10 +71,9 @@ namespace RTS.Gameplay
             }
         }
 
-        public UnitGraphics Graphics;
+        public SelectableGraphics Graphics;
         public Team team = Team.Team1;
         public HumanPlayer Beholder;//This should not be exported and it should be Beholder and not Owner
-        public NavigationAgent2D NavAgent;
 
         
         [Export]
@@ -120,8 +119,7 @@ namespace RTS.Gameplay
         }
         public override void _Ready()
         {
-            Graphics = GetNode<UnitGraphics>(nameof(Graphics));
-            NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
+            Graphics = GetNode<SelectableGraphics>(nameof(Graphics));
             VisionArea = GetNode<Area2D>(nameof(VisionArea));
             AbilityNode = GetNode<Node>(nameof(Abilities));
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.Pixels;

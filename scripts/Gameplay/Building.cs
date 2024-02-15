@@ -14,9 +14,26 @@ namespace RTS.Gameplay
     public partial class Building : Damageable, IComparable<Building>
     {
 
-        public Target RallyPoint;
+        private Target rallyPoint;
         private bool following = false;
-        Line2D RallyPath;//TODO: update when reset (use the navagent we stole from unit)
+        Line2D RallyPath;//TODO
+
+        public Target RallyPoint { get => rallyPoint; set {
+                rallyPoint = value;
+                RallyPath.Points = new Vector2[2] { Position,value.Position };
+            } }
+
+        public override void _Ready()
+        {
+            base._Ready();
+            RallyPath = Graphics.GetNode<Line2D>("PathLine");
+            RallyPoint = new()
+            {
+                type = Target.Type.Selectable,
+                selectable = this
+            };
+            RallyPath.GlobalPosition = Vector2.Zero;//So path doesn't move with the unit
+        }
 
         public override void CleanCommandQueue()
         {
@@ -36,11 +53,9 @@ namespace RTS.Gameplay
         public void SetRally(Target target)
         {
             RallyPoint = target;
-            if (target.type == Target.Type.Location)
-            {
-                NavAgent.TargetPosition = target.location;
-            }
-            else
+            GD.Print(RallyPath.Points[0]+" "+ RallyPath.Points[0]);
+            GD.Print(RallyPath.Visible);
+            if (target.type == Target.Type.Selectable)
             {
                 following = true;
                 if (target.selectable is Damageable damageable)//TODO: The damageable should perhaps be Selectable and it should deRally even on disapearing into the fog of war if its not our Selectable
@@ -50,8 +65,12 @@ namespace RTS.Gameplay
                 }
             }
         }
-
-        public int CompareTo(Building other)
+        /*public override void _PhysicsProcess(double delta)
+        {
+            //if (CurrentAction == UnitAction.Dying) return;
+            if (following) RallyPoint = RallyPoint;
+        }*/
+            public int CompareTo(Building other)
         {
             return GetIndex().CompareTo(other.GetIndex());//For now
         }

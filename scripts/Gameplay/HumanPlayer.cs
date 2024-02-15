@@ -40,7 +40,7 @@ namespace RTS.scripts.Gameplay
         private ColorRect TopBar;
         private ColorRect BottomBar;
         private TextureRect UnitPortrait;
-        private GridContainer UnitsSelected;
+        private UnitsSelected UnitsSelected;
         private UnitActions UnitActions;
         [Export(PropertyHint.Range, "0,20,1,or_greater")]
         public float ScrollSpeed = 5;
@@ -61,7 +61,7 @@ namespace RTS.scripts.Gameplay
                 switch (value)
                 {
                     case ClickMode.Move:
-                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new (16, 0));
+                        Input.SetCustomMouseCursor(Cursors.Hand, hotspot: new(16, 0));
                         break;
                     case ClickMode.Attack:
                     case ClickMode.UseAbility:
@@ -105,17 +105,7 @@ namespace RTS.scripts.Gameplay
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
             camera.VisibilityLayer = BitID;//I am not sure this is working proper
-            UnitsSelected = BottomBar.GetNode<GridContainer>(nameof(UnitsSelected));
-            for (int i = 0; i < UnitsSelected.Columns; i++)
-            {
-                UnitsSelected.AddChild(new TextureRect()
-                {
-                    ExpandMode = TextureRect.ExpandModeEnum.FitHeight,
-                    StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
-                    SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-                    SizeFlagsVertical = Control.SizeFlags.ExpandFill
-                });
-            }
+            UnitsSelected = BottomBar.GetNode<UnitsSelected>(nameof(UnitsSelected));
             UnitActions = BottomBar.GetNode<UnitActions>(nameof(UnitActions));
         }
         /// <summary>
@@ -200,9 +190,9 @@ namespace RTS.scripts.Gameplay
                         unit.Command(clickMode, hoveringOver);
                     });*/
                     //Throws odd errors
-                    if(Clickmode == ClickMode.UseAbility)
+                    if (Clickmode == ClickMode.UseAbility)
                     {
-                        HighlightedSelectable.Command(ClickMode.UseAbility,new Target(hoveringOver),HangingAbility);
+                        HighlightedSelectable.Command(ClickMode.UseAbility, new Target(hoveringOver), HangingAbility);
                         Clickmode = ClickMode.Move;
                     }
                     foreach (Selectable selectable in Selection)//Can be paralelised
@@ -302,24 +292,16 @@ namespace RTS.scripts.Gameplay
         }
         private void UpdateUnitGridAndPortrait()
         {
-            //TODO: IF only one selected then UNITCARD
-            foreach (TextureRect child in UnitsSelected.GetChildren().Cast<TextureRect>())
-                child.Texture = null;//TODO: probably make it that there are the texture spots already premade and we just add textures to them. I don't like this construction and desctruction of nodes
             UnitPortrait.Texture = null;
-            var suEnum = Selection.GetEnumerator();
-            for (int i = 0; i < Math.Min(UnitsSelected.Columns, Selection.Count); i++)
-            {
-                //this feels like the best way to do it while keeping the sortedSet. (Eventually could change it to SortedList I guess and just index into it)
-                suEnum.MoveNext();
-                ((TextureRect)UnitsSelected.GetChild(i)).Texture = suEnum.Current.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;
-            }
+
+            UnitsSelected.Update(Selection);
 
 
             if (Selection.Count > 0)
             {
                 UnitPortrait.Texture = HighlightedSelectable.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
                 UnitActions.FillGridButtons(HighlightedSelectable.Abilities);
-}
+            }
             else
             {
                 UnitActions.DestroyChildren();
@@ -327,8 +309,8 @@ namespace RTS.scripts.Gameplay
 
 
 
-            
+
         }
-        
+
     }
 }

@@ -12,6 +12,7 @@ radius = 272.007
 
 [node name="Building" type="CharacterBody2D"]
 input_pickable = true
+motion_mode = 1
 floor_stop_on_slope = false
 safe_margin = 10.0
 script = ExtResource("1_arpdc")
@@ -43,13 +44,6 @@ offset_bottom = -33.0
 [node name="Cross" parent="Graphics" index="5"]
 position = Vector2(2.86102e-06, -2.6226e-06)
 scale = Vector2(0.33125, 0.41875)
-
-[node name="NavAgent" type="NavigationAgent2D" parent="."]
-path_metadata_flags = 5
-avoidance_enabled = true
-radius = 20.0
-max_neighbors = 100
-max_speed = 85235.1
 
 [node name="VisionArea" type="Area2D" parent="."]
 
