@@ -20,18 +20,14 @@ namespace RTS.Gameplay
 
         public Target RallyPoint { get => rallyPoint; set {
                 rallyPoint = value;
-                RallyPath.Points = new Vector2[2] { Position,value.Position };
+                RallyPath.Points = new Vector2[2] { Position,value.Position };//It behaved mighty strange when I tried to just change the second position. The reassignment didn't work (was simply ignored)
             } }
 
         public override void _Ready()
         {
             base._Ready();
             RallyPath = Graphics.GetNode<Line2D>("PathLine");
-            RallyPoint = new()
-            {
-                type = Target.Type.Selectable,
-                selectable = this
-            };
+            RallyPoint = new(this);
             RallyPath.GlobalPosition = Vector2.Zero;//So path doesn't move with the unit
         }
 
@@ -53,14 +49,12 @@ namespace RTS.Gameplay
         public void SetRally(Target target)
         {
             RallyPoint = target;
-            GD.Print(RallyPath.Points[0]+" "+ RallyPath.Points[0]);
-            GD.Print(RallyPath.Visible);
             if (target.type == Target.Type.Selectable)
             {
                 following = true;
                 if (target.selectable is Damageable damageable)//TODO: The damageable should perhaps be Selectable and it should deRally even on disapearing into the fog of war if its not our Selectable
                 {
-                    damageable.SignalDead += () => SetRally(new() { type = Target.Type.Location, location = damageable.Position });//This oughta mean that the Rally point stays where the unit died
+                    damageable.SignalDead += () => SetRally(new(damageable.Position));//This oughta mean that the Rally point stays where the unit died
                     //player.VisionArea.BodyExited += Detarget; //TODO when outside vision
                 }
             }

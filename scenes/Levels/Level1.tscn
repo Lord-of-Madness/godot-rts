@@ -1,28 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjq028k0i6idh"]
+[gd_scene load_steps=9 format=3 uid="uid://bjq028k0i6idh"]
 
-[ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://beoxgmnjp5qn8" path="res://scenes/HumanPlayer.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3"]
-[ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="3_edfn5"]
 [ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_b23cp"]
+[ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="5_bt0lf"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
-[ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Barack/Building_Barrack.tscn" id="7_ma2uy"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_8ua6g")
-Gamespeed = 4.1
-
-[node name="Player" parent="." node_paths=PackedStringArray("Game_Resources") instance=ExtResource("1")]
-script = ExtResource("3_edfn5")
-ScrollSpeed = 5.0
-Game_Resources = []
-
-[node name="UnitActions" parent="Player/Camera2D/HUD/BottomBar" index="1"]
-rows = 4
+Gamespeed = 3.1
 
 [node name="Ground" type="TileMap" parent="."]
 tile_set = ExtResource("2")
@@ -36,55 +27,40 @@ layer_2/name = "Decor"
 layer_2/z_index = 1
 layer_2/tile_data = PackedInt32Array()
 
-[node name="Object" type="StaticBody2D" parent="."]
+[node name="TestCollisonObject" type="StaticBody2D" parent="."]
 z_index = 1
 position = Vector2(667, 180)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Object"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestCollisonObject"]
 shape = SubResource("1")
 
-[node name="Sprite2D" type="Sprite2D" parent="Object"]
+[node name="Sprite2D" type="Sprite2D" parent="TestCollisonObject"]
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("3")
 
-[node name="units" type="Node" parent="."]
+[node name="HumanPlayer" parent="." instance=ExtResource("1")]
 
-[node name="Unit" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(173.322, 287.648)
-motion_mode = 0
-wall_min_slide_angle = 0.261799
-floor_stop_on_slope = true
-safe_margin = 0.1
+[node name="Unit" parent="HumanPlayer/Selectables" index="0" instance=ExtResource("6_5q6jk")]
+position = Vector2(296, 291)
+
+[node name="Unit2" parent="HumanPlayer/Selectables" index="1" instance=ExtResource("4_b23cp")]
+position = Vector2(93, 391)
 ExportAbilities = []
 
-[node name="Unit2" parent="units" instance=ExtResource("4_b23cp")]
-position = Vector2(315.349, 295.123)
-motion_mode = 0
-wall_min_slide_angle = 0.261799
-floor_stop_on_slope = true
-safe_margin = 0.1
-ExportAbilities = []
+[node name="Unit3" parent="HumanPlayer/Selectables" index="2" instance=ExtResource("6_5q6jk")]
+position = Vector2(247, 427)
 
-[node name="Unit3" parent="units" instance=ExtResource("6_5q6jk")]
-position = Vector2(179.73, 368.806)
-motion_mode = 0
-wall_min_slide_angle = 0.261799
-floor_stop_on_slope = true
-safe_margin = 0.1
+[node name="UnitActions" parent="HumanPlayer/Camera2D/HUD/BottomBar" index="1"]
+rows = 4
 
-[node name="Unit4" parent="units" instance=ExtResource("6_5q6jk")]
-position = Vector2(304.563, 376.706)
-motion_mode = 0
-wall_min_slide_angle = 0.261799
-floor_stop_on_slope = true
-safe_margin = 0.1
+[node name="Player" parent="." instance=ExtResource("5_bt0lf")]
+Team = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-position = Vector2(0, -1)
+[node name="Unit4" parent="Player/Selectables" index="0" instance=ExtResource("6_5q6jk")]
+position = Vector2(585, 285)
 
-[node name="Building" parent="." instance=ExtResource("7_ma2uy")]
-position = Vector2(661, 426)
-motion_mode = 0
-MaxHP = 100
+[node name="Unit5" parent="Player/Selectables" index="1" instance=ExtResource("6_5q6jk")]
+position = Vector2(580, 410)
 
+[editable path="HumanPlayer"]
 [editable path="Player"]

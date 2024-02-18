@@ -8,6 +8,6 @@ namespace RTS.Gameplay
         [Export]
         public int pos;
         [Export]
-        public PackedScene ability;
+        public AbilityRes ability;
     }
 }

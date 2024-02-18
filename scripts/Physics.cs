@@ -98,7 +98,7 @@ namespace RTS.Physics
 
         public readonly int CompareTo(float other) => value.CompareTo(other);
 
-        public int CompareTo(Second other) => value.CompareTo(other.value);
+        public readonly int CompareTo(Second other) => value.CompareTo(other.value);
     }
     public static class PhysicsExtensions
     {

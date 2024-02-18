@@ -11,6 +11,10 @@ namespace RTS.UI
     {
         public partial class InfoLabel : Label
         {
+            public InfoLabel(string text)
+            {
+                Text = text;
+            }
             public InfoLabel()
             {
                 SizeFlagsHorizontal = SizeFlags.Fill;
@@ -32,22 +36,17 @@ namespace RTS.UI
             {
                 //Display stats about the Unit
                 Selectable s = Selection.First();
-                AddChild(new InfoLabel()
-                {
-                    Text = s.Name
+                AddChild(new InfoLabel(s.Name));
+                AddChild(new InfoLabel(s.team.ToString()));
 
-                });
                 if (s is Damageable d) {
-                    AddChild(new InfoLabel() { Text = "MaxHP: " + d.MaxHP });
+                    AddChild(new InfoLabel("MaxHP: " + d.MaxHP));
                 }
                 if(s is Unit u)
                 {
                     foreach (var item in u.Attacks)
                     {
-                        AddChild(new InfoLabel()
-                        {
-                            Text = "Attack [Name: " + item.Name + ", AoE: " + item.AoE + ", AttackPeriod: " + item.AttackPeriod + "s"
-                        });
+                        AddChild(new InfoLabel("Attack [Name: " + item.Name + ", AoE: " + item.AoE + ", AttackPeriod: " + item.AttackPeriod + "s"));
                     }
                     
                 }

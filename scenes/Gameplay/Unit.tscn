@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/Gameplay/UnitGraphics.cs" id="3_tdtbp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
-radius = 8.0
+radius = 5.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
 radius = 51.0098

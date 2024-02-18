@@ -47,12 +47,11 @@ namespace RTS.Gameplay
 
             base._Ready();
             Graphics = GetNode<UnitGraphics>(nameof(Graphics));
-            Attacks = GetNode<AttacksNode>(nameof(Attacks)).Attacks;
             NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
             NavAgent.VelocityComputed += GetMoving;
             NavAgent.NavigationFinished += TargetReached;
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
-            NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius + 1;//So that its always somewhat accurate
+            NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius;//So that its always somewhat accurate
             GoIdle();
             Deselect();
         }
@@ -70,11 +69,9 @@ namespace RTS.Gameplay
             switch (clickMode)
             {
                 case Player.ClickMode.Move:
-                    CurrentAction = SelectableAction.Move;
                     MoveTo(target);
                     break;
                 case Player.ClickMode.Attack:
-                    CurrentAction = SelectableAction.Attack;
                     AttackCommand(target);
                     break;
                 case Player.ClickMode.UseAbility:
@@ -109,20 +106,6 @@ namespace RTS.Gameplay
                 }
             }
             if (CurrentAction == SelectableAction.Dying) return;
-            foreach (Attack attack in Attacks)
-            {
-                if (attack.cooldown < attack.AttackPeriod) attack.cooldown += delta;
-                if (attack.targetInRange)
-                {
-                    if (attack.cooldown >= attack.AttackPeriod)
-                    {
-                        attack.AttackAnim(Graphics.Direction);
-                        attack.cooldown = 0;
-                        Damageable damagableTarget = (Damageable)attack.target.selectable;
-                        damagableTarget.HP = (int)Math.Round(damagableTarget.HP - attack.Damage);//Not the nicest but feels the correctest
-                    }
-                }
-            }
             //if (GetLastSlideCollision() is KinematicCollision2D collision && collision.GetCollider() == target) TargetReached();
 
 
@@ -134,6 +117,7 @@ namespace RTS.Gameplay
         /// <param name="target"></param>
         public void MoveTo(Target target)
         {
+            CurrentAction = SelectableAction.Move;
             this.target = target;
             if (target.type == Target.Type.Location)
             {
@@ -149,10 +133,19 @@ namespace RTS.Gameplay
                 }
             }
         }
+        public override void TryAgro(Node2D node)
+        {
+            if(following || CurrentAction == SelectableAction.Move) return;
+            if (node is Selectable selectable && selectable.team.IsHostile(team))
+            {
+                AttackCommand(new Target(selectable));
+            }
+        }
         public void AttackCommand(Target target)
         {
             //GD.Print("AttackCommand? ",target);
             MoveTo(target);//Moving as base plus extra
+            CurrentAction = SelectableAction.Attack;
             RetargetAttacks(target);
         }
         public void UseAbility(Target target,Ability ability)
@@ -164,37 +157,7 @@ namespace RTS.Gameplay
             }
         }
 
-        private void RetargetAttacks(Target target)
-        {
-            if (Attacks is not null)
-            {
-                foreach (var attack in Attacks)
-                {
-                    attack.Retarget(target);
-                    /*
-                    attack.AttackRange.BodyEntered += (body) =>
-                    {
-                        AttackTargetInRange(body, attack);
-                    };
-                    //attack.AttackRange.BodyEntered += (Node2D smthn) => { GD.Print("Whatever"); };
-                    //attack.AttackRange.AreaEntered += (Area2D smthn) => { GD.Print(smthn); };
-                    //GD.Print(((CircleShape2D)attack.AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius);
-                    */
-                }
 
-            }
-        }
-        private void DetargetAttacks()
-        {
-            if (Attacks is not null)
-            {
-                foreach (var attack in Attacks)
-                {
-                    attack.Detarget();
-                }
-
-            }
-        }
 
         private void Detarget()
         {
@@ -256,7 +219,6 @@ namespace RTS.Gameplay
 
         public override void Dead()
         {
-            //GD.Print("Is this the end?");
             CurrentAction = SelectableAction.Dying;
             EmitSignal(SignalName.SignalDisablingSelection,this);
             EmitSignal(SignalName.SignalDead);

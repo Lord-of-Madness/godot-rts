@@ -14,7 +14,12 @@ namespace RTS.Gameplay
 
         public abstract void OnTargetRecieved(Target target);
     }
-    [GlobalClass]
+    //[GlobalClass]
+    public abstract partial class AbilityRes : Resource
+    {
+        public abstract string Text { get; set; }
+        public abstract Ability Instantiate(Selectable owner);
+    }
     public abstract partial class Ability : Node
     {
         private Second cooldown = 0;
@@ -27,10 +32,7 @@ namespace RTS.Gameplay
         public virtual void OnClick(AbilityButton button)
         {
             if (OnCooldown) return;
-            if (Cooldown != 0)
-            {
-                cooldown = Cooldown;
-            }
+            cooldown = Cooldown;
 
         }
         public override void _Process(double delta)
@@ -47,6 +49,7 @@ namespace RTS.Gameplay
         /// <summary>
         /// <para>Ability name and the text that displays on the Button. Its called Text so it doesn't colide with <c>Name</c> which is the name of the root <c>Node</c></para>
         /// <para>Its abstract cause its mandatory</para>
+        /// <para> We generaly throw exceptions on set except in generated names but maybe because of translations we might wanna change it later </para>
         /// </summary>
         public abstract string Text { get; set; }
         public Key Shortcut { get; set; } = Key.None;

@@ -11,8 +11,7 @@ namespace RTS.Graphics
     public partial class UnitGraphics : SelectableGraphics
     {
         public NavigationAgent2D NavAgent;
-        
-        public Direction Direction { get; private set; }
+
 
 
 

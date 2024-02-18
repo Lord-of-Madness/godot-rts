@@ -10,9 +10,9 @@ namespace RTS.Gameplay
 {
     public static class TeamExtension
     {
-        public static bool IsHostile(this Team team)
+        public static bool IsHostile(this Team team,Team otherteam)
         {
-            return false;
+            return team!=otherteam;
         }
     }
     public enum Team
@@ -26,6 +26,7 @@ namespace RTS.Gameplay
         public AttacksNode AttacksNode { get; set; }
 
     }
+    [GlobalClass]
     public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {
         [Signal] public delegate void SignalDisablingSelectionEventHandler(Unit unit);//when dead, loss of control etc.
@@ -72,8 +73,9 @@ namespace RTS.Gameplay
         }
 
         public SelectableGraphics Graphics;
-        public Team team = Team.Team1;
+        public Team team;
         public HumanPlayer Beholder;//This should not be exported and it should be Beholder and not Owner
+        public Player OwnerPlayer;
 
         
         [Export]
@@ -122,14 +124,59 @@ namespace RTS.Gameplay
             Graphics = GetNode<SelectableGraphics>(nameof(Graphics));
             VisionArea = GetNode<Area2D>(nameof(VisionArea));
             AbilityNode = GetNode<Node>(nameof(Abilities));
+            Attacks = GetNode<AttacksNode>(nameof(Attacks)).Attacks;
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.Pixels;
-            Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>("Player");
+            Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>(nameof(HumanPlayer));
             foreach (var abilityPair in ExportAbilities)//Dictionaries don't work in Export so gotta hack it in like this to get a proper Dict
             {
-                var ab = abilityPair.ability.Instantiate<Ability>();
-                ab.OwningSelectable = this;//Can't use constructors cause Instantiate doesn't work with em
+                var ab = abilityPair.ability.Instantiate(this);
                 Abilities.Add(abilityPair.pos, ab);
                 AbilityNode.AddChild(ab);
+            }
+            OwnerPlayer = GetParent().GetParent<Player>();
+            team = OwnerPlayer.Team;
+            if(Attacks.Count > 0)
+            {
+                VisionArea.BodyEntered += TryAgro;
+            }
+
+        }
+        public virtual void TryAgro(Node2D node)
+        {
+            if(node is Selectable selectable && selectable.team.IsHostile(team))
+            {
+                RetargetAttacks(new Target(selectable));
+            }
+        }
+        protected void RetargetAttacks(Target target)
+        {
+            if (Attacks is not null)
+            {
+                foreach (Attack attack in Attacks)
+                {
+                    attack.Retarget(target);
+                    /*
+                    attack.AttackRange.BodyEntered += (body) =>
+                    {
+                        AttackTargetInRange(body, attack);
+                    };
+                    //attack.AttackRange.BodyEntered += (Node2D smthn) => { GD.Print("Whatever"); };
+                    //attack.AttackRange.AreaEntered += (Area2D smthn) => { GD.Print(smthn); };
+                    //GD.Print(((CircleShape2D)attack.AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius);
+                    */
+                }
+
+            }
+        }
+        protected void DetargetAttacks()
+        {
+            if (Attacks is not null)
+            {
+                foreach (var attack in Attacks)
+                {
+                    attack.Detarget();
+                }
+
             }
         }
         /// <summary>

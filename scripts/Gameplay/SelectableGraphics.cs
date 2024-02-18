@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using RTS.Gameplay;
+using RTS.mainspace;
 
 namespace RTS.Graphics
 {
@@ -16,6 +17,7 @@ namespace RTS.Graphics
         protected Selectable parent;
         protected const string DEATH = "Death";
         protected bool IsDead { get =>anim.CurrentAnimation==DEATH; }
+        public Direction Direction { get; protected set; } = Direction.Forward;
         public override void _Ready()
         {
             SelectionVisual = GetNode<Node2D>("Selected");

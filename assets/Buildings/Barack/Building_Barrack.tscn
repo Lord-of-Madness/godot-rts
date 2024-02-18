@@ -8,7 +8,7 @@ size = Vector2(144.001, 144.999)
 
 [node name="Barrack" instance=ExtResource("1_m2r6f")]
 script = ExtResource("2_dfrfr")
-MaxHP = 80
+MaxHP = 70
 ExportAbilities = []
 visionRange = 0.0
 

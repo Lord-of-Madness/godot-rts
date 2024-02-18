@@ -1,0 +1,181 @@
+[gd_scene load_steps=12 format=3 uid="uid://beoxgmnjp5qn8"]
+
+[ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1_t3lyo"]
+[ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="2_7rcui"]
+[ext_resource type="PackedScene" uid="uid://ex6vndrp1hbs" path="res://scenes/UI/resource_ui.tscn" id="2_c6qj7"]
+[ext_resource type="FontFile" path="res://resources/fonts/new_dynamicfont.tres" id="3"]
+[ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="4_3ymha"]
+[ext_resource type="Script" path="res://scripts/SelectRect.cs" id="5"]
+[ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
+[ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
+[ext_resource type="Script" path="res://scripts/UI/UnitsSelected.cs" id="7_w6rp2"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_mt7xr"]
+events = [SubResource("InputEventKey_1ktqu")]
+
+[node name="HumanPlayer" instance=ExtResource("1_t3lyo")]
+script = ExtResource("2_7rcui")
+ScrollSpeed = 5.0
+Team = 0
+
+[node name="Camera2D" type="Camera2D" parent="." index="2"]
+anchor_mode = 0
+limit_left = 0
+limit_top = 0
+limit_right = 1500
+limit_bottom = 900
+editor_draw_limits = true
+
+[node name="HUD" type="CanvasLayer" parent="Camera2D" index="0"]
+
+[node name="TopBar" type="ColorRect" parent="Camera2D/HUD" index="0"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+color = Color(0, 0, 0, 1)
+
+[node name="ResourceTab" type="HBoxContainer" parent="Camera2D/HUD/TopBar" index="0"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 2
+
+[node name="Scrap" parent="Camera2D/HUD/TopBar/ResourceTab" index="0" instance=ExtResource("2_c6qj7")]
+layout_mode = 2
+Value = 230
+
+[node name="Rations" parent="Camera2D/HUD/TopBar/ResourceTab" index="1" instance=ExtResource("2_c6qj7")]
+layout_mode = 2
+Value = 140
+
+[node name="QuickMenu" type="HBoxContainer" parent="Camera2D/HUD/TopBar" index="1"]
+layout_mode = 0
+anchor_right = 0.5
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Menu" type="MenuButton" parent="Camera2D/HUD/TopBar/QuickMenu" index="0"]
+process_mode = 3
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+shortcut = SubResource("Shortcut_mt7xr")
+text = "MENU"
+flat = false
+item_count = 5
+popup/item_0/text = "Save -NI-"
+popup/item_0/id = 0
+popup/item_1/text = "Load -NI-"
+popup/item_1/id = 1
+popup/item_2/text = "Settings -NI-"
+popup/item_2/id = 2
+popup/item_3/text = "Exit to Menu"
+popup/item_3/id = 3
+popup/item_4/text = "Exit Game"
+popup/item_4/id = 4
+script = ExtResource("6")
+
+[node name="Goals" type="Button" parent="Camera2D/HUD/TopBar/QuickMenu" index="1"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "Goals"
+
+[node name="Log" type="Button" parent="Camera2D/HUD/TopBar/QuickMenu" index="2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3")
+text = "Log"
+
+[node name="VisualOverlay" type="TextureRect" parent="Camera2D/HUD/TopBar" index="2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TileMap" type="TileMap" parent="Camera2D/HUD/TopBar/VisualOverlay" index="0"]
+tile_set = ExtResource("4_3ymha")
+format = 2
+layer_0/tile_data = PackedInt32Array(262144, 2228257, 196617, 262145, 2228257, 196617, 262146, 2228257, 196617, 262147, 2228257, 196617, 262148, 2228257, 196617, 262149, 2228257, 196617, 262150, 2228257, 196617, 262151, 2228257, 196617, 262152, 2228257, 196617, 262153, 2228257, 196617, 262154, 2228257, 196617, 262155, 2228257, 196617, 262156, 2228257, 196617, 262157, 2228257, 196617, 262158, 2228257, 196617, 262159, 2228257, 196617, 262160, 2228257, 196617, 262161, 2228257, 196617, 262162, 2228257, 196617, 262163, 2228257, 196617, 262164, 2228257, 196617, 262165, 2228257, 196617, 262166, 2228257, 196617, 262167, 2228257, 196617, 262168, 2228257, 196617, 262169, 2228257, 196617, 262170, 2228257, 196617, 262171, 2228257, 196617, 262172, 2228257, 196617, 262173, 2228257, 196617, 262174, 2228257, 196617, 262175, 2228257, 196617, 262176, 2228257, 196617, 262177, 2228257, 196617, 262178, 2228257, 196617, 262179, 2228257, 196617, 262180, 2228257, 196617, 262181, 2228257, 196617, 262182, 2228257, 196617, 262183, 2228257, 196617, 262184, 2228257, 196617, 262185, 2228257, 196617, 262186, 2228257, 196617, 262187, 2228257, 196617, 262188, 2228257, 196617, 262189, 2228257, 196617, 262190, 2228257, 196617, 262191, 2228257, 196617, 262192, 2228257, 196617, 262193, 2228257, 196617, 262194, 2228257, 196617, 262195, 2228257, 196617, 262196, 2228257, 196617, 262197, 2228257, 196617, 262198, 2228257, 196617, 262199, 2228257, 196617, 262200, 2228257, 196617, 262201, 2228257, 196617, 262202, 2228257, 196617, 262203, 2228257, 196617, 262204, 2228257, 196617, 262205, 2228257, 196617, 262206, 2228257, 196617, 262207, 2228257, 196617, 262208, 2228257, 196617, 262209, 2228257, 196617, 262210, 2228257, 196617, 262211, 2228257, 196617, 262212, 2228257, 196617, 262213, 2228257, 196617, 262214, 2228257, 196617, 262215, 2228257, 196617, 262216, 2228257, 196617, 262217, 2228257, 196617, 262218, 2228257, 196617, 262219, 2228257, 196617, 262220, 2228257, 196617, 262221, 2228257, 196617, 262222, 2228257, 196617, 262223, 2228257, 196617)
+
+[node name="BottomBar" type="ColorRect" parent="Camera2D/HUD" index="1"]
+anchors_preset = -1
+anchor_top = 0.763
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.00255585
+offset_bottom = -0.0320053
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="UnitsSelected" type="GridContainer" parent="Camera2D/HUD/BottomBar" index="0"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 0.6
+anchor_bottom = 1.0
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 10
+script = ExtResource("7_w6rp2")
+
+[node name="UnitActions" type="GridContainer" parent="Camera2D/HUD/BottomBar" index="1"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.0020752
+offset_top = 8.0
+offset_right = -0.00256348
+offset_bottom = 0.391968
+columns = 6
+script = ExtResource("7_tqpuo")
+
+[node name="UnitPortrait" type="TextureRect" parent="Camera2D/HUD/BottomBar" index="2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 0.8
+anchor_bottom = 1.0
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Minimap" type="SubViewportContainer" parent="Camera2D/HUD/BottomBar" index="3"]
+layout_mode = 0
+anchor_right = 0.2
+anchor_bottom = 1.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Camera2D/HUD/BottomBar/Minimap" index="0"]
+handle_input_locally = false
+size = Vector2i(256, 170)
+render_target_update_mode = 4
+
+[node name="VisualOverlay" type="Control" parent="Camera2D/HUD/BottomBar" index="4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TileMap" type="TileMap" parent="Camera2D/HUD/BottomBar/VisualOverlay" index="0"]
+position = Vector2(0, -5)
+tile_set = ExtResource("4_3ymha")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 2293793, 9, 1, 2228257, 9, 2, 2228257, 9, 3, 2228257, 9, 4, 2228257, 9, 5, 2228257, 9, 6, 2228257, 9, 7, 2228257, 9, 8, 2228257, 9, 9, 2228257, 9, 10, 2228257, 9, 11, 2228257, 9, 12, 2228257, 9, 13, 2228257, 9, 14, 2228257, 9, 15, 2228257, 9, 65551, 2228257, 65545, 131087, 2228257, 65545, 196623, 2228257, 65545, 262159, 2228257, 65545, 327695, 2228257, 65545, 393231, 2228257, 65545, 458767, 2228257, 65545, 524303, 2228257, 65545, 589839, 2228257, 65545, 655375, 2228257, 65545, 720911, 2228257, 65545, 786447, 2228257, 65545, 851983, 2228257, 65545, 852016, 2228257, 65545, 786480, 2228257, 65545, 720944, 2228257, 65545, 655408, 2228257, 65545, 589872, 2228257, 65545, 524336, 2228257, 65545, 458800, 2228257, 65545, 393264, 2228257, 65545, 327728, 2228257, 65545, 262192, 2228257, 65545, 196656, 2228257, 65545, 131120, 2228257, 65545, 65584, 2228257, 65545, 48, 2228257, 9, 655423, 2228257, 131081, 589887, 2228257, 131081, 720959, 2228257, 131081, 786495, 2228257, 131081, 852031, 2228257, 131081, 524351, 2228257, 131081, 458815, 2228257, 131081, 393279, 2228257, 131081, 327743, 2228257, 131081, 262207, 2228257, 131081, 196671, 2228257, 131081, 131135, 2228257, 131081, 65599, 2228257, 131081, 63, 2228257, 9, 16, 2228257, 9, 17, 2228257, 9, 18, 2228257, 9, 19, 2228257, 9, 20, 2228257, 9, 21, 2228257, 9, 22, 2228257, 9, 23, 2228257, 9, 24, 2228257, 9, 25, 2228257, 9, 26, 2228257, 9, 27, 2228257, 9, 28, 2228257, 9, 29, 2228257, 9, 30, 2228257, 9, 31, 2228257, 9, 32, 2228257, 9, 33, 2228257, 9, 34, 2228257, 9, 35, 2228257, 9, 36, 2228257, 9, 37, 2228257, 9, 38, 2228257, 9, 39, 2228257, 9, 40, 2228257, 9, 41, 2228257, 9, 42, 2228257, 9, 43, 2228257, 9, 44, 2228257, 9, 45, 2228257, 9, 46, 2228257, 9, 47, 2228257, 9, 49, 2228257, 9, 50, 2228257, 9, 51, 2228257, 9, 52, 2228257, 9, 53, 2228257, 9, 54, 2228257, 9, 55, 2228257, 9, 56, 2228257, 9, 57, 2228257, 9, 58, 2228257, 9, 59, 2228257, 9, 60, 2228257, 9, 61, 2228257, 9, 62, 2228257, 9, 64, 2228257, 9, 65, 2228257, 9, 66, 2228257, 9, 67, 2228257, 9, 68, 2228257, 9, 69, 2228257, 9, 70, 2228257, 9, 71, 2228257, 9, 72, 2228257, 9, 73, 2228257, 9, 74, 2228257, 9, 75, 2228257, 9, 76, 2228257, 9, 77, 2228257, 9, 78, 2228257, 9, 79, 2228257, 9)
+
+[node name="SelectRect" type="Node2D" parent="Camera2D/HUD" index="2"]
+script = ExtResource("5")
+
+[connection signal="toggled" from="Camera2D/HUD/TopBar/QuickMenu/Menu" to="Camera2D/HUD/TopBar/QuickMenu/Menu" method="_on_Menu_toggled"]

@@ -1,6 +1,7 @@
 using Godot;
 using RTS.mainspace;
 using RTS.Physics;
+using System;
 
 namespace RTS.Gameplay
 {
@@ -19,8 +20,8 @@ namespace RTS.Gameplay
         [Export(PropertyHint.Range, "0,10,1,or_greater")] public float Damage { get; set; }
         [Export] public bool Ranged { get; set; }//If ranged unit will attack once enemy is in range. If melee unit will attack once close and range only affects "escape distance" and/or AoE
         [Export] public bool AoE { get; set; }//Tool needed to require area2D if AoE.
-        [Export(PropertyHint.Range, "0,10,1,or_greater")] public float range;//in tiles
-        public Tilemeter Range { get { return (Tilemeter)range; } set { range = (float)value; } }
+
+
         [Export] public DamageType Damagetype { get; set; }
         public AnimationPlayer anim;
         public Area2D AttackRange;
@@ -28,12 +29,31 @@ namespace RTS.Gameplay
         public bool targetInRange = false;
         public Second cooldown;
         public Second AttackPeriod { get { return 1 / AttackSpeed; } }
+
+        [Export(PropertyHint.Range, "0,10,1,or_greater")]
+        public float range;//in tiles
+        public Tilemeter Range//This simply reinterprets things as Tilemeters
+        {
+            get => (Tilemeter)range;
+            set => range = (float)value;
+        }
+       
+        /*public float RangeExport//This exists simply as means to export the float and set Range proper
+        {
+            get => range; set
+            {
+                range =value;
+                GD.Print(Range.Pixels);
+                ((CircleShape2D)GetNode<Area2D>(nameof(AttackRange)).GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = Range.Pixels;
+            }
+        }*/
+
         public Selectable owner;
         public Sprite2D Graphic;
         public override void _Ready()
         {
-            owner = GetParent().GetParent<Selectable>();
             base._Ready();
+            owner = GetParent().GetParent<Selectable>();
             Graphic = GetNode<Sprite2D>(nameof(Graphic));
             anim = Graphic.GetNode<AnimationPlayer>(nameof(AnimationPlayer));
             AttackRange = GetNode<Area2D>(nameof(AttackRange));
@@ -41,6 +61,21 @@ namespace RTS.Gameplay
             cooldown = AttackPeriod;
             AttackRange.BodyEntered += TargetEnteredRange;
             AttackRange.BodyExited += TargetLeftRange;
+        }
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+            if (cooldown < AttackPeriod) cooldown += delta;
+            if (targetInRange)
+            {
+                if (cooldown >= AttackPeriod)
+                {
+                    AttackAnim(owner.Graphics.Direction);
+                    cooldown = 0;
+                    Damageable damagableTarget = (Damageable)target.selectable;
+                    damagableTarget.HP = (int)Math.Round(damagableTarget.HP - Damage);//Not the nicest but feels the correctest
+                }
+            }
         }
         public void AttackAnim(Direction direction)
         {
@@ -99,7 +134,7 @@ namespace RTS.Gameplay
         public void Retarget(Target target)
         {
             this.target = target;
-            if(target.type==Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
+            if (target.type == Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
                 targetInRange = true;
             else targetInRange = false;
             //GD.Print(targetInRange);

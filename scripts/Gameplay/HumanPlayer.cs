@@ -77,8 +77,7 @@ namespace RTS.scripts.Gameplay
 
         public void JustHovered(Selectable target)
         {
-            hoveringOver.type = Target.Type.Selectable;
-            hoveringOver.selectable = target;
+            hoveringOver = new(target);
             target.Graphics.Hover();
         }
         public void DeHovered(Selectable target)
@@ -104,7 +103,7 @@ namespace RTS.scripts.Gameplay
             BottomBar = HUD.GetNode<ColorRect>(nameof(BottomBar));
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
-            camera.VisibilityLayer = BitID;//I am not sure this is working proper
+            //camera.VisibilityLayer = BitID;//I am not sure this is working proper
             UnitsSelected = BottomBar.GetNode<UnitsSelected>(nameof(UnitsSelected));
             UnitActions = BottomBar.GetNode<UnitActions>(nameof(UnitActions));
         }
@@ -181,7 +180,7 @@ namespace RTS.scripts.Gameplay
                         //hoveringOver.location = mousebutton.GlobalPosition+camera.Position;
                         hoveringOver.location = GetViewport().GetMousePosition() + camera.Position;
                     }
-                    else if (hoveringOver.type == Target.Type.Selectable && hoveringOver.selectable.team.IsHostile())
+                    else if (hoveringOver.type == Target.Type.Selectable && hoveringOver.selectable.team.IsHostile(this.Team))
                     {
                         Clickmode = ClickMode.Attack;
                     }
@@ -197,6 +196,7 @@ namespace RTS.scripts.Gameplay
                     }
                     foreach (Selectable selectable in Selection)//Can be paralelised
                     {
+                        if (selectable.team != Team) continue;
                         if (!mousebutton.ShiftPressed) { selectable.CleanCommandQueue(); }
                         selectable.Command(Clickmode, new Target(hoveringOver));
                     }
@@ -246,7 +246,7 @@ namespace RTS.scripts.Gameplay
                 };
 
 
-                var prefiltered = (from s in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query, MAX_SELECTED_THINGS)
+                Selectable[] prefiltered = (from s in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query, MAX_SELECTED_THINGS)
                                    where ((GodotObject)s["collider"]) is Selectable
                                    select (Selectable)s["collider"]).ToArray();
                 if (prefiltered.Length == 1)
@@ -263,9 +263,9 @@ namespace RTS.scripts.Gameplay
                             &&
                             (unit.CurrentAction != Unit.SelectableAction.Dying)
                             &&
-                            Selection.Add(unit)//isn't selected again (shift select) 
+                            unit.team == Team
                             &&
-                            unit.team == team
+                            Selection.Add(unit)//isn't selected again (shift select) 
                             )
                         {
                             SelectObject(unit);

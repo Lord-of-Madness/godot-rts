@@ -1,7 +1,5 @@
 using Godot;
-using RTS.Gameplay;
 using RTS.scripts.Gameplay;
-using System;
 
 namespace RTS.Gameplay
 {

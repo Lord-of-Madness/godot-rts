@@ -17,6 +17,15 @@ namespace RTS.Gameplay
             Selectable
         }
         public Target() { }
+        public Target(Selectable selectable)
+        {
+            type = Type.Selectable; this.selectable = selectable;
+        }
+        public Target(Vector2 location)
+        {
+            type = Type.Location;
+            this.location = location;
+        }
         public Target(Target other)
         {
             type = other.type;
@@ -42,13 +51,9 @@ namespace RTS.Gameplay
     //[Tool]
     public partial class Player : Node
     {
-        public int ID { get; private set; } = 3;//TODO check this cause I think I have somewhere specified what the IDs mean and 3 might just mean a human player or something
-        public uint BitID//WIP THIS can be done like in the editor via the flag export
-        {
-            get => ((uint)1) << (ID - 1);
-        }
-
-        protected Team team = Team.Team1;
+        private Team team;
+        [Export]
+        public Team Team { get => team; private set => team = value; }
         public string name = "Player";
 
         protected SortedSet<Selectable> Selection = new();
@@ -59,7 +64,6 @@ namespace RTS.Gameplay
         //[Export] private bool EditorPause { get; set; } = true;
 
         private Array<GameResource> gameresources;//having a backing field made sense back when we were trying to be adding resources from the editor. For now its a relic.
-        [Export]
         public Array<GameResource> Game_Resources
         {
             get => gameresources;
