@@ -27,25 +27,31 @@ namespace RTS.Graphics
         {
             if (IsDead) return;
             //Sprite:
-            if (direction.X > 0.5)
+            if (Math.Abs(direction.X) > Math.Abs(direction.Y))
             {
-                anim.Play(Direction.Right.ToString());
-                Direction = Direction.Right;
-            }
-            else if (direction.X < -0.5)
-            {
-                anim.Play(Direction.Left.ToString());
-                Direction = Direction.Left;
-            }
-            else if (direction.Y < -0.5)
-            {
-                anim.Play(Direction.Back.ToString());
-                Direction = Direction.Back;
+                if (direction.X > 0.5)
+                {
+                    anim.Play(Direction.Right.ToString());
+                    Direction = Direction.Right;
+                }
+                else
+                {
+                    anim.Play(Direction.Left.ToString());
+                    Direction = Direction.Left;
+                }
             }
             else
             {
-                anim.Play(Direction.Forward.ToString());
-                Direction = Direction.Forward;
+                if (direction.Y < -0.5)
+                {
+                    anim.Play(Direction.Back.ToString());
+                    Direction = Direction.Back;
+                }
+                else
+                {
+                    anim.Play(Direction.Forward.ToString());
+                    Direction = Direction.Forward;
+                }
             }
 
             //Path:
@@ -63,7 +69,7 @@ namespace RTS.Graphics
         }
         public void NavigationFinished()
         {
-            if(!IsDead) anim.Play($"Idle{Direction}");
+            if (!IsDead) anim.Play($"Idle{Direction}");
             PathLine.Points = Array.Empty<Vector2>();
             //Sometimes navigation is finished even when not all points have been passed through
         }

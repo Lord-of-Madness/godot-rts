@@ -59,25 +59,17 @@ namespace RTS.Gameplay
                 }
             }
         }
-        /*public override void _PhysicsProcess(double delta)
+        public override void _PhysicsProcess(double delta)
         {
             //if (CurrentAction == UnitAction.Dying) return;
-            if (following) RallyPoint = RallyPoint;
-        }*/
+#pragma warning disable CA2245 // Do not assign a property to itself
+            if (following) RallyPoint = RallyPoint;//I know its kinda ugly but it works!
+#pragma warning restore CA2245 // Do not assign a property to itself
+        }
             public int CompareTo(Building other)
         {
             return GetIndex().CompareTo(other.GetIndex());//For now
         }
 
-        public override void Dead()
-        {
-            EmitSignal(SignalName.SignalDisablingSelection, this);
-            EmitSignal(SignalName.SignalDead);
-            Graphics.DeathAnim();//At the end it will remove the unit
-        }
-        /*public override void _Ready()
-        {
-            base._Ready();
-        }*/
     }
 }

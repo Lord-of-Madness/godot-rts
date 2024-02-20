@@ -19,7 +19,6 @@ events = [SubResource("InputEventKey_1ktqu")]
 [node name="HumanPlayer" instance=ExtResource("1_t3lyo")]
 script = ExtResource("2_7rcui")
 ScrollSpeed = 5.0
-Team = 0
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 anchor_mode = 0
