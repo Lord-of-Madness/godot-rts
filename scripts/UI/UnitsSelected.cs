@@ -38,6 +38,7 @@ namespace RTS.UI
                 Selectable s = Selection.First();
                 AddChild(new InfoLabel(s.Name));
                 AddChild(new InfoLabel(s.team.ToString()));
+                AddChild(new InfoLabel(s.CurrentAction.ToString()));
 
                 if (s is Damageable d) {
                     AddChild(new InfoLabel("MaxHP: " + d.MaxHP));

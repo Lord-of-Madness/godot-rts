@@ -46,6 +46,11 @@ namespace RTS.Gameplay
                 else return selectable.Position;
             }
         }
+        public override string ToString()
+        {
+            if (type == Type.Location) return location.ToString();
+            else return selectable.ToString();
+        }
     }
 
     //[Tool]

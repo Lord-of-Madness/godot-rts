@@ -228,9 +228,9 @@ namespace RTS.scripts.Gameplay
                     {
                         selectable.Deselect();
                         selectable.SignalDisablingSelection -= DeselectObject;
-                        //specificaly not using DeselectUnit(unit) cause I want to reset tbe selected units and not remove them one after another
+                        //specificaly not using DeselectObject(selectable) cause I want to reset the selected units and not remove them one after another
                     }
-                    Selection = new();
+                    Selection.Clear();
 
                 }
             }

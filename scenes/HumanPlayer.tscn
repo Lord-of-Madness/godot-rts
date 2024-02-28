@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://beoxgmnjp5qn8"]
+[gd_scene load_steps=13 format=3 uid="uid://beoxgmnjp5qn8"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1_t3lyo"]
 [ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="2_7rcui"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/UI/MenuUI.cs" id="6"]
 [ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
 [ext_resource type="Script" path="res://scripts/UI/UnitsSelected.cs" id="7_w6rp2"]
+[ext_resource type="Script" path="res://scripts/Cucumber.gd" id="10_nus8h"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
 keycode = 4194305
@@ -176,5 +177,9 @@ layer_0/tile_data = PackedInt32Array(0, 2293793, 9, 1, 2228257, 9, 2, 2228257, 9
 
 [node name="SelectRect" type="Node2D" parent="Camera2D/HUD" index="2"]
 script = ExtResource("5")
+
+[node name="GDExample" type="GDExample" parent="." index="3"]
+position = Vector2(2.21082, 2.15995)
+script = ExtResource("10_nus8h")
 
 [connection signal="toggled" from="Camera2D/HUD/TopBar/QuickMenu/Menu" to="Camera2D/HUD/TopBar/QuickMenu/Menu" method="_on_Menu_toggled"]

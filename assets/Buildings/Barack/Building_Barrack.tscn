@@ -1,7 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg1bn2ipijxef"]
+[gd_scene load_steps=12 format=3 uid="uid://cg1bn2ipijxef"]
 
 [ext_resource type="PackedScene" uid="uid://cjhgu6y8fsaba" path="res://scenes/Gameplay/Building.tscn" id="1_m2r6f"]
 [ext_resource type="Script" path="res://assets/Buildings/Barack/Building_Barrack.cs" id="2_dfrfr"]
+[ext_resource type="Script" path="res://assets/Abilities/Train/TrainAbilityRes.cs" id="3_c8r0n"]
+[ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="3_diknd"]
+[ext_resource type="PackedScene" uid="uid://c1eldf4wb86j3" path="res://assets/Units/king/Unit_King.tscn" id="4_hnfwu"]
+[ext_resource type="Script" path="res://assets/Abilities/MenuAbility/MenuAbilityRes.cs" id="7_oervi"]
+
+[sub_resource type="Resource" id="Resource_v34wc"]
+script = ExtResource("3_c8r0n")
+unit = ExtResource("4_hnfwu")
+
+[sub_resource type="Resource" id="Resource_q1f1i"]
+script = ExtResource("3_diknd")
+pos = 0
+ability = SubResource("Resource_v34wc")
+
+[sub_resource type="Resource" id="Resource_8tqv6"]
+script = ExtResource("7_oervi")
+Text = "Menu"
+ExportAbilities = []
+
+[sub_resource type="Resource" id="Resource_d2m88"]
+script = ExtResource("3_diknd")
+pos = 1
+ability = SubResource("Resource_8tqv6")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sdjb5"]
 size = Vector2(144.001, 144.999)
@@ -9,8 +32,7 @@ size = Vector2(144.001, 144.999)
 [node name="Barrack" instance=ExtResource("1_m2r6f")]
 script = ExtResource("2_dfrfr")
 MaxHP = 70
-ExportAbilities = []
-visionRange = 0.0
+ExportAbilities = [SubResource("Resource_q1f1i"), SubResource("Resource_d2m88")]
 
 [node name="CollisionShape2D" parent="." index="0"]
 shape = SubResource("RectangleShape2D_sdjb5")

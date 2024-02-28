@@ -19,6 +19,7 @@ namespace RTS.Gameplay
                 HealthChanged();
             }
         }
+        public bool Invulnerable { get; set; } = false;//TODO (does nothing for now)
         //[ExportGroup("CombatStats")]
         [Export] public int MaxHP { get; set; }
         protected ProgressBar HealthBar;
@@ -29,7 +30,15 @@ namespace RTS.Gameplay
             EmitSignal(SignalName.SignalHealthChanged);
             if (HP <= 0) Dead();
         }
-        public abstract void Dead();
+        public void Dead()
+        {
+            CurrentAction = SelectableAction.Dying;
+            EmitSignal(SignalName.SignalDisablingSelection, this);
+            EmitSignal(SignalName.SignalDead);
+            CleanCommandQueue();
+            //leave corpse?
+            Graphics.DeathAnim();//At the end it will remove the Damagable
+        }
         public void Damaged()
         {
             EmitSignal(SignalName.SignalDamaged);
@@ -41,5 +50,6 @@ namespace RTS.Gameplay
             HealthBar.MaxValue = MaxHP;
             HP = MaxHP;
         }
+
     }
 }

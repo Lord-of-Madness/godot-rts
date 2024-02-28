@@ -1,5 +1,4 @@
 ﻿using Godot;
-//using MonoCustomResourceRegistry;
 namespace RTS.Gameplay
 {
     [GlobalClass]
@@ -11,8 +10,7 @@ namespace RTS.Gameplay
         public PackedScene Building;
         public override BuildBuildingAbility Instantiate(Selectable owner)
         {
-            if (owner is null) GD.Print("BuildBuildingAbility Instantiate");
-            return new BuildBuildingAbility(Building.Instantiate<Building>()) {OwningSelectable = owner };
+            return new(Building.Instantiate<Building>()) {OwningSelectable = owner };
         }
     }
 }

@@ -5,10 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://ctod8dbkgo14r" path="res://resources/knights_3x.png" id="3_voakr"]
 [ext_resource type="PackedScene" uid="uid://b8fpqhh5ad6jf" path="res://scenes/Anims/AttackAnim.tscn" id="5_87v5t"]
 
-[node name="Unit" instance=ExtResource("1_wd507")]
+[node name="Unit_King" instance=ExtResource("1_wd507")]
 speed = 2.0
 MaxHP = 50
-ExportAbilities = []
 visionRange = 5.0
 
 [node name="UnitPortrait" parent="." index="1"]
@@ -27,9 +26,6 @@ offset_left = -8.0
 offset_top = -26.0
 offset_right = 8.0
 offset_bottom = -22.0
-
-[node name="Attacks" parent="." index="5" node_paths=PackedStringArray("PrimaryAttack")]
-PrimaryAttack = NodePath("MeleeAttack")
 
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_87v5t")]
 AttackSpeed = 1.0

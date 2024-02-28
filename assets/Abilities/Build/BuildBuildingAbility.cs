@@ -29,7 +29,7 @@ namespace RTS.Gameplay
         {
             Building newBuilding = (Building)building.Duplicate();
             newBuilding.Position = target.Position;
-            if (OwningSelectable is null) GD.Print("OnTargetRecieved");
+            GD.Print(OwningSelectable.Name);
             OwningSelectable.AddSibling(newBuilding);
         }
     }

@@ -25,9 +25,6 @@ namespace RTS.Gameplay
         /// </summary>
         public double BaseUnitValue { get; set; }
 
-        
-
-
         /// <summary>
         /// Unit movement speed in Tiles per second
         /// Figure out how to add descriptions in c# (it doesn't appear to be possible)
@@ -44,7 +41,6 @@ namespace RTS.Gameplay
 
         public override void _Ready()
         {
-
             base._Ready();
             Graphics = GetNode<UnitGraphics>(nameof(Graphics));
             NavAgent = GetNode<NavigationAgent2D>(nameof(NavAgent));
@@ -52,7 +48,7 @@ namespace RTS.Gameplay
             NavAgent.NavigationFinished += TargetReached;
             NavAgent.NavigationFinished += Graphics.NavigationFinished;
             NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius;//So that its always somewhat accurate
-            GoIdle();
+            Detarget();
             Deselect();
         }
         public override void CleanCommandQueue()
@@ -84,7 +80,6 @@ namespace RTS.Gameplay
         {
             if (following) return;
             if (CurrentAction == SelectableAction.Move) GoIdle();
-            Detarget();
         }
         private void GoIdle()
         {
@@ -178,11 +173,14 @@ namespace RTS.Gameplay
         {
             //if (CurrentAction == UnitAction.Dying) return;
             if (following) NavAgent.TargetPosition = target.Position;
-            if (!NavAgent.IsNavigationFinished())
+            if (
+                !NavAgent.IsNavigationFinished()
+                &&
+                Position!= NavAgent.TargetPosition//this is here because when you set NavAgents position to the position of the unit the navigation ain't considered finished
+                )
             {
                 Vector2 direction = Position.DirectionTo(NavAgent.GetNextPathPosition());
                 NavAgent.Velocity = Speed.Speed * direction;
-                
                 Graphics.MovingTo(direction);
             }
 
@@ -215,17 +213,6 @@ namespace RTS.Gameplay
 
             //Ordered by age in scene tree (should be last resort)
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.
-        }
-
-        public override void Dead()
-        {
-            CurrentAction = SelectableAction.Dying;
-            EmitSignal(SignalName.SignalDisablingSelection,this);
-            EmitSignal(SignalName.SignalDead);
-            CleanCommandQueue();
-            //leave corpse?
-            Graphics.DeathAnim();//At the end it will remove the unit
-
         }
     }
 }

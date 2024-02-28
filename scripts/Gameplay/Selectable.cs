@@ -199,5 +199,9 @@ namespace RTS.Gameplay
             return GetIndex().CompareTo(other.GetIndex());
 
         }
+        public override string ToString()
+        {
+            return base.ToString() + " " + Name;
+        }
     }
 }

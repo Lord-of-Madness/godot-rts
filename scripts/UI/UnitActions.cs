@@ -3,6 +3,7 @@ using RTS.scripts.Gameplay;
 
 namespace RTS.Gameplay
 {
+    [GlobalClass]
     public partial class UnitActions : GridContainer
     {
         [Export]
@@ -20,14 +21,16 @@ namespace RTS.Gameplay
         public override void _Ready()
         {
             base._Ready();
-            player = GetParent().GetParent().GetParent().GetParent<HumanPlayer>();
+            player = GetParent().GetParent().GetParent().GetParent<HumanPlayer>();//Crude? Yes. Effective? Yes
         }
 
         public void FillGridButtons(Godot.Collections.Dictionary<int, Ability> abilities)
         {
+            
             DestroyChildren();
             for (int i = 0; i < BUTTON_COUNT; i++)
             {
+                
                 AbilityButton button = new();//This feels wasteful but safer. I know not of a way to otherwise clean up the buttons safely.
                 AddChild(button);//Needs to be here cause _Ready gets called here and this is when we need it to happen
                 if (abilities.TryGetValue(i, out Ability ability))

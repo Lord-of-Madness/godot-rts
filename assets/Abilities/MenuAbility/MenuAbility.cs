@@ -4,6 +4,9 @@ using RTS.Physics;
 using System;
 namespace RTS.Gameplay
 {
+    /// <summary>
+    /// Works as a "Back" button for MenuAbilities
+    /// </summary>
     public partial class BackAbility : Ability
     {
         Dictionary<int, Ability> PreviousAbilityList;
@@ -26,40 +29,36 @@ namespace RTS.Gameplay
 
         }
     }
-
+    /// <summary>
+    /// Acts like a folder in the Ability UI to group things like Buildings together
+    /// </summary>
     public partial class MenuAbility : Ability
     {
+        [Export]
         public override string Text { get; set; }
         public override bool Active => true;
         public override Second Cooldown => new(0f);
 
-        private Dictionary<int, Ability> abilities;
+        [Export]
+        public Dictionary<int, Ability> abilities;
 
-        public MenuAbility(Dictionary<int, Ability> abilities , Selectable owner)
+        public MenuAbility(Dictionary<int, Ability> abilities , Selectable owner,string text)
         {
             this.abilities = abilities;
+            Text = text;
             OwningSelectable = owner;
             foreach (var pair in this.abilities)
             {
-                if( OwningSelectable is null)GD.Print("MenuAbility");
-                //T item = abilities[i];
-                //BuildBuildingAbility ability = new(item, OwningSelectable);//Rather than the building itself I should add an ability to build said building in the BuildAbility
-                pair.Value.OwningSelectable = OwningSelectable;
                 AddChild(pair.Value);
-                //abilities.Add(i, pair.Value);
             }
 
 
         }
 
-        //public Array<Blueprint<T>> SceneList { get; set; }
         public override void OnClick(AbilityButton button)
         {
             base.OnClick(button);
             UnitActions original = button.GetParent<UnitActions>();
-
-            //Dictionary<int, Ability> abilities = new();
-
             if (!abilities.ContainsKey(original.BUTTON_COUNT - 1))
             {
                 BackAbility backAbility = new(OwningSelectable.Abilities, OwningSelectable);//This is duplicated on purpose cause if there are multiple levels of Lists the Owning Selectable is still the same but Ability list might be different

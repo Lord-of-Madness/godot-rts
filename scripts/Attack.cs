@@ -64,12 +64,14 @@ namespace RTS.Gameplay
         }
         public override void _Process(double delta)
         {
+
             base._Process(delta);
             if (cooldown < AttackPeriod) cooldown += delta;
             if (targetInRange)
             {
                 if (cooldown >= AttackPeriod)
                 {
+                    
                     AttackAnim(owner.Graphics.Direction);
                     cooldown = 0;
                     Damageable damagableTarget = (Damageable)target.selectable;
@@ -113,12 +115,12 @@ namespace RTS.Gameplay
         {
             if (target is null || owner.CurrentAction != Selectable.SelectableAction.Attack) return;
 
-            //GD.Print(inrangee.Name, " entered");
+            GD.Print(inrangee.Name, " entered and has type: ",inrangee.GetType());
             if (inrangee is Selectable selectable
                 && selectable == target.selectable)
             {
                 targetInRange = true;
-                //GD.Print("Target in range!");
+                GD.Print("Target in range!");
             }
         }
         public void TargetLeftRange(Node2D body)
@@ -134,13 +136,14 @@ namespace RTS.Gameplay
         public void Retarget(Target target)
         {
             this.target = target;
+            GD.Print("Retargetin! "+target);
             if (target.type == Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
                 targetInRange = true;
             else targetInRange = false;
-            //GD.Print(targetInRange);
         }
         public void Detarget()
         {
+            GD.Print("Detarget");
             target = null;
             targetInRange = false;
         }

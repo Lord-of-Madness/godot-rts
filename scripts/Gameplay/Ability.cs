@@ -14,12 +14,6 @@ namespace RTS.Gameplay
 
         public abstract void OnTargetRecieved(Target target);
     }
-    //[GlobalClass]
-    public abstract partial class AbilityRes : Resource
-    {
-        public abstract string Text { get; set; }
-        public abstract Ability Instantiate(Selectable owner);
-    }
     public abstract partial class Ability : Node
     {
         private Second cooldown = 0;
