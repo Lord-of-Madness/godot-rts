@@ -1,5 +1,4 @@
 using Godot;
-using RTS.scripts.Gameplay;
 
 namespace RTS.Gameplay
 {
@@ -7,8 +6,8 @@ namespace RTS.Gameplay
     public partial class UnitActions : GridContainer
     {
         [Export]
-        int rows = 4;
-        public int BUTTON_COUNT { get => rows * Columns; }
+        ushort rows = 4;
+        public ushort BUTTON_COUNT { get => (ushort)(rows * (ushort)Columns); }
         public void DestroyChildren()
         {
             foreach (var ability in GetChildren())//Clean up the old buttons
@@ -24,11 +23,11 @@ namespace RTS.Gameplay
             player = GetParent().GetParent().GetParent().GetParent<HumanPlayer>();//Crude? Yes. Effective? Yes
         }
 
-        public void FillGridButtons(Godot.Collections.Dictionary<int, Ability> abilities)
+        public void FillGridButtons(Godot.Collections.Dictionary<ushort, Ability> abilities)
         {
             
             DestroyChildren();
-            for (int i = 0; i < BUTTON_COUNT; i++)
+            for (ushort i = 0; i < BUTTON_COUNT; i++)
             {
                 
                 AbilityButton button = new();//This feels wasteful but safer. I know not of a way to otherwise clean up the buttons safely.

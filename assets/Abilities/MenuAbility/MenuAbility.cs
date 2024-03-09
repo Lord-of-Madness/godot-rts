@@ -9,8 +9,8 @@ namespace RTS.Gameplay
     /// </summary>
     public partial class BackAbility : Ability
     {
-        Dictionary<int, Ability> PreviousAbilityList;
-        public BackAbility(Dictionary<int, Ability> previousAbList, Selectable owner)
+        Dictionary<ushort, Ability> PreviousAbilityList;
+        public BackAbility(Dictionary<ushort, Ability> previousAbList, Selectable owner)
         {
             PreviousAbilityList = previousAbList;
             OwningSelectable = owner;
@@ -40,9 +40,9 @@ namespace RTS.Gameplay
         public override Second Cooldown => new(0f);
 
         [Export]
-        public Dictionary<int, Ability> abilities;
+        public Dictionary<ushort, Ability> abilities;
 
-        public MenuAbility(Dictionary<int, Ability> abilities , Selectable owner,string text)
+        public MenuAbility(Dictionary<ushort, Ability> abilities , Selectable owner,string text)
         {
             this.abilities = abilities;
             Text = text;
@@ -59,11 +59,11 @@ namespace RTS.Gameplay
         {
             base.OnClick(button);
             UnitActions original = button.GetParent<UnitActions>();
-            if (!abilities.ContainsKey(original.BUTTON_COUNT - 1))
+            if (!abilities.ContainsKey((ushort)(original.BUTTON_COUNT - 1u)))
             {
                 BackAbility backAbility = new(OwningSelectable.Abilities, OwningSelectable);//This is duplicated on purpose cause if there are multiple levels of Lists the Owning Selectable is still the same but Ability list might be different
                 AddChild(backAbility);
-                abilities.Add(original.BUTTON_COUNT - 1, backAbility);
+                abilities.Add((ushort)(original.BUTTON_COUNT - 1), backAbility);
             }
             original.FillGridButtons(abilities);
         }

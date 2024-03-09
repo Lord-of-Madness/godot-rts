@@ -11,7 +11,7 @@ namespace RTS.Gameplay
         public Array<AbilityPair> ExportAbilities = new();
         public override MenuAbility Instantiate(Selectable owner)
         {
-            Dictionary<int, Ability> abilities = new();
+            Dictionary<ushort, Ability> abilities = new();
             foreach (var pair in ExportAbilities)
             {
                 abilities.Add(pair.pos, pair.ability.Instantiate(owner));
