@@ -1,15 +1,9 @@
 ﻿using Godot;
-using Godot.Collections;
-using RTS.Gameplay;
 using RTS.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static RTS.Gameplay.Player;
 
-namespace RTS.scripts.Gameplay
+namespace RTS.Gameplay
 {
 
     public partial class HumanPlayer : Player
@@ -90,7 +84,7 @@ namespace RTS.scripts.Gameplay
         {
             base._Ready();
             Clickmode = ClickMode.Move;
-            hoveringOver = new();
+            hoveringOver = new(Vector2.Zero);
             camera = GetNode<Camera2D>(nameof(Camera2D));
             HUD = camera.GetNode<CanvasLayer>(nameof(HUD));
             selectRectNode = HUD.GetNode<SelectRect>(nameof(SelectRect));
@@ -261,7 +255,7 @@ namespace RTS.scripts.Gameplay
                         if (
                             selectable is Unit unit
                             &&
-                            (unit.CurrentAction != Unit.SelectableAction.Dying)
+                            (unit.CurrentAction != Selectable.SelectableAction.Dying)
                             &&
                             unit.team == Team
                             &&
