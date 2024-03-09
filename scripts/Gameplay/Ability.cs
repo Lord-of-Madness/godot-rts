@@ -11,12 +11,15 @@ namespace RTS.Gameplay
     [GlobalClass]
     public abstract partial class TargetedAbility : Ability
     {
-
+        /// <summary>
+        /// Triggered upon specifiing the target (Ability.OnClick has been triggered and then a Target has been given)
+        /// </summary>
+        /// <param name="target"></param>
         public abstract void OnTargetRecieved(Target target);
     }
     public abstract partial class Ability : Node
     {
-        private Second cooldown = 0;
+        protected Second cooldown = 0;
         /// <summary>
         /// <para>Triggers upon pressing the button (later also on Shortcut)</para>
         /// <para>Has a reference to its button and through it to the rest of the scene</para>
@@ -25,9 +28,7 @@ namespace RTS.Gameplay
         /// <param name="button"></param>
         public virtual void OnClick(AbilityButton button)
         {
-            if (OnCooldown) return;
             cooldown = Cooldown;
-
         }
         public override void _Process(double delta)
         {
@@ -46,16 +47,23 @@ namespace RTS.Gameplay
         /// <para> We generaly throw exceptions on set except in generated names but maybe because of translations we might wanna change it later </para>
         /// </summary>
         public abstract string Text { get; set; }
+        [Export]
         public Key Shortcut { get; set; } = Key.None;
         /// <summary>Ability cooldown (static value) (<c>cooldown</c> is the dynamic time remaining)</summary>
         public abstract Second Cooldown { get; }
+        /// <summary>
+        /// True if Ability is cooling down
+        /// </summary>
         public bool OnCooldown { get
             {
                 if (Cooldown == 0) return false;
-                else return cooldown <= 0;
+                else return cooldown > 0;
             } }
         ///<summary> Describes whether ability is Active or Passive (button is either enabled or not)</summary>
         public abstract bool Active { get; }
+        /// <summary>
+        /// The selectable that owns this Ability
+        /// </summary>
         public Selectable OwningSelectable { get; set; }
     }
 }
