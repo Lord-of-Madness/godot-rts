@@ -1,7 +1,6 @@
 ﻿using Godot;
 using RTS.Graphics;
 using RTS.Physics;
-using RTS.scripts.Gameplay;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ namespace RTS.Gameplay
     [GlobalClass]
     public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>
     {
-        [Signal] public delegate void SignalDisablingSelectionEventHandler(Unit unit);//when dead, loss of control etc.
+        [Signal] public delegate void SignalDisablingSelectionEventHandler(Selectable selectable);//when dead, loss of control etc.
         public enum SelectableAction
         {
             Move,
@@ -82,7 +81,7 @@ namespace RTS.Gameplay
         public Array<AbilityPair> ExportAbilities = new();
 
         public Node AbilityNode;
-        public Godot.Collections.Dictionary<int, Ability> Abilities = new();
+        public Godot.Collections.Dictionary<ushort, Ability> Abilities = new();
 
         public Area2D VisionArea;
         [Export(PropertyHint.Range, "0,10,1,or_greater")]
@@ -154,16 +153,17 @@ namespace RTS.Gameplay
             {
                 foreach (Attack attack in Attacks)
                 {
+                    /**/
                     attack.Retarget(target);
                     /*
                     attack.AttackRange.BodyEntered += (body) =>
                     {
                         AttackTargetInRange(body, attack);
-                    };
+                    };*/
                     //attack.AttackRange.BodyEntered += (Node2D smthn) => { GD.Print("Whatever"); };
                     //attack.AttackRange.AreaEntered += (Area2D smthn) => { GD.Print(smthn); };
                     //GD.Print(((CircleShape2D)attack.AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius);
-                    */
+                    
                 }
 
             }
