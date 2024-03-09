@@ -34,7 +34,7 @@ namespace RTS.Gameplay
 
             if (OwningSelectable is Building ownBuilding)
             {
-                GD.Print("Building");
+                //GD.Print("Building");
                 newUnit.Command(Player.ClickMode.Move, ownBuilding.RallyPoint);
             }
             else if (OwningSelectable is Unit unit)
