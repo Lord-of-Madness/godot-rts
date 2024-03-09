@@ -4,6 +4,7 @@ using RTS.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Godot.TextEdit;
 
 namespace RTS.Gameplay
 {
@@ -27,7 +28,6 @@ namespace RTS.Gameplay
 
         /// <summary>
         /// Unit movement speed in Tiles per second
-        /// Figure out how to add descriptions in c# (it doesn't appear to be possible)
         /// </summary>
         [Export(PropertyHint.Range, "0,20,1,or_greater")] //doesn't work with non-Variant
         private float speed;
@@ -76,6 +76,9 @@ namespace RTS.Gameplay
                     break;
             }
         }
+        /// <summary>
+        /// This gets called by the NavAgent when it reaches its goal
+        /// </summary>
         private void TargetReached()
         {
             if (following) return;
@@ -164,15 +167,15 @@ namespace RTS.Gameplay
                 //GD.Print("DETARGETING!");
                 damageable.SignalDead -= Detarget;
             }
-            target = new();
+            target = null;
             following = false;
             
         }
 
         public override void _PhysicsProcess(double delta)
         {
-            //if (CurrentAction == UnitAction.Dying) return;
-            if (following) NavAgent.TargetPosition = target.Position;
+            if (CurrentAction == SelectableAction.Dying) return;
+            if (following && CurrentAction != SelectableAction.Dying) NavAgent.TargetPosition = target.Position;
             if (
                 !NavAgent.IsNavigationFinished()
                 &&
