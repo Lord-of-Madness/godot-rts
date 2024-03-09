@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjq028k0i6idh"]
+[gd_scene load_steps=19 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://beoxgmnjp5qn8" path="res://scenes/HumanPlayer.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
@@ -8,9 +8,40 @@
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="5_bt0lf"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="6_5q6jk"]
 [ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Barack/Building_Barrack.tscn" id="7_2eaqi"]
+[ext_resource type="Script" path="res://assets/Abilities/Train/TrainAbilityRes.cs" id="8_7hd67"]
+[ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="9_tsuri"]
+[ext_resource type="Script" path="res://assets/Abilities/MenuAbility/MenuAbilityRes.cs" id="10_7q1ke"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(46, 46)
+
+[sub_resource type="Resource" id="Resource_v34wc"]
+script = ExtResource("8_7hd67")
+unit = ExtResource("4_b23cp")
+
+[sub_resource type="Resource" id="Resource_q1f1i"]
+script = ExtResource("9_tsuri")
+pos = 0
+ability = SubResource("Resource_v34wc")
+
+[sub_resource type="Resource" id="Resource_8tqv6"]
+script = ExtResource("10_7q1ke")
+Text = "Menu"
+ExportAbilities = []
+
+[sub_resource type="Resource" id="Resource_d2m88"]
+script = ExtResource("9_tsuri")
+pos = 1
+ability = SubResource("Resource_8tqv6")
+
+[sub_resource type="Resource" id="Resource_tl32a"]
+script = ExtResource("8_7hd67")
+unit = ExtResource("6_5q6jk")
+
+[sub_resource type="Resource" id="Resource_e33jb"]
+script = ExtResource("9_tsuri")
+pos = 2
+ability = SubResource("Resource_tl32a")
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_8ua6g")
@@ -29,6 +60,7 @@ layer_2/z_index = 1
 layer_2/tile_data = PackedInt32Array()
 
 [node name="TestCollisonObject" type="StaticBody2D" parent="."]
+editor_description = "Gotta make it so that it taints the tiles underneath"
 z_index = 1
 position = Vector2(667, 180)
 
@@ -60,7 +92,11 @@ position = Vector2(444, 501)
 position = Vector2(503, 154)
 
 [node name="Barrack" parent="HumanPlayer/Selectables" index="6" instance=ExtResource("7_2eaqi")]
-position = Vector2(200, 206)
+position = Vector2(192, 192)
+ExportAbilities = [SubResource("Resource_q1f1i"), SubResource("Resource_d2m88"), SubResource("Resource_e33jb")]
+
+[node name="Barrack2" parent="HumanPlayer/Selectables" index="7" instance=ExtResource("7_2eaqi")]
+position = Vector2(720, 400)
 
 [node name="Player" parent="." instance=ExtResource("5_bt0lf")]
 Team = 1

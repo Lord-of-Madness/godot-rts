@@ -27,7 +27,7 @@ pos = 1
 ability = SubResource("Resource_8tqv6")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sdjb5"]
-size = Vector2(144.001, 144.999)
+size = Vector2(128, 128)
 
 [node name="Barrack" instance=ExtResource("1_m2r6f")]
 script = ExtResource("2_dfrfr")
@@ -35,20 +35,23 @@ MaxHP = 70
 ExportAbilities = [SubResource("Resource_q1f1i"), SubResource("Resource_d2m88")]
 
 [node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(0, -1.90735e-06)
 shape = SubResource("RectangleShape2D_sdjb5")
 
 [node name="Selected" parent="Graphics" index="0"]
-position = Vector2(2.01871, -15.2647)
-scale = Vector2(1.25936, 1.16176)
+position = Vector2(0, 0)
+scale = Vector2(1.08289, 0.970588)
+polygon = PackedVector2Array(-53.5605, -68, -62.795, -55.6364, -62.795, 54.6061, -53.5605, 69.0303, 52.637, 69.0303, 60.9481, 53.5758, 60.9481, -57.697, 49.8666, -68)
 
 [node name="Sprite2D" parent="Graphics" index="1"]
-scale = Vector2(2.32813, 2.32813)
+position = Vector2(3.33786e-06, 3.33786e-06)
+scale = Vector2(2, 2)
 
 [node name="HealthBar" parent="Graphics" index="4"]
-offset_left = -73.0
-offset_top = -91.0
-offset_right = 75.0
-offset_bottom = -74.0
+offset_left = -64.0
+offset_top = -80.0
+offset_right = 64.0
+offset_bottom = -64.0
 
 [node name="Cross" parent="Graphics" index="5"]
 position = Vector2(-2, -7.5)
