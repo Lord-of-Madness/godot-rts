@@ -8,6 +8,13 @@ using System.Linq;
 
 namespace RTS.Gameplay
 {
+    public interface ITargetable//Interface might be better than a class ->TODO conisder
+    {
+        public Vector2 Position { get; }
+        public string ToString();
+    }
+
+
     //[StructLayout(LayoutKind.Explicit)]//Tried making it into C++esque  Variant-like object. Probably silly and completely unecessary. And it didn't even work(even making it a struct broke something somewhere)
     public class Target
     {
@@ -16,7 +23,6 @@ namespace RTS.Gameplay
             Location,
             Selectable
         }
-        public Target() { }
         public Target(Selectable selectable)
         {
             type = Type.Selectable; this.selectable = selectable;
