@@ -10,11 +10,13 @@ namespace RTS.mainspace
 		private Control ChapterMenu;
 		private readonly List<string> Levels = new();
 
+		bool toggleOn =false;
+		double cooldown = 0;
+
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
 			Input.MouseMode = Input.MouseModeEnum.Confined;
-
             MainMenu = GetNode<Control>(nameof(MainMenu));
 			ChapterMenu = GetNode<Control>(nameof(ChapterMenu));
 			MainMenu.GetNode<Button>("ButtonCampaign").Pressed += Campaign;
@@ -72,7 +74,26 @@ namespace RTS.mainspace
 				button.Text = "INVALID";
             }
 		}
-		private void Back()
+        public override void _Process(double delta)
+        {
+            base._Process(delta);
+			if (cooldown > 0) cooldown -= delta;
+        }
+        public override void _UnhandledKeyInput(InputEvent @event)
+        {
+            base._UnhandledKeyInput(@event);
+			if(@event is InputEventKey key)
+			{
+				if(cooldown<=0 && key.Keycode == Key.Escape)
+				{
+					toggleOn = !toggleOn;
+					cooldown = 1d;
+                    Input.MouseMode = toggleOn ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Confined;
+
+                }
+			}
+        }
+        private void Back()
 		{
 			MainMenu.Visible = true;
 			ChapterMenu.Visible = false;
