@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Godot.Collections;
+using Godot.NativeInterop;
 using System.Collections.Generic;
 
 namespace RTS.mainspace
@@ -7,10 +8,17 @@ namespace RTS.mainspace
     using GVector2 = Godot.Vector2;
     public static class GodotExtensions
     {
-        public static Array<T> ToGodotArray<[MustBeVariant] T>(this IEnumerable<T> e)
+        /// <summary>
+        /// Converts Enumerable into a Godot.Array
+        /// </summary>
+        /// <typeparam name="TVariant"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        public static Array<TVariant> ToGodotArray<[MustBeVariant] TVariant>(this IEnumerable<TVariant> enumerable)
         {
-            Array<T> array = new();
-            var en = e.GetEnumerator();
+            
+            Array<TVariant> array = new();
+            var en = enumerable.GetEnumerator();
             while (en.MoveNext())
             {
                 array.Add(en.Current);
