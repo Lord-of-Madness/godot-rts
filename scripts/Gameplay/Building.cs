@@ -1,11 +1,4 @@
-using RTS.Gameplay;
-using RTS.mainspace;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 using Godot;
 
 namespace RTS.Gameplay
@@ -16,12 +9,16 @@ namespace RTS.Gameplay
 
         private Target rallyPoint;
         private bool following = false;
-        Line2D RallyPath;//TODO
+        Line2D RallyPath;
 
-        public Target RallyPoint { get => rallyPoint; set {
+        public Target RallyPoint
+        {
+            get => rallyPoint; set
+            {
                 rallyPoint = value;
-                RallyPath.Points = new Vector2[2] { Position,value.Position };//It behaved mighty strange when I tried to just change the second position. The reassignment didn't work (was simply ignored)
-            } }
+                RallyPath.Points = new Vector2[2] { Position, value.Position };//It behaved mighty strange when I tried to just change the second position. The reassignment didn't work (was simply ignored)
+            }
+        }
 
         public override void _Ready()
         {
@@ -66,7 +63,7 @@ namespace RTS.Gameplay
             if (following) RallyPoint = RallyPoint;//I know its kinda ugly but it works!
 #pragma warning restore CA2245 // Do not assign a property to itself
         }
-            public int CompareTo(Building other)
+        public int CompareTo(Building other)
         {
             return GetIndex().CompareTo(other.GetIndex());//For now
         }
