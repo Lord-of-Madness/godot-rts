@@ -9,7 +9,7 @@ namespace RTS.Gameplay
     /// <para>I am currently assuming this is a binary state and there are only Targeted/NonTargeted Abilities</para>
     /// </summary>
     [GlobalClass]
-    public abstract partial class TargetedAbility : Ability
+    public abstract partial class TargetedAbility : Ability//TODO: add range from which it can be triggered.
     {
         /// <summary>
         /// Triggered upon specifiing the target (Ability.OnClick has been triggered and then a Target has been given)

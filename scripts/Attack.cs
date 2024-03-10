@@ -5,18 +5,26 @@ using System;
 
 namespace RTS.Gameplay
 {
+    /// <summary>
+    /// Class that gets attached in the editor to given Selectable under the Attacks node
+    /// </summary>
+    /// <remarks>
+    /// Has general 
+    /// </remarks>
     [GlobalClass]
     public partial class Attack : Node2D
     {
-        /*
-         Doing it this way allows me to recycle easier however for full release with own models and everythign this should be part of a Unit solidly.
-        Also this allows me to edit it in the editor
-         */
-        public enum DamageType//not gonna use it now (will contain something like: Piercing, Siege etc.)
+        /// <summary>
+        /// Unused for now (TODO: contain something like: Piercing, Siege etc.)
+        /// </summary>
+        public enum DamageType
         {
             Standart
         }
-        [Export(PropertyHint.Range, "0,10,1,or_greater")] public float AttackSpeed { get; set; }//Attacks per second
+        /// <summary>
+        /// Attacks per second a.k.a frequency
+        /// </summary>
+        [Export(PropertyHint.Range, "0,10,1,or_greater")] public float AttackSpeed { get; set; }
         [Export(PropertyHint.Range, "0,10,1,or_greater")] public float Damage { get; set; }
         [Export] public bool Ranged { get; set; }//If ranged unit will attack once enemy is in range. If melee unit will attack once close and range only affects "escape distance" and/or AoE
         [Export] public bool AoE { get; set; }//Tool needed to require area2D if AoE.
@@ -27,12 +35,20 @@ namespace RTS.Gameplay
         public Area2D AttackRange;
         public Target target;
         public bool targetInRange = false;
+        /// <summary>
+        /// current time before next attack (set to Attack period going down to 0)
+        /// </summary>
         public Second cooldown;
         public Second AttackPeriod { get { return 1 / AttackSpeed; } }
-
+        /// <summary>
+        /// range in tiles. To be exportable must be float. Will get reinterpreted as Tilemeters elsewhere in the code
+        /// </summary>
         [Export(PropertyHint.Range, "0,10,1,or_greater")]
-        public float range;//in tiles
-        public Tilemeter Range//This simply reinterprets things as Tilemeters
+        public float range;
+        /// <summary>
+        /// Attack range
+        /// </summary>
+        public Tilemeter Range
         {
             get => (Tilemeter)range;
             set => range = (float)value;
@@ -79,6 +95,10 @@ namespace RTS.Gameplay
                 }
             }
         }
+        /// <summary>
+        /// Plays attack animation in the specified direction
+        /// </summary>
+        /// <param name="direction"></param>
         public void AttackAnim(Direction direction)
         {
             switch (direction)
@@ -133,17 +153,25 @@ namespace RTS.Gameplay
                 targetInRange = false;
             }
         }
+        /// <summary>
+        /// Changes target for a new one
+        /// Also checks if it is in range already
+        /// </summary>
+        /// <param name="target">new target</param>
         public void Retarget(Target target)
         {
             this.target = target;
-            GD.Print("Retargetin! "+target);
+            //GD.Print("Retargetin! "+target);
             if (target.type == Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
                 targetInRange = true;
             else targetInRange = false;
         }
+        /// <summary>
+        /// Nulls out <c>target</c>
+        /// </summary>
         public void Detarget()
         {
-            GD.Print("Detarget");
+            //GD.Print("Detarget");
             target = null;
             targetInRange = false;
         }

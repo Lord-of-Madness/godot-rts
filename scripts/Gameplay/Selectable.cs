@@ -140,13 +140,21 @@ namespace RTS.Gameplay
             }
 
         }
+        /// <summary>
+        /// Checks if the node can be attacked (is <c>Damagable</c> and hostile)
+        /// </summary>
+        /// <param name="node"></param>
         public virtual void TryAgro(Node2D node)
         {
-            if(node is Selectable selectable && selectable.team.IsHostile(team))
+            if(node is Damageable damagable && damagable.team.IsHostile(team))
             {
-                RetargetAttacks(new Target(selectable));
+                RetargetAttacks(new Target(damagable));
             }
         }
+        /// <summary>
+        /// Calls retarget on all available attacks
+        /// </summary>
+        /// <param name="target"></param>
         protected void RetargetAttacks(Target target)
         {
             if (Attacks is not null)
