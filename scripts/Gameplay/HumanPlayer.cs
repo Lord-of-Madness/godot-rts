@@ -2,6 +2,7 @@
 using RTS.UI;
 using System;
 using System.Linq;
+using RTS.mainspace;
 
 namespace RTS.Gameplay
 {
@@ -216,7 +217,7 @@ namespace RTS.Gameplay
             {
                 selectRectNode.dragging = true;
                 selectRectNode.start = mousebutton.Position;
-                if (Selection.Count > 0 && !Input.IsKeyPressed(Key.Shift))//The shift key is kinda hardcoded perhaps change that later
+                if (Selection.Count > 0 && !Input.IsKeyPressed(Key.Shift))//TODO the shift key is kinda hardcoded perhaps change that later
                 {
                     foreach (Selectable selectable in Selection)
                     {
@@ -279,15 +280,16 @@ namespace RTS.Gameplay
         }
         private void DeselectObject(Selectable selectable)
         {
+            
             selectable.SignalDisablingSelection -= DeselectObject;
-            Selection.Remove(selectable);
+            GD.Print(Selection.Remove(selectable));
             selectable.Deselect();
             UpdateUnitGridAndPortrait();
         }
         private void UpdateUnitGridAndPortrait()
         {
             UnitPortrait.Texture = null;
-
+            
             UnitsSelected.Update(Selection);
 
 

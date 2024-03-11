@@ -25,6 +25,18 @@ namespace RTS.mainspace
             }
             return array;
         }
+        /// <summary>
+        /// uses string comparison for unequal <c>StringName</c>s (equal use standart StringName comparison)
+        /// StringName is meant to be used for equality only. Use with caution
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static int CompareTo(this StringName a, StringName b)
+        {
+            if (a == b) return 0;
+            else return ((string)a).CompareTo(b);
+        }
     }
     public enum Direction
     {

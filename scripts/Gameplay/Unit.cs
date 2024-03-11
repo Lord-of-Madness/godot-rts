@@ -23,6 +23,7 @@ namespace RTS.Gameplay
         /// <para>This oughta give us a Value of a freshly recruted unit or in its prime. (freshly recruited units might not start with max Energy/Cooldowns for balancing reasons)</para>
         /// <para>Should be similar to <c>UnitValue</c> but use MAXHP instead of HP etc. </para>
         /// <para>Have to ensure that no two Units have the same <c>BaseUnitValue</c> so that they are always sorted toghther in the UI</para>
+        /// <para>On the other hand lets not require that and just sort by UnitName first? ->If so then what if units have the same name...?</para>
         /// </summary>
         public double BaseUnitValue { get; set; }
 
@@ -194,7 +195,8 @@ namespace RTS.Gameplay
         /// <param name="safe_velocity"></param>
         private void GetMoving(Vector2 safe_velocity)
         {
-            Velocity = safe_velocity;
+            if (CurrentAction == SelectableAction.Dying) Velocity = Vector2.Zero;
+            else Velocity = safe_velocity;
             MoveAndSlide();
         }
 
@@ -209,6 +211,8 @@ namespace RTS.Gameplay
         /// </returns>
         public int CompareTo(Unit other)
         {
+            //Sort first by type then by HP
+            if(Name!=other.) return ((string)Name).CompareTo(other.Name);
             if (BaseUnitValue != other.BaseUnitValue) return BaseUnitValue.CompareTo(other.BaseUnitValue);
             if (UnitValue != other.UnitValue) return UnitValue.CompareTo(other.UnitValue);
 

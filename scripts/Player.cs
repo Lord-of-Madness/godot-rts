@@ -3,7 +3,7 @@ using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using RTS.UI;
-using System.Linq;
+using RTS.mainspace;
 
 
 namespace RTS.Gameplay
@@ -91,10 +91,19 @@ namespace RTS.Gameplay
         public Team Team { get => team; private set => team = value; }
         public string name = "Player";
         /// <summary>
-        /// Currently selected Selectables
+        /// Currently selected <c>Selectable</c>s
         /// </summary>
-        protected SortedSet<Selectable> Selection = new();
+        protected SortedSet<Selectable> Selection = new(Comparer<Selectable>.Create((a,b) => a.Name.CompareTo(b.Name)));
+        //NOTE: If we need to reasign it elsewhere it would make sense to make it a custom type so we don't accidentaly use wrong comparers.
+        //Also - I kinda guessed the Comparer maybe its incorrect I don't know .
+        // It didn't work with default comparer. Not certain why.
+        /// <summary>
+        /// The current highlighted segment of the <c>Selection</c>
+        /// </summary>
         protected Selectable HighlightedSelectable { get => Selection.Min; }//TODO: Tabing through groups etc., highlighting
+        /// <summary>
+        /// Reference to the local Map
+        /// </summary>
         public Map localLevel;
 
 
