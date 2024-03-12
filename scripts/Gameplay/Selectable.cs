@@ -109,13 +109,13 @@ namespace RTS.Gameplay
         public void _on_mouse_entered()
 #pragma warning restore IDE1006 // Naming Styles
         {
-            Beholder.JustHovered(this);
+            Beholder?.JustHovered(this);
         }
 #pragma warning disable IDE1006 // Naming Styles
         public void _on_mouse_exited()
 #pragma warning restore IDE1006 // Naming Styles
         {
-            Beholder.DeHovered(this);
+            Beholder?.DeHovered(this);
         }
         public abstract void Command(Player.ClickMode clickMode, Target target, Ability ability = null);
         public virtual void CleanCommandQueue()
@@ -129,7 +129,8 @@ namespace RTS.Gameplay
             AbilityNode = GetNode<Node>(nameof(Abilities));
             Attacks = GetNode<AttacksNode>(nameof(Attacks)).Attacks;
             ((CircleShape2D)VisionArea.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius = VisionRange.Pixels;
-            Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>(nameof(HumanPlayer));
+            if(GetTree().CurrentScene.HasNode(nameof(HumanPlayer)))//Used for the Menu thingie
+                Beholder = GetTree().CurrentScene.GetNode<HumanPlayer>(nameof(HumanPlayer));
             foreach (var abilityPair in ExportAbilities)//Dictionaries don't work in Export so gotta hack it in like this to get a proper Dict
             {
                 var ab = abilityPair.ability.Instantiate(this);

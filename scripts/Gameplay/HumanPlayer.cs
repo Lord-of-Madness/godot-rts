@@ -35,7 +35,7 @@ namespace RTS.Gameplay
         private ColorRect TopBar;
         private ColorRect BottomBar;
         private TextureRect UnitPortrait;
-        private UnitsSelected UnitsSelected;
+        private InfoContainer InfoContainer;
         private UnitActions UnitActions;
         [Export(PropertyHint.Range, "0,20,1,or_greater")]
         public float ScrollSpeed = 5;
@@ -99,7 +99,7 @@ namespace RTS.Gameplay
             UnitPortrait = BottomBar.GetNode<TextureRect>(nameof(UnitPortrait));
 
             //camera.VisibilityLayer = BitID;//I am not sure this is working proper
-            UnitsSelected = BottomBar.GetNode<UnitsSelected>(nameof(UnitsSelected));
+            InfoContainer = BottomBar.GetNode<InfoContainer>(nameof(InfoContainer));
             UnitActions = BottomBar.GetNode<UnitActions>(nameof(UnitActions));
         }
         /// <summary>
@@ -154,6 +154,7 @@ namespace RTS.Gameplay
             else
             {*/
             CameraMovement();
+            InfoContainer.Update(Selection, HighlightedSelectable);
             //}
 
         }
@@ -290,10 +291,10 @@ namespace RTS.Gameplay
         {
             UnitPortrait.Texture = null;
 
-            UnitsSelected.Update(Selection);
+            
 
 
-            if (Selection.Count > 0)
+            if (Selection.Count > 0)//this might be handled by the INFOCONTAINER TOO
             {
                 UnitPortrait.Texture = HighlightedSelectable.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
                 UnitActions.FillGridButtons(HighlightedSelectable.Abilities);

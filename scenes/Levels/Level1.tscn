@@ -81,6 +81,7 @@ scale = Vector2(0.75, 0.75)
 texture = ExtResource("3")
 
 [node name="HumanPlayer" parent="." instance=ExtResource("1")]
+Team = 0
 
 [node name="Unit" parent="HumanPlayer/Selectables" index="0" instance=ExtResource("6_5q6jk")]
 position = Vector2(360, 360)
@@ -94,13 +95,17 @@ position = Vector2(143, 487)
 [node name="Barrack" parent="HumanPlayer/Selectables" index="3" instance=ExtResource("7_2eaqi")]
 position = Vector2(192, 192)
 ExportAbilities = [SubResource("Resource_e33jb"), SubResource("Resource_rot5u")]
+visionRange = 0.0
 
 [node name="Barrack2" parent="HumanPlayer/Selectables" index="4" instance=ExtResource("7_2eaqi")]
 position = Vector2(720, 400)
 ExportAbilities = [SubResource("Resource_2d8xx"), SubResource("Resource_wemnm")]
+visionRange = 0.0
 
 [node name="Unit King" parent="HumanPlayer/Selectables" index="5" instance=ExtResource("9_o4ati")]
 position = Vector2(163, 325)
+ExportAbilities = []
+visionRange = 0.0
 
 [node name="Camera2D" parent="HumanPlayer" index="2"]
 limit_right = 4500
@@ -120,9 +125,11 @@ position = Vector2(2263, 1247)
 
 [node name="Barrack" parent="Player/Selectables" index="2" instance=ExtResource("7_2eaqi")]
 position = Vector2(2941, 1525)
+visionRange = 0.0
 
 [node name="Barrack2" parent="Player/Selectables" index="3" instance=ExtResource("7_2eaqi")]
 position = Vector2(3331, 1240)
+visionRange = 0.0
 
 [node name="NeutralPlayer" parent="." instance=ExtResource("5_bt0lf")]
 Team = 2
