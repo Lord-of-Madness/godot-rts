@@ -211,8 +211,9 @@ namespace RTS.Gameplay
         /// </returns>
         public int CompareTo(Unit other)
         {
+            if(this==other) return 0;
             //Sort first by type then by HP
-            if(Name!=other.) return ((string)Name).CompareTo(other.Name);
+            if(SName!=other.SName) return SName.CompareTo(other.SName);
             if (BaseUnitValue != other.BaseUnitValue) return BaseUnitValue.CompareTo(other.BaseUnitValue);
             if (UnitValue != other.UnitValue) return UnitValue.CompareTo(other.UnitValue);
 

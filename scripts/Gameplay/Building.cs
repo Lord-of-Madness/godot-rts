@@ -11,6 +11,7 @@ namespace RTS.Gameplay
         private bool following = false;
         Line2D RallyPath;
 
+        public Shape2D BuildingCollision{ get => GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape; }
         public Target RallyPoint
         {
             get => rallyPoint; set

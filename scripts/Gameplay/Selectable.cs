@@ -76,7 +76,11 @@ namespace RTS.Gameplay
         public HumanPlayer Beholder;//This should not be exported and it should be Beholder and not Owner
         public Player OwnerPlayer;
 
-        
+        public float SizeRadious { get => ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius; }
+
+        [Export]
+        public string SName { get; set; }//Name of the Selectable. Must be unique
+
         [Export]
         public Array<AbilityPair> ExportAbilities = new();
 

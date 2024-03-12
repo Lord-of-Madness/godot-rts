@@ -93,7 +93,13 @@ namespace RTS.Gameplay
         /// <summary>
         /// Currently selected <c>Selectable</c>s
         /// </summary>
-        protected SortedSet<Selectable> Selection = new(Comparer<Selectable>.Create((a,b) => a.Name.CompareTo(b.Name)));
+        protected SortedSet<Selectable> Selection = new(Comparer<Selectable>.Create(
+            (a, b) => //a.CompareTo(b)));//this doesn't make em equal when they should be
+            {
+                int res = a.SName.CompareTo(b.SName);
+                if (res == 0) return a.Name.CompareTo(b.Name);
+                else return res;
+            }));
         //NOTE: If we need to reasign it elsewhere it would make sense to make it a custom type so we don't accidentaly use wrong comparers.
         //Also - I kinda guessed the Comparer maybe its incorrect I don't know .
         // It didn't work with default comparer. Not certain why.
