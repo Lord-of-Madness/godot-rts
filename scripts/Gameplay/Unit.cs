@@ -58,7 +58,7 @@ namespace RTS.Gameplay
             Detarget();
         }
         public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
-            //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
+        //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
         {
             if (CurrentAction == SelectableAction.Dying) return;
             if (target.type == Target.Type.Selectable && target.selectable == this) return;
@@ -73,7 +73,7 @@ namespace RTS.Gameplay
                     break;
                 case Player.ClickMode.UseAbility:
                     //TODO:CurentAction = UnitAction.?
-                    UseAbility(target,ability);
+                    UseAbility(target, ability);
                     break;
             }
         }
@@ -89,7 +89,7 @@ namespace RTS.Gameplay
         {
             CurrentAction = SelectableAction.Idle;
             //NavAgent.AvoidanceEnabled = false;
-            NavAgent.TargetPosition=Position;
+            NavAgent.TargetPosition = Position;
         }
         private double timer = 0;//for debug purposes
         public override void _Process(double delta)
@@ -134,7 +134,7 @@ namespace RTS.Gameplay
         }
         public override void TryAgro(Node2D node)
         {
-            if(following || CurrentAction == SelectableAction.Move) return;
+            if (following || CurrentAction == SelectableAction.Move) return;
             if (node is Selectable selectable && selectable.team.IsHostile(team))
             {
                 AttackCommand(new Target(selectable));
@@ -147,10 +147,10 @@ namespace RTS.Gameplay
             CurrentAction = SelectableAction.Attack;
             RetargetAttacks(target);
         }
-        public void UseAbility(Target target,Ability ability)
+        public void UseAbility(Target target, Ability ability)
         {
             MoveTo(target);
-            if(ability is TargetedAbility targetedAbility)
+            if (ability is TargetedAbility targetedAbility)
             {
                 targetedAbility.OnTargetRecieved(target);//TODO: this is clearly kinda wrong and all
             }
@@ -170,7 +170,7 @@ namespace RTS.Gameplay
             }
             target = null;
             following = false;
-            
+
         }
 
         public override void _PhysicsProcess(double delta)
@@ -180,7 +180,7 @@ namespace RTS.Gameplay
             if (
                 !NavAgent.IsNavigationFinished()
                 &&
-                Position!= NavAgent.TargetPosition//this is here because when you set NavAgents position to the position of the unit the navigation ain't considered finished
+                Position != NavAgent.TargetPosition//this is here because when you set NavAgents position to the position of the unit the navigation ain't considered finished
                 )
             {
                 Vector2 direction = Position.DirectionTo(NavAgent.GetNextPathPosition());
@@ -211,13 +211,13 @@ namespace RTS.Gameplay
         /// </returns>
         public int CompareTo(Unit other)
         {
-            if(this==other) return 0;
+            if (this == other) return 0;
             //Sort first by type then by HP
-            if(SName!=other.SName) return SName.CompareTo(other.SName);
+            if (SName != other.SName) return SName.CompareTo(other.SName);
             if (BaseUnitValue != other.BaseUnitValue) return BaseUnitValue.CompareTo(other.BaseUnitValue);
             if (UnitValue != other.UnitValue) return UnitValue.CompareTo(other.UnitValue);
 
-            if(HP != other.HP) { return HP.CompareTo(other.HP); }//This is a neat sorting to see who needs the least and the most healing (Oughta delete it once we implement UnitValue)
+            if (HP != other.HP) { return HP.CompareTo(other.HP); }//This is a neat sorting to see who needs the least and the most healing (Oughta delete it once we implement UnitValue)
 
             //Ordered by age in scene tree (should be last resort)
             return GetIndex().CompareTo(other.GetIndex());//TODO: Sort units by priority based on their "Heroicness" then the number of abilities, then I guess their cost.

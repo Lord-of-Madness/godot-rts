@@ -16,7 +16,7 @@ namespace RTS.Graphics
         public static readonly float SQRT2 = (float)Math.Sqrt(2);
         protected Selectable parent;
         protected const string DEATH = "Death";
-        protected bool IsDead { get =>anim.CurrentAnimation==DEATH; }
+        protected bool IsDead { get => anim.CurrentAnimation == DEATH; }
         public Direction Direction { get; protected set; } = Direction.Forward;
         public override void _Ready()
         {

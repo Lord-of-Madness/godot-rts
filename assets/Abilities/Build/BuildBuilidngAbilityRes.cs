@@ -10,7 +10,7 @@ namespace RTS.Gameplay
         [Export]
         public PackedScene Building;
         public override BuildBuildingAbility Instantiate(Selectable owner)
-            => new(Building.Instantiate<Building>()) {OwningSelectable = owner };
-        
+            => new(Building.Instantiate<Building>()) { OwningSelectable = owner };
+
     }
 }

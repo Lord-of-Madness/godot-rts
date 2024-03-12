@@ -9,9 +9,9 @@ namespace RTS.Gameplay
 {
     public static class TeamExtension
     {
-        public static bool IsHostile(this Team team,Team otherteam)
+        public static bool IsHostile(this Team team, Team otherteam)
         {
-            return team!=otherteam;
+            return team != otherteam;
         }
     }
     public enum Team
@@ -138,7 +138,7 @@ namespace RTS.Gameplay
             }
             OwnerPlayer = GetParent().GetParent<Player>();
             team = OwnerPlayer.Team;
-            if(Attacks.Count > 0)
+            if (Attacks.Count > 0)
             {
                 VisionArea.BodyEntered += TryAgro;
             }
@@ -150,7 +150,7 @@ namespace RTS.Gameplay
         /// <param name="node"></param>
         public virtual void TryAgro(Node2D node)
         {
-            if(node is Damageable damagable && damagable.team.IsHostile(team))
+            if (node is Damageable damagable && damagable.team.IsHostile(team))
             {
                 RetargetAttacks(new Target(damagable));
             }
@@ -175,7 +175,7 @@ namespace RTS.Gameplay
                     //attack.AttackRange.BodyEntered += (Node2D smthn) => { GD.Print("Whatever"); };
                     //attack.AttackRange.AreaEntered += (Area2D smthn) => { GD.Print(smthn); };
                     //GD.Print(((CircleShape2D)attack.AttackRange.GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius);
-                    
+
                 }
 
             }

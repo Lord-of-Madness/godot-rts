@@ -3,7 +3,7 @@ using System;
 
 namespace RTS.Gameplay
 {
-    public abstract partial class Damageable : Selectable 
+    public abstract partial class Damageable : Selectable
     {
         [Signal] public delegate void SignalDeadEventHandler();
         [Signal] public delegate void SignalDamagedEventHandler();

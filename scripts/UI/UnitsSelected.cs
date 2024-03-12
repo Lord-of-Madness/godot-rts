@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RTS.UI
 {
-    
+
     public partial class UnitsSelected : GridContainer
     {
         public partial class InfoLabel : Label
@@ -40,22 +40,23 @@ namespace RTS.UI
                 AddChild(new InfoLabel(s.team.ToString()));
                 AddChild(new InfoLabel(s.CurrentAction.ToString()));
 
-                if (s is Damageable d) {
+                if (s is Damageable d)
+                {
                     AddChild(new InfoLabel("MaxHP: " + d.MaxHP));
                 }
-                if(s is Unit u)
+                if (s is Unit u)
                 {
                     foreach (var item in u.Attacks)
                     {
                         AddChild(new InfoLabel("Attack [Name: " + item.Name + ", AoE: " + item.AoE + ", AttackPeriod: " + item.AttackPeriod + "s"));
                     }
-                    
+
                 }
             }
             else
             {
                 var suEnum = Selection.GetEnumerator();
-                while(suEnum.MoveNext())
+                while (suEnum.MoveNext())
                 {
                     //TODO: if we overshoot certain ammount of rows we should make tabs for the rest of the selected units
                     //this feels like the best way to do it while keeping the sortedSet. (Eventually could change it to SortedList I guess and just index into it)

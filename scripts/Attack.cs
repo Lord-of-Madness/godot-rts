@@ -53,7 +53,7 @@ namespace RTS.Gameplay
             get => (Tilemeter)range;
             set => range = (float)value;
         }
-       
+
         /*public float RangeExport//This exists simply as means to export the float and set Range proper
         {
             get => range; set
@@ -87,7 +87,7 @@ namespace RTS.Gameplay
             {
                 if (cooldown >= AttackPeriod)
                 {
-                    
+
                     AttackAnim(owner.Graphics.Direction);
                     cooldown = 0;
                     Damageable damagableTarget = (Damageable)target.selectable;
@@ -135,12 +135,12 @@ namespace RTS.Gameplay
         {
             if (target is null || owner.CurrentAction != Selectable.SelectableAction.Attack) return;
 
-            GD.Print(inrangee.Name, " entered and has type: ",inrangee.GetType());
+            GD.Print(inrangee.Name, " entered and has type: ", inrangee.GetType());
             if (inrangee is Selectable selectable
                 && selectable == target.selectable)
             {
                 targetInRange = true;
-                GD.Print("Target in range!");
+                //GD.Print("Target in range!");
             }
         }
         public void TargetLeftRange(Node2D body)

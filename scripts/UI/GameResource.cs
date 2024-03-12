@@ -12,7 +12,7 @@ namespace RTS.UI
         {
             get => Icon.Texture; set => Icon.Texture = value;
         }
-        Label ValueLabel=new();
+        Label ValueLabel = new();
         public static GameResource operator +(GameResource lhs, int rhs) { lhs.Value += rhs; return lhs; }
         public static GameResource operator -(GameResource lhs, int rhs) { lhs.Value -= rhs; return lhs; }
         public static GameResource operator +(GameResource lhs, GameResource rhs) { lhs.Value += rhs.Value; return lhs; }
@@ -21,11 +21,13 @@ namespace RTS.UI
 
         int val;
         [Export(PropertyHint.Range, "0,1000,10,or_greater")]
-        public int Value {
+        public int Value
+        {
             get => val;
-            set {
+            set
+            {
                 val = value;
-                ValueLabel.Text= val.ToString();
+                ValueLabel.Text = val.ToString();
             }
         }
         public override void _Ready()

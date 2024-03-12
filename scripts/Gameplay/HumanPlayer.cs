@@ -242,8 +242,8 @@ namespace RTS.Gameplay
 
 
                 Selectable[] prefiltered = (from s in localLevel.GetWorld2D().DirectSpaceState.IntersectShape(query, MAX_SELECTED_THINGS)
-                                   where ((GodotObject)s["collider"]) is Selectable
-                                   select (Selectable)s["collider"]).ToArray();
+                                            where ((GodotObject)s["collider"]) is Selectable
+                                            select (Selectable)s["collider"]).ToArray();
                 if (prefiltered.Length == 1)
                 {
 
@@ -280,7 +280,7 @@ namespace RTS.Gameplay
         }
         private void DeselectObject(Selectable selectable)
         {
-            
+
             selectable.SignalDisablingSelection -= DeselectObject;
             GD.Print(Selection.Remove(selectable));
             selectable.Deselect();
@@ -289,7 +289,7 @@ namespace RTS.Gameplay
         private void UpdateUnitGridAndPortrait()
         {
             UnitPortrait.Texture = null;
-            
+
             UnitsSelected.Update(Selection);
 
 

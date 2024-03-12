@@ -19,10 +19,14 @@ namespace RTS.Gameplay
         bool OnTheWayToBuild = false;
 
         bool ptl;
-        bool PickingTargetLocation { get=>ptl; set {
+        bool PickingTargetLocation
+        {
+            get => ptl; set
+            {
                 ptl = value;
                 wireframe.Visible = value;
-            } }
+            }
+        }
 
         public Building building;
 
@@ -36,7 +40,7 @@ namespace RTS.Gameplay
         {
             base.OnClick(button);
             PickingTargetLocation = true;
-            
+
             GD.Print("TODO: Display building wireframe at the mouseposition");
         }
         Vector2 targetLocation;
@@ -92,7 +96,7 @@ namespace RTS.Gameplay
         public override void _Process(double delta)
         {
             base._Process(delta);
-            if(OwningSelectable.OwnerPlayer is HumanPlayer && PickingTargetLocation)//this is an UI thing. Is it wise to put it with the rest of the gameplay code?
+            if (OwningSelectable.OwnerPlayer is HumanPlayer && PickingTargetLocation)//this is an UI thing. Is it wise to put it with the rest of the gameplay code?
             {
                 wireframe.Position = GetViewport().GetMousePosition();
                 if (BuildingFits(wireframe.Position))

@@ -15,7 +15,7 @@ namespace RTS.Gameplay
 
         public override void OnTargetRecieved(Target target)
         {
-            if(target.type==Target.Type.Selectable && target.selectable is GameResourceSource gameResource)
+            if (target.type == Target.Type.Selectable && target.selectable is GameResourceSource gameResource)
             {
                 GameResourceSource = gameResource;
                 //find return point
