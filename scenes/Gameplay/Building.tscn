@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://cjhgu6y8fsaba"]
 
 [ext_resource type="Script" path="res://scripts/Gameplay/Building.cs" id="1_arpdc"]
-[ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="2_q8lde"]
 [ext_resource type="Texture2D" uid="uid://bl4ob1588ap6d" path="res://resources/icon.png" id="3_iircv"]
 [ext_resource type="Script" path="res://scripts/Gameplay/AttacksNode.cs" id="4_21pqh"]
+[ext_resource type="PackedScene" uid="uid://bgs4xv7mlphr3" path="res://scenes/Gameplay/DamagableGraphics.tscn" id="4_difxh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_422au"]
 radius = 8.0
@@ -11,7 +11,7 @@ radius = 8.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
 radius = 272.007
 
-[node name="Building" type="CharacterBody2D"]
+[node name="Building" type="CharacterBody2D" groups=["Building", "Damagable", "Selectable"]]
 input_pickable = true
 motion_mode = 1
 floor_stop_on_slope = false
@@ -28,24 +28,6 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_iircv")
 region_rect = Rect2(18, 24, 39, 39)
 
-[node name="Graphics" parent="." instance=ExtResource("2_q8lde")]
-
-[node name="Selected" parent="Graphics" index="0"]
-polygon = PackedVector2Array(-55.1666, -52, -62.5, -44, -64.3333, 68, -53.3333, 82, 49.3333, 82, 60.3333, 72, 60.3333, -40, 51.1666, -54, -2, -54)
-
-[node name="Sprite2D" parent="Graphics" index="1"]
-texture = ExtResource("3_iircv")
-
-[node name="HealthBar" parent="Graphics" index="4"]
-offset_left = -30.0
-offset_top = -42.0
-offset_right = 30.0
-offset_bottom = -33.0
-
-[node name="Cross" parent="Graphics" index="5"]
-position = Vector2(2.86102e-06, -2.6226e-06)
-scale = Vector2(0.33125, 0.41875)
-
 [node name="VisionArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
@@ -55,6 +37,17 @@ shape = SubResource("CircleShape2D_nwlgh")
 script = ExtResource("4_21pqh")
 
 [node name="Abilities" type="Node" parent="."]
+
+[node name="Graphics" parent="." instance=ExtResource("4_difxh")]
+
+[node name="Sprite2D" parent="Graphics" index="1"]
+texture = ExtResource("3_iircv")
+
+[node name="HealthBar" parent="Graphics" index="5"]
+offset_left = -27.0
+offset_top = -38.0
+offset_right = 27.0
+offset_bottom = -32.0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

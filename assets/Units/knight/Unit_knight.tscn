@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dwsji62gj53dj"]
+[gd_scene load_steps=13 format=3 uid="uid://dwsji62gj53dj"]
 
 [ext_resource type="PackedScene" uid="uid://cbma510xjxclo" path="res://scenes/Gameplay/Unit.tscn" id="1_4rkn0"]
 [ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Barack/Building_Barrack.tscn" id="2_88pxm"]
@@ -8,11 +8,11 @@
 [ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="4_o5q4q"]
 [ext_resource type="PackedScene" uid="uid://b8fpqhh5ad6jf" path="res://scenes/Anims/AttackAnim.tscn" id="5_8vowj"]
 [ext_resource type="Script" path="res://assets/Abilities/MenuAbility/MenuAbilityRes.cs" id="5_xlwvh"]
-[ext_resource type="Texture2D" uid="uid://1lnt5qawrngv" path="res://resources/Kyrise's RPG Icon Pack/icons/48x48/sword_03e.png" id="9_mwv10"]
 
 [sub_resource type="Resource" id="Resource_eahx7"]
 script = ExtResource("3_2os3o")
 Building = ExtResource("2_88pxm")
+Range = 0.0
 
 [sub_resource type="Resource" id="Resource_d8u1b"]
 script = ExtResource("4_o5q4q")
@@ -32,29 +32,27 @@ ability = SubResource("Resource_dvyoi")
 [node name="Unit" instance=ExtResource("1_4rkn0")]
 speed = 5.0
 MaxHP = 11
+SName = "Knight"
 ExportAbilities = [SubResource("Resource_d8u1b"), SubResource("Resource_bjc1g")]
 visionRange = 6.0
 
 [node name="UnitPortrait" parent="." index="1"]
 texture = ExtResource("2_qo5nv")
 
-[node name="Selected" parent="Graphics" index="0"]
-visible = true
-
 [node name="Sprite2D" parent="Graphics" index="1"]
-position = Vector2(0, -10)
+position = Vector2(0, -13)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_y7r6o")
 hframes = 3
 vframes = 4
 region_enabled = true
-region_rect = Rect2(468, 0, 234, 436)
+region_rect = Rect2(466, 0, 234, 436)
 
-[node name="HealthBar" parent="Graphics" index="4"]
-offset_left = -10.0
-offset_top = -25.0
-offset_right = 10.0
-offset_bottom = -21.0
+[node name="HealthBar" parent="Graphics" index="5"]
+offset_left = -9.0
+offset_top = -27.0
+offset_right = 9.0
+offset_bottom = -23.0
 
 [node name="NavAgent" parent="." index="3"]
 time_horizon_agents = 1.62
@@ -62,16 +60,9 @@ time_horizon_agents = 1.62
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_8vowj")]
 AttackSpeed = 5.0
 Damage = 1.0
+Ranged = false
+AoE = false
+Damagetype = 0
 range = 17.0
-
-[node name="Graphic2" type="Sprite2D" parent="Attacks/MeleeAttack" index="0"]
-visible = false
-rotation = 0.755728
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("9_mwv10")
-
-[node name="AttackRange2" type="Area2D" parent="Attacks/MeleeAttack" index="1"]
-rotation = -1.62839
-scale = Vector2(0.15, 0.15)
 
 [editable path="Graphics"]
