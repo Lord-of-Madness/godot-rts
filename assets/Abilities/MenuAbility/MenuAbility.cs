@@ -22,9 +22,9 @@ namespace RTS.Gameplay
 
         public override bool Active => true;
 
-        public override void OnClick(AbilityButton button)
+        public override void OnClickUI(AbilityButton button)
         {
-            base.OnClick(button);
+            //base.OnClickUI(button); don't need to call OnUSE
             button.GetParent<UnitActions>().FillGridButtons(OwningSelectable.Abilities);
 
         }
@@ -55,9 +55,9 @@ namespace RTS.Gameplay
 
         }
 
-        public override void OnClick(AbilityButton button)
+        public override void OnClickUI(AbilityButton button)
         {
-            base.OnClick(button);
+            //base.OnClickUI(button); Don't need onUSE
             UnitActions original = button.GetParent<UnitActions>();
             if (!abilities.ContainsKey((ushort)(original.BUTTON_COUNT - 1u)))
             {

@@ -14,7 +14,7 @@ namespace RTS.Gameplay
             set
             {
                 ability = value;
-                Pressed += () => {if(!ability.OnCooldown)ability.OnClick(this); };
+                Pressed += () => {if(!ability.OnCooldown)ability.OnClickUI(this); };
                 Icon = ability.Icon;
                 Disabled = false;
                 Text = ability.Text;

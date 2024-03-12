@@ -27,23 +27,20 @@ namespace RTS.Gameplay
                 wireframe.Visible = value;
             }
         }
-
         public Building building;
-
         public Sprite2D wireframe;
+        Vector2 targetLocation;
+
         public BuildBuildingAbility(Building building)
         {
             this.building = building;
             Text = "Build " + building.Name;
         }
-        public override void OnClick(AbilityButton button)
+        public override void OnUse()
         {
-            base.OnClick(button);
+            base.OnUse();
             PickingTargetLocation = true;
-
-            GD.Print("TODO: Display building wireframe at the mouseposition");
         }
-        Vector2 targetLocation;
 
         bool BuildingFits(Vector2 location)
         {

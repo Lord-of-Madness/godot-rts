@@ -12,6 +12,11 @@ namespace RTS.Gameplay
 
         public override bool Active => true;
 
+        [Export]
+        public float trainingTime;
+        public Second TraingTime { get => trainingTime; }//TODO UI sauce and all that jazz
+
+
         public Unit unit;
         public override void _Ready()
         {
@@ -22,13 +27,16 @@ namespace RTS.Gameplay
         {
             this.unit = unit;
         }
-        public override void OnClick(AbilityButton button)
+        public override void OnUse()
         {
-            base.OnClick(button);
+            base.OnUse();
             //TODO: Training time
+            //Building oughta have a production queue to which we add this.
+            //So we should instead of spawnign a unit add a TrainJob to the Building and it should handle it itself
             Unit newUnit = (Unit)unit.Duplicate();
-            //GD.Print(OwningSelectable.Name);
-            //GD.Print(newUnit.Name + " + " + newUnit.GetType());
+            TrainJob trainJob = new (newUnit);
+            //TODO: OwningSelectable.BuildQueue.Add(trainJob)
+            //The thing under us should be yeeted into unit/building themselves
             newUnit.Position = OwningSelectable.Position;
             OwningSelectable.AddSibling(newUnit);
 
@@ -42,6 +50,14 @@ namespace RTS.Gameplay
                 newUnit.Command(Player.ClickMode.Move, unit.target);
                 //Might wanna use the same ClickMode as unit but Clickmode and SelectableAction aren't the same tho if we ever Change SelectableAction to Actions then it will be simpler
             }
+        }
+    }
+    public struct TrainJob
+    {
+        public Second TraingTime { get; }
+        public Unit unit;
+        public TrainJob(Unit unit) {
+            this.unit = unit;
         }
     }
 }

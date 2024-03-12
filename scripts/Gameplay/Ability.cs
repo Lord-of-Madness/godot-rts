@@ -70,12 +70,20 @@ namespace RTS.Gameplay
     {
         protected Second cooldown = 0;
         /// <summary>
-        /// <para>Triggers upon pressing the button (later also on Shortcut)</para>
+        /// <para>Method bound to an ability button calls the OnUse function. Is used for HumanPlayers so Abilities can have a UI part</para>
         /// <para>Has a reference to its button and through it to the rest of the scene</para>
-        /// <para><c>base.OnClick(button)</c> should always be called even when overriding as it will handle Cooldowns</para>
         /// </summary>
         /// <param name="button"></param>
-        public virtual void OnClick(AbilityButton button)
+        public virtual void OnClickUI(AbilityButton button)
+        {
+            OnUse();
+        }
+        /// <summary>
+        /// <para>Triggers upon pressing the button by the player (called from OnClickUI) or by various AI players</para>
+        /// <para>Is what ability does right after using it</para>
+        /// <para><c>base.OnUse()</c> should always be called even when overriding as it will handle Cooldowns</para>
+        /// </summary>
+        public virtual void OnUse()
         {
             cooldown = Cooldown;
         }
