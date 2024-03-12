@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnuece6w12tmn"]
+
+[ext_resource type="PackedScene" uid="uid://cb5wird6cki6b" path="res://scenes/Gameplay/Selectable.tscn" id="1_v71mh"]
+[ext_resource type="Script" path="res://scripts/Gameplay/GameResourceSource.cs" id="2_7pqax"]
+[ext_resource type="Texture2D" uid="uid://ch0a8tgj7gkck" path="res://assets/Resources/Scrap.png" id="3_leule"]
+
+[node name="GameResourceSource" instance=ExtResource("1_v71mh")]
+script = ExtResource("2_7pqax")
+Capacity = 800
+SName = "ScrapPile"
+
+[node name="UnitPortrait" parent="." index="1"]
+texture = ExtResource("3_leule")
+
+[node name="Sprite2D" parent="Graphics" index="1"]
+scale = Vector2(0.324324, 0.356589)
+texture = ExtResource("3_leule")
+
+[editable path="Graphics"]

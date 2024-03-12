@@ -4,7 +4,7 @@ using RTS.Gameplay;
 namespace RTS.UI
 {
     [Tool]
-    public partial class GameResource : HBoxContainer
+    public partial class GameResource : HBoxContainer//TODO: Split UI from the logic? AI players don't need HBoxContainers
     {
         TextureRect Icon = new();
         [Export]
