@@ -37,6 +37,14 @@ namespace RTS.mainspace
             if (a == b) return 0;
             else return ((string)a).CompareTo(b);
         }
+        public static void DestroyChildren(this Node node)
+        {
+            foreach (var item in node.GetChildren())
+            {
+                node.RemoveChild(item);
+                item.QueueFree();
+            }
+        }
     }
     public enum Direction
     {
