@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcuc4672hyw01"]
+
+[ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1_xlc8t"]
+[ext_resource type="Script" path="res://scripts/Gameplay/BuildOrderPlayer.cs" id="2_4pcrp"]
+
+[node name="Player" instance=ExtResource("1_xlc8t")]
+script = ExtResource("2_4pcrp")
+Team = 0
