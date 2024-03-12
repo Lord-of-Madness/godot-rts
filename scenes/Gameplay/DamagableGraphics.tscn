@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgs4xv7mlphr3"]
+
+[ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="1_lqu0t"]
+
+[node name="DamagableGraphics" instance=ExtResource("1_lqu0t")]
+
+[node name="HealthBar" type="ProgressBar" parent="." index="5"]
+modulate = Color(0, 1, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -13.0
+offset_top = -23.0
+offset_right = 13.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+show_percentage = false
