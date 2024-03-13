@@ -32,6 +32,7 @@ namespace RTS.Gameplay
         }
         public void Dead()
         {
+            if (CurrentAction == SelectableAction.Dying) return;//This might happen somehow. And it likely causes sum errors
             CurrentAction = SelectableAction.Dying;
             EmitSignal(SignalName.SignalDisablingSelection, this);
             EmitSignal(SignalName.SignalDead);

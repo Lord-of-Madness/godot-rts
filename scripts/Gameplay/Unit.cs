@@ -51,6 +51,14 @@ namespace RTS.Gameplay
             NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius;//So that its always somewhat accurate
             Detarget();
             Deselect();
+
+            SetPhysicsProcess(false);
+            NavigationServer2D.MapChanged += PhysicsDelayer;
+        }
+        void PhysicsDelayer(Rid _)
+        {
+            SetPhysicsProcess(true);//This is here to fix a bug where map was not ready when physicsprocess asked about it
+            NavigationServer2D.MapChanged -= PhysicsDelayer;//Need to clean up so we don't stack the signals on
         }
         public override void CleanCommandQueue()
         {
@@ -163,7 +171,7 @@ namespace RTS.Gameplay
             GoIdle();
             DetargetAttacks();
             //navAgent.TargetPosition = Position;
-            if (following && target is not null && (target.selectable is Damageable damageable))
+            if (/*following &&*/ target is not null && (target.selectable is Damageable damageable))
             {
                 //GD.Print("DETARGETING!");
                 damageable.SignalDead -= Detarget;

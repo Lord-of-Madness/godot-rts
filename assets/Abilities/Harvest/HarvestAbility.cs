@@ -34,5 +34,7 @@ namespace RTS.Gameplay
             //1. Give Unit thing to carry -> any unit is technicaly suitable if it has this ability
             //2. Give the unit new command to return to return point
         }
+
+        public override void OnUse(){}
     }
 }

@@ -29,7 +29,6 @@ namespace RTS.Gameplay
         }
         public override void OnUse()
         {
-            base.OnUse();
             //TODO: Training time
             //Building oughta have a production queue to which we add this.
             //So we should instead of spawnign a unit add a TrainJob to the Building and it should handle it itself

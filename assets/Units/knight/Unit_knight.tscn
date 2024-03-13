@@ -60,9 +60,6 @@ time_horizon_agents = 1.62
 [node name="MeleeAttack" parent="Attacks" index="0" instance=ExtResource("5_8vowj")]
 AttackSpeed = 5.0
 Damage = 1.0
-Ranged = false
-AoE = false
-Damagetype = 0
 range = 17.0
 
 [editable path="Graphics"]

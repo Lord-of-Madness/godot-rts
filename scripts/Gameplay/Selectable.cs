@@ -26,7 +26,7 @@ namespace RTS.Gameplay
 
     }
     [GlobalClass]
-    public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>
+    public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>, ITargetable
     {
         [Signal] public delegate void SignalDisablingSelectionEventHandler(Selectable selectable);//when dead, loss of control etc.
         public enum SelectableAction

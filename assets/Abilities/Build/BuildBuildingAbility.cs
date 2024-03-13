@@ -38,7 +38,6 @@ namespace RTS.Gameplay
         }
         public override void OnUse()
         {
-            base.OnUse();
             PickingTargetLocation = true;
         }
 

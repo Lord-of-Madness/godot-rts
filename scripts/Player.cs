@@ -13,12 +13,11 @@ namespace RTS.Gameplay
         public Vector2 Position { get; }
         public string ToString();
     }
-
-
-
-
-    public class Scapegoat { }
-
+    public struct Location : ITargetable
+    {
+        private Vector2 data;
+        public readonly Vector2 Position => data;
+    }
 
 
     /// <summary>

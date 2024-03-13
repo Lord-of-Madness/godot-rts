@@ -21,7 +21,7 @@ namespace RTS.Gameplay
         public override Second Cooldown => 0;
 
         public override bool Active => true;
-
+        public override void OnUse() { }
         public override void OnClickUI(AbilityButton button)
         {
             //base.OnClickUI(button); don't need to call OnUSE
@@ -54,7 +54,7 @@ namespace RTS.Gameplay
 
 
         }
-
+        public override void OnUse() { }
         public override void OnClickUI(AbilityButton button)
         {
             //base.OnClickUI(button); Don't need onUSE

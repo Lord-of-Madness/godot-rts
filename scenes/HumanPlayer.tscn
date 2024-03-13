@@ -21,7 +21,6 @@ events = [SubResource("InputEventKey_1ktqu")]
 [node name="HumanPlayer" instance=ExtResource("1_t3lyo")]
 script = ExtResource("2_7rcui")
 ScrollSpeed = 5.0
-Team = 0
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 anchor_mode = 0
@@ -123,11 +122,9 @@ anchors_preset = -1
 anchor_left = 0.2
 anchor_right = 0.6
 anchor_bottom = 1.0
-current_tab = 1
 script = ExtResource("7_s6cc5")
 
 [node name="UnitsSelected" type="GridContainer" parent="Camera2D/HUD/BottomBar/InfoContainer" index="1"]
-visible = false
 clip_contents = true
 layout_mode = 2
 theme_override_constants/h_separation = 4
@@ -136,6 +133,7 @@ columns = 10
 script = ExtResource("7_w6rp2")
 
 [node name="UnitInfo" type="Control" parent="Camera2D/HUD/BottomBar/InfoContainer" index="2"]
+visible = false
 clip_contents = true
 layout_mode = 2
 script = ExtResource("9_bcci2")

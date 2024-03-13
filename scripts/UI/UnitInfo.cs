@@ -20,7 +20,7 @@ public partial class UnitInfo : Control
         AttacksInfo.DestroyChildren();
         NameLabel.Text = "";
         HPLabel.Text = "";
-        if (selectable is not null)
+        if (selectable is not null)//empty selection and whatnot
         {
             NameLabel.Text = selectable.SName;
             if (selectable is Damageable d) HPLabel.Text = d.HP.ToString();

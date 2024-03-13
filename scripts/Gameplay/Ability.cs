@@ -74,18 +74,27 @@ namespace RTS.Gameplay
         /// <para>Has a reference to its button and through it to the rest of the scene</para>
         /// </summary>
         /// <param name="button"></param>
-        public virtual void OnClickUI(AbilityButton button)
+        public void BaseOnClickUI(AbilityButton button)
         {
-            OnUse();
+            OnClickUI(button);
+            BaseOnUse();
         }
+        public virtual void OnClickUI(AbilityButton button) { }
         /// <summary>
         /// <para>Triggers upon pressing the button by the player (called from OnClickUI) or by various AI players</para>
         /// <para>Is what ability does right after using it</para>
-        /// <para><c>base.OnUse()</c> should always be called even when overriding as it will handle Cooldowns</para>
+        /// doesn't need to do anything
         /// </summary>
-        public virtual void OnUse()
+        public abstract void OnUse();
+        /// <summary>
+        /// This enforces cooldowns.
+        /// OnUse is the overriden part
+        /// </summary>
+        public void BaseOnUse()
         {
+            if (OnCooldown) return;//Done here again for the sake of nonUI using players
             cooldown = Cooldown;
+            OnUse();
         }
         public override void _Process(double delta)
         {

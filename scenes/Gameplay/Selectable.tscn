@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb5wird6cki6b"]
+
+[ext_resource type="PackedScene" uid="uid://dtfhxu0l7blxf" path="res://scenes/Gameplay/SelectableGraphics.tscn" id="1_jhovs"]
+[ext_resource type="Script" path="res://scripts/Gameplay/AttacksNode.cs" id="2_hnf3o"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ykgd7"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0c0xa"]
+radius = 51.0098
+
+[node name="Selectable" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CircleShape2D_ykgd7")
+
+[node name="UnitPortrait" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.1, 0.1)
+region_rect = Rect2(18, 24, 39, 39)
+
+[node name="Graphics" parent="." instance=ExtResource("1_jhovs")]
+
+[node name="VisionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+shape = SubResource("CircleShape2D_0c0xa")
+
+[node name="Attacks" type="Node2D" parent="."]
+script = ExtResource("2_hnf3o")
+
+[node name="Abilities" type="Node" parent="."]
