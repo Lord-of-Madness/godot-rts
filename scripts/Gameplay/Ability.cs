@@ -29,10 +29,14 @@ namespace RTS.Gameplay
         /// Triggered upon specifiing the target (Ability.OnClick has been triggered and then a Target has been given)
         /// </summary>
         /// <param name="target"></param>
-        public virtual void OnTargetRecieved(Target target)
+        public virtual void OnTargetRecieved(ITargetable target)
         {
             if (OwningSelectable.Position.DistanceTo(target.Position) <= Range) OnTargetReached();//If it is within range already
             else detectionZone.Monitoring = true;
+        }
+        public virtual void OnTargetingCanceled()
+        {
+            //TODO - make it trigger.
         }
         /// <summary>
         /// Triggers upon getting within abilityrange of the Target

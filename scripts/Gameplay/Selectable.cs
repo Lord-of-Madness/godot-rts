@@ -36,7 +36,8 @@ namespace RTS.Gameplay
             Idle,
             Stay,
             Patrol,
-            Dying
+            Dying,
+            UsingAbility
         }
         private Queue<SelectableAction> CommandQueue = new();
         /*
@@ -117,7 +118,7 @@ namespace RTS.Gameplay
         {
             Beholder?.DeHovered(this);
         }
-        public abstract void Command(Player.ClickMode clickMode, Target target, Ability ability = null);
+        public abstract void Command(Player.ClickMode clickMode, ITargetable target, Ability ability = null);
         public virtual void CleanCommandQueue()
         {
             CommandQueue = new();
@@ -153,14 +154,14 @@ namespace RTS.Gameplay
         {
             if (node is Damageable damagable && damagable.team.IsHostile(team))
             {
-                RetargetAttacks(new Target(damagable));
+                RetargetAttacks(damagable);
             }
         }
         /// <summary>
         /// Calls retarget on all available attacks
         /// </summary>
         /// <param name="target"></param>
-        protected void RetargetAttacks(Target target)
+        protected void RetargetAttacks(ITargetable target)
         {
             if (Attacks is not null)
             {
@@ -199,12 +200,13 @@ namespace RTS.Gameplay
         {
             if (other is Unit otherunit)
             {
-                if (this is Building) return -1;
+                if (this is Building) {
+                    return 1; }
                 else if (this is Unit unit) return unit.CompareTo(otherunit);//Not certain if these can even be called. Wouldn't the tighter Comparer be used anyway?
             }
             else if (other is Building otherbuilding)
             {
-                if (this is Unit) return 1;
+                if (this is Unit) return -1;
                 else if (this is Building building) return building.CompareTo(otherbuilding);
             }
 
@@ -215,6 +217,11 @@ namespace RTS.Gameplay
         public override string ToString()
         {
             return base.ToString() + " " + Name;
+        }
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+            //TODO signal this so people can detarget?
         }
     }
 }

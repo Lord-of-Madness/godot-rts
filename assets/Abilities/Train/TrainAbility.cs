@@ -21,7 +21,7 @@ namespace RTS.Gameplay
         public override void _Ready()
         {
             base._Ready();
-            Text = "Train " + unit.Name;
+            Text = "Train " + unit.SName;
         }
         public TrainAbility(Unit unit)
         {
@@ -42,7 +42,13 @@ namespace RTS.Gameplay
             if (OwningSelectable is Building ownBuilding)
             {
                 //GD.Print("Building");
-                newUnit.Command(Player.ClickMode.Move, ownBuilding.RallyPoint);
+                //GD.Print(ownBuilding.RallyPoint);
+                if(ownBuilding.RallyPoint is Damageable d && d.team.IsHostile(ownBuilding.team))
+                {
+                    newUnit.Command(Player.ClickMode.Attack, ownBuilding.RallyPoint);
+                }
+                else
+                    newUnit.Command(Player.ClickMode.Move, ownBuilding.RallyPoint);
             }
             else if (OwningSelectable is Unit unit)
             {

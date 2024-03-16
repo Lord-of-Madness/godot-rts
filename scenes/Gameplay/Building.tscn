@@ -43,6 +43,9 @@ script = ExtResource("4_21pqh")
 [node name="Sprite2D" parent="Graphics" index="1"]
 texture = ExtResource("3_iircv")
 
+[node name="PathLine" parent="Graphics" index="3"]
+visible = false
+
 [node name="HealthBar" parent="Graphics" index="5"]
 offset_left = -27.0
 offset_top = -38.0

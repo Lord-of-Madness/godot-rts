@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://biduocxnqdvun"]
+[gd_scene load_steps=24 format=3 uid="uid://biduocxnqdvun"]
 
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="3_1njeh"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://assets/Abilities/Train/TrainAbilityRes.cs" id="6_nu6eo"]
 [ext_resource type="PackedScene" uid="uid://dwsji62gj53dj" path="res://assets/Units/knight/Unit_knight.tscn" id="7_vgktd"]
 [ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="8_jeutb"]
+[ext_resource type="PackedScene" uid="uid://bglhkqyppw6d1" path="res://assets/Units/king/UnitKing.tscn" id="9_275fg"]
+[ext_resource type="PackedScene" uid="uid://cn5asrw72a40p" path="res://assets/Units/archer/unit_archer.tscn" id="10_oovjb"]
 
 [sub_resource type="Resource" id="Resource_1yrgb"]
 script = ExtResource("6_nu6eo")
@@ -18,6 +20,51 @@ unit = ExtResource("7_vgktd")
 script = ExtResource("8_jeutb")
 pos = 0
 ability = SubResource("Resource_1yrgb")
+
+[sub_resource type="Resource" id="Resource_rmgj2"]
+script = ExtResource("6_nu6eo")
+unit = ExtResource("10_oovjb")
+
+[sub_resource type="Resource" id="Resource_2d8xx"]
+script = ExtResource("8_jeutb")
+pos = 8
+ability = SubResource("Resource_rmgj2")
+
+[sub_resource type="Resource" id="Resource_05fb5"]
+script = ExtResource("6_nu6eo")
+unit = ExtResource("7_vgktd")
+
+[sub_resource type="Resource" id="Resource_44l7b"]
+script = ExtResource("8_jeutb")
+pos = 1
+ability = SubResource("Resource_05fb5")
+
+[sub_resource type="Resource" id="Resource_rd20a"]
+script = ExtResource("6_nu6eo")
+unit = ExtResource("9_275fg")
+
+[sub_resource type="Resource" id="Resource_giijh"]
+script = ExtResource("8_jeutb")
+pos = 0
+ability = SubResource("Resource_rd20a")
+
+[sub_resource type="Resource" id="Resource_akxhs"]
+script = ExtResource("6_nu6eo")
+unit = ExtResource("9_275fg")
+
+[sub_resource type="Resource" id="Resource_ax5w5"]
+script = ExtResource("8_jeutb")
+pos = 0
+ability = SubResource("Resource_akxhs")
+
+[sub_resource type="Resource" id="Resource_7ricn"]
+script = ExtResource("6_nu6eo")
+unit = ExtResource("10_oovjb")
+
+[sub_resource type="Resource" id="Resource_vmlsm"]
+script = ExtResource("8_jeutb")
+pos = 1
+ability = SubResource("Resource_7ricn")
 
 [node name="Node" type="Node"]
 
@@ -36,30 +83,126 @@ layer_1/tile_data = PackedInt32Array(786470, 2293793, 2, 1376309, 2293793, 2, 85
 
 [node name="Player" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
+Team = 0
 
 [node name="Barrack" parent="Map/Player/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(103, 640)
+position = Vector2(113, 647)
+MaxHP = 9999
 ExportAbilities = [SubResource("Resource_rfn37")]
 
+[node name="Unit" parent="Map/Player/Selectables" index="1" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit2" parent="Map/Player/Selectables" index="2" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit3" parent="Map/Player/Selectables" index="3" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit4" parent="Map/Player/Selectables" index="4" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit5" parent="Map/Player/Selectables" index="5" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit6" parent="Map/Player/Selectables" index="6" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit7" parent="Map/Player/Selectables" index="7" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit8" parent="Map/Player/Selectables" index="8" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit9" parent="Map/Player/Selectables" index="9" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit10" parent="Map/Player/Selectables" index="10" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit11" parent="Map/Player/Selectables" index="11" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit12" parent="Map/Player/Selectables" index="12" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit13" parent="Map/Player/Selectables" index="13" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
+[node name="Unit14" parent="Map/Player/Selectables" index="14" instance=ExtResource("7_vgktd")]
+position = Vector2(717, -27)
+
 [node name="Player2" parent="Map" instance=ExtResource("3_la75w")]
+script = ExtResource("5_5o60g")
 Team = 1
 
 [node name="Barrack2" parent="Map/Player2/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(1252, -89)
+position = Vector2(1178, 137)
+MaxHP = 9999
+ExportAbilities = [SubResource("Resource_2d8xx"), SubResource("Resource_44l7b")]
+
+[node name="Unit_Archer" parent="Map/Player2/Selectables" index="1" instance=ExtResource("10_oovjb")]
+position = Vector2(1039, 129)
+ExportAbilities = []
+
+[node name="Unit_Archer2" parent="Map/Player2/Selectables" index="2" instance=ExtResource("10_oovjb")]
+position = Vector2(1041, 203)
+ExportAbilities = []
+
+[node name="Unit_Archer3" parent="Map/Player2/Selectables" index="3" instance=ExtResource("10_oovjb")]
+position = Vector2(965, 117)
+ExportAbilities = []
 
 [node name="Player3" parent="Map" instance=ExtResource("3_la75w")]
+script = ExtResource("5_5o60g")
 Team = 2
 
 [node name="Barrack2" parent="Map/Player3/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(-108, -108)
+position = Vector2(221, 243)
+MaxHP = 9999
+ExportAbilities = [SubResource("Resource_giijh")]
 
 [node name="Unit" parent="Map/Player3/Selectables" index="1" instance=ExtResource("7_vgktd")]
-position = Vector2(706, 384)
+position = Vector2(836, 415)
+
+[node name="Unit2" parent="Map/Player3/Selectables" index="2" instance=ExtResource("7_vgktd")]
+position = Vector2(251, 216)
+
+[node name="Unit3" parent="Map/Player3/Selectables" index="3" instance=ExtResource("7_vgktd")]
+position = Vector2(301, 146)
+
+[node name="Unit4" parent="Map/Player3/Selectables" index="4" instance=ExtResource("7_vgktd")]
+position = Vector2(836, 415)
+
+[node name="Unit5" parent="Map/Player3/Selectables" index="5" instance=ExtResource("7_vgktd")]
+position = Vector2(913, 541)
+
+[node name="Unit6" parent="Map/Player3/Selectables" index="6" instance=ExtResource("7_vgktd")]
+position = Vector2(784, 381)
+
+[node name="Unit7" parent="Map/Player3/Selectables" index="7" instance=ExtResource("7_vgktd")]
+position = Vector2(752, 419)
 
 [node name="Player4" parent="Map" instance=ExtResource("3_la75w")]
+script = ExtResource("5_5o60g")
+Team = 0
 
 [node name="Barrack2" parent="Map/Player4/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(1378, 826)
+position = Vector2(1068, 549)
+MaxHP = 9999
+ExportAbilities = [SubResource("Resource_ax5w5"), SubResource("Resource_vmlsm")]
+
+[node name="Unit King" parent="Map/Player4/Selectables" index="1" instance=ExtResource("9_275fg")]
+position = Vector2(981, 181)
+ExportAbilities = []
+
+[node name="Unit King2" parent="Map/Player4/Selectables" index="2" instance=ExtResource("9_275fg")]
+position = Vector2(987, 444)
+ExportAbilities = []
+
+[node name="Unit King3" parent="Map/Player4/Selectables" index="3" instance=ExtResource("9_275fg")]
+position = Vector2(946, 491)
+ExportAbilities = []
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

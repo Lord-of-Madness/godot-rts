@@ -7,7 +7,7 @@ namespace RTS.Gameplay
 {
     public partial class BuildOrderPlayer : Player
     {
-        Selectable target = null;
+        ITargetable target = null;
         public override void _Process(double delta)
         {
 
@@ -23,13 +23,13 @@ namespace RTS.Gameplay
                     enemies1d.AddRange(selectable);
                 }
                 if (enemies1d.Count > 0)
-                    target = (Selectable)enemies1d.First();
+                    target = new Location(((Selectable)enemies1d.First()).Position);
             }
             foreach (Selectable item in GetNode("Selectables").GetChildren().Cast<Selectable>())
             {
                 if (item is Building building)
                 {
-                    if (target is not null) building.RallyPoint = new(target);
+                    if (target is not null) building.RallyPoint = target;
                     foreach (Ability ability in from pair in building.Abilities select pair.Value)
                     {
                         if (ability is not TargetedAbility)//just so we accidentaly don't do something weird
@@ -39,7 +39,7 @@ namespace RTS.Gameplay
                 else if (item is Unit unit)
                 {
                     if(unit.CurrentAction!= Selectable.SelectableAction.Attack)
-                    unit.Command(ClickMode.Attack, new(target));
+                    unit.Command(ClickMode.Attack, new Location(target.Position));
                 }
             }
         }

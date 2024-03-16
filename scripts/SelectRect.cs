@@ -8,6 +8,7 @@ namespace RTS.UI
         private Vector2 end;
         public bool dragging =false;
         public Vector2 Size { get => (end - start).Abs(); }
+        public Rect2 Rect { get => new Rect2(start, end - start).Abs(); }
         public override void _Draw()
         {
             if (dragging)

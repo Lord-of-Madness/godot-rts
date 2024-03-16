@@ -7,7 +7,7 @@ namespace RTS.Graphics
 {
     public partial class SelectableGraphics : Node2D
     {
-        protected Line2D PathLine;
+        public Line2D PathLine;
         protected Node2D SelectionVisual;
         protected Color selectionSelfModulateColor;
         protected bool selected;

@@ -6,7 +6,7 @@ namespace RTS.Gameplay
 {
     public partial class GameResourceSource : Selectable
     {
-        public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
+        public override void Command(Player.ClickMode clickMode, ITargetable target, Ability ability = null)
         {
             GD.Print("No point giving this guy any commands");
         }

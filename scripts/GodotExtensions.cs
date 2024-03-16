@@ -1,6 +1,7 @@
 ﻿using Godot;
 using Godot.Collections;
 using Godot.NativeInterop;
+using RTS.Gameplay;
 using System.Collections.Generic;
 
 namespace RTS.mainspace
@@ -44,6 +45,14 @@ namespace RTS.mainspace
                 node.RemoveChild(item);
                 item.QueueFree();
             }
+        }
+        public static float LimitWidth(this Camera2D camera)
+        {
+            return camera.LimitRight - camera.LimitLeft;
+        }
+        public static float LimitHeight(this Camera2D camera)
+        {
+            return camera.LimitBottom - camera.LimitTop;
         }
     }
     public enum Direction

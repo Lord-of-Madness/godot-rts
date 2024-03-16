@@ -37,7 +37,19 @@ namespace RTS.Gameplay
 
         public new UnitGraphics Graphics;
         public NavigationAgent2D NavAgent;
-        public Target target;
+        public ITargetable target;
+        public ITargetable Target
+        {
+            get => target; set
+            {
+                if (target is not null)
+                {
+                    //disconect Detarget from previous
+                }
+                target = value;
+                //connect Detarget to previous
+            }
+        }
         private bool following = false;
 
         public override void _Ready()
@@ -51,9 +63,11 @@ namespace RTS.Gameplay
             NavAgent.Radius = ((CircleShape2D)GetNode<CollisionShape2D>(nameof(CollisionShape2D)).Shape).Radius;//So that its always somewhat accurate
             Detarget();
             Deselect();
-
-            SetPhysicsProcess(false);
-            NavigationServer2D.MapChanged += PhysicsDelayer;
+            if (!GetParent().IsNodeReady())
+            {
+                SetPhysicsProcess(false);
+                NavigationServer2D.MapChanged += PhysicsDelayer;
+            }
         }
         void PhysicsDelayer(Rid _)
         {
@@ -65,12 +79,15 @@ namespace RTS.Gameplay
             base.CleanCommandQueue();
             Detarget();
         }
-        public override void Command(Player.ClickMode clickMode, Target target, Ability ability = null)
+        public override void Command(Player.ClickMode clickMode, ITargetable target, Ability ability = null)
         //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
         {
+            //GD.Print(CurrentAction);
             if (CurrentAction == SelectableAction.Dying) return;
-            if (target.type == Target.Type.Selectable && target.selectable == this) return;
+            if (target == this) return;
             //NavAgent.AvoidanceEnabled = true;
+           
+
             switch (clickMode)
             {
                 case Player.ClickMode.Move:
@@ -84,6 +101,7 @@ namespace RTS.Gameplay
                     UseAbility(target, ability);
                     break;
             }
+            //GD.Print(CurrentAction);
         }
         /// <summary>
         /// This gets called by the NavAgent when it reaches its goal
@@ -122,18 +140,19 @@ namespace RTS.Gameplay
         /// Otherwise moves to a unit.
         /// </summary>
         /// <param name="target"></param>
-        public void MoveTo(Target target)
+        public void MoveTo(ITargetable target)
         {
             CurrentAction = SelectableAction.Move;
             this.target = target;
-            if (target.type == Target.Type.Location)
+            if (target is Location l)
             {
-                NavAgent.TargetPosition = target.location;
+                NavAgent.TargetPosition = l;
             }
             else
             {
                 following = true;
-                if (target.selectable is Damageable damageable)
+
+                if (target is Damageable damageable)
                 {
                     damageable.SignalDead += Detarget;
                     //player.VisionArea.BodyExited += Detarget; //TODO when outside vision
@@ -145,17 +164,17 @@ namespace RTS.Gameplay
             if (following || CurrentAction == SelectableAction.Move) return;
             if (node is Selectable selectable && selectable.team.IsHostile(team))
             {
-                AttackCommand(new Target(selectable));
+                AttackCommand(selectable);
             }
         }
-        public void AttackCommand(Target target)
+        public void AttackCommand(ITargetable target)
         {
             //GD.Print("AttackCommand? ",target);
             MoveTo(target);//Moving as base plus extra
             CurrentAction = SelectableAction.Attack;
             RetargetAttacks(target);
         }
-        public void UseAbility(Target target, Ability ability)
+        public void UseAbility(ITargetable target, Ability ability)
         {
             MoveTo(target);
             if (ability is TargetedAbility targetedAbility)
@@ -171,7 +190,7 @@ namespace RTS.Gameplay
             GoIdle();
             DetargetAttacks();
             //navAgent.TargetPosition = Position;
-            if (/*following &&*/ target is not null && (target.selectable is Damageable damageable))
+            if (/*following &&*/ target is not null && (target is Damageable damageable))
             {
                 //GD.Print("DETARGETING!");
                 damageable.SignalDead -= Detarget;
@@ -184,7 +203,8 @@ namespace RTS.Gameplay
         public override void _PhysicsProcess(double delta)
         {
             if (CurrentAction == SelectableAction.Dying) return;
-            if (following && CurrentAction != SelectableAction.Dying) NavAgent.TargetPosition = target.Position;
+            
+            if (following && CurrentAction != SelectableAction.Dying && NavAgent.TargetPosition.DistanceSquaredTo(target.Position) > 0.2f) NavAgent.TargetPosition = target.Position;
             if (
                 !NavAgent.IsNavigationFinished()
                 &&

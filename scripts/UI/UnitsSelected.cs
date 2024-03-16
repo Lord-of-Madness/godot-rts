@@ -11,7 +11,7 @@ namespace RTS.UI
     public partial class UnitsSelected : GridContainer
     {
         
-        public void Update(SortedSet<Selectable> Selection)
+        public void Update(Selection Selection)
         {
             this.DestroyChildren();
 

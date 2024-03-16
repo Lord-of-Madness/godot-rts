@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bjq028k0i6idh"]
+[gd_scene load_steps=22 format=3 uid="uid://bjq028k0i6idh"]
 
 [ext_resource type="PackedScene" uid="uid://beoxgmnjp5qn8" path="res://scenes/HumanPlayer.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="1_8ua6g"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://bglhkqyppw6d1" path="res://assets/Units/king/UnitKing.tscn" id="9_o4ati"]
 [ext_resource type="Script" path="res://scripts/Gameplay/AbilityPair.cs" id="9_tsuri"]
 [ext_resource type="PackedScene" uid="uid://cn5asrw72a40p" path="res://assets/Units/archer/unit_archer.tscn" id="10_eenqk"]
-[ext_resource type="Script" path="res://scripts/Gameplay/BuildOrderPlayer.cs" id="12_8sbka"]
 [ext_resource type="PackedScene" uid="uid://bnuece6w12tmn" path="res://scenes/Gameplay/GameResourceSource.tscn" id="12_oe1a4"]
 
 [sub_resource type="RectangleShape2D" id="1"]
@@ -82,26 +81,56 @@ scale = Vector2(0.75, 0.75)
 texture = ExtResource("3")
 
 [node name="HumanPlayer" parent="." instance=ExtResource("1")]
+ZoomSnapAmmount = 1.1
+ZoomSnap = false
 
 [node name="Unit" parent="HumanPlayer/Selectables" index="0" instance=ExtResource("6_5q6jk")]
 position = Vector2(360, 360)
 
-[node name="Unit3" parent="HumanPlayer/Selectables" index="1" instance=ExtResource("6_5q6jk")]
+[node name="Unit2" parent="HumanPlayer/Selectables" index="1" instance=ExtResource("6_5q6jk")]
+position = Vector2(325, 438)
+
+[node name="Unit5" parent="HumanPlayer/Selectables" index="2" instance=ExtResource("6_5q6jk")]
+position = Vector2(271, 343)
+
+[node name="Unit6" parent="HumanPlayer/Selectables" index="3" instance=ExtResource("6_5q6jk")]
+position = Vector2(164, 412)
+
+[node name="Unit7" parent="HumanPlayer/Selectables" index="4" instance=ExtResource("6_5q6jk")]
+position = Vector2(321, 277)
+
+[node name="Unit8" parent="HumanPlayer/Selectables" index="5" instance=ExtResource("6_5q6jk")]
+position = Vector2(240, 514)
+
+[node name="Unit9" parent="HumanPlayer/Selectables" index="6" instance=ExtResource("6_5q6jk")]
+position = Vector2(322, 522)
+
+[node name="Unit10" parent="HumanPlayer/Selectables" index="7" instance=ExtResource("6_5q6jk")]
+position = Vector2(65, 340)
+
+[node name="Unit11" parent="HumanPlayer/Selectables" index="8" instance=ExtResource("6_5q6jk")]
+position = Vector2(59, 422)
+
+[node name="Unit12" parent="HumanPlayer/Selectables" index="9" instance=ExtResource("6_5q6jk")]
+position = Vector2(59, 496)
+
+[node name="Unit3" parent="HumanPlayer/Selectables" index="10" instance=ExtResource("6_5q6jk")]
 position = Vector2(247, 427)
 
-[node name="Unit4" parent="HumanPlayer/Selectables" index="2" instance=ExtResource("6_5q6jk")]
+[node name="Unit4" parent="HumanPlayer/Selectables" index="11" instance=ExtResource("6_5q6jk")]
 position = Vector2(143, 487)
 
-[node name="Barrack" parent="HumanPlayer/Selectables" index="3" instance=ExtResource("7_2eaqi")]
+[node name="Barrack" parent="HumanPlayer/Selectables" index="12" instance=ExtResource("7_2eaqi")]
 position = Vector2(192, 192)
 ExportAbilities = [SubResource("Resource_e33jb"), SubResource("Resource_rot5u")]
 
-[node name="Barrack2" parent="HumanPlayer/Selectables" index="4" instance=ExtResource("7_2eaqi")]
+[node name="Barrack2" parent="HumanPlayer/Selectables" index="13" instance=ExtResource("7_2eaqi")]
 position = Vector2(720, 400)
 ExportAbilities = [SubResource("Resource_2d8xx"), SubResource("Resource_wemnm")]
 
-[node name="Unit King" parent="HumanPlayer/Selectables" index="5" instance=ExtResource("9_o4ati")]
+[node name="Unit King" parent="HumanPlayer/Selectables" index="14" instance=ExtResource("9_o4ati")]
 position = Vector2(163, 325)
+ExportAbilities = []
 
 [node name="Camera2D" parent="HumanPlayer" index="2"]
 limit_right = 4500
@@ -111,7 +140,6 @@ limit_bottom = 2200
 rows = 5
 
 [node name="Player" parent="." instance=ExtResource("5_bt0lf")]
-script = ExtResource("12_8sbka")
 Team = 1
 
 [node name="Unit4" parent="Player/Selectables" index="0" instance=ExtResource("6_5q6jk")]
@@ -131,6 +159,8 @@ Team = 2
 
 [node name="GameResourceSource" parent="NeutralPlayer/Selectables" index="0" instance=ExtResource("12_oe1a4")]
 position = Vector2(48, 227)
+ExportAbilities = []
+visionRange = 0.0
 
 [editable path="HumanPlayer"]
 [editable path="Player"]

@@ -23,6 +23,7 @@ script = ExtResource("2_dfrfr")
 MaxHP = 70
 SName = "Barrack"
 ExportAbilities = [SubResource("Resource_2d8xx")]
+visionRange = 0.0
 
 [node name="CollisionShape2D" parent="." index="0"]
 position = Vector2(0, -1.90735e-06)

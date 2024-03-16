@@ -13,9 +13,9 @@ namespace RTS.Gameplay
         GameResourceSource GameResourceSource { get; set; }
         //Building returnPoint { get; set; } Lets not put it here. It is better we just say: RETURN and the unit will find a way
 
-        public override void OnTargetRecieved(Target target)
+        public override void OnTargetRecieved(ITargetable target)
         {
-            if (target.type == Target.Type.Selectable && target.selectable is GameResourceSource gameResource)
+            if (target is GameResourceSource gameResource)
             {
                 GameResourceSource = gameResource;
                 //find return point

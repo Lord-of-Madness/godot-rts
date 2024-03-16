@@ -40,6 +40,10 @@ namespace RTS.Gameplay
         {
             PickingTargetLocation = true;
         }
+        public override void OnTargetingCanceled()
+        {
+            PickingTargetLocation = false;
+        }
 
         bool BuildingFits(Vector2 location)
         {
@@ -62,13 +66,13 @@ namespace RTS.Gameplay
             //Put an Area2D on the location. if it doesn't collide with anything but non-coliding ground return true otherwise false
         }
 
-        public override void OnTargetRecieved(Target target)
+        public override void OnTargetRecieved(ITargetable target)
         {
             //base.OnTargetRecieved(target);The base one a) checks if its already in Range, b) starts monitoring. And we don't need either cause we run it in process
             PickingTargetLocation = false;
-            if (target.type == Target.Type.Location
-                && BuildingFits(target.location)
-                ) { targetLocation = target.location; OnTheWayToBuild = true; }
+            if (target is Location l
+                && BuildingFits(l.Position)
+                ) { targetLocation = l.Position; OnTheWayToBuild = true; }
 
         }
 
@@ -92,14 +96,14 @@ namespace RTS.Gameplay
         public override void _Process(double delta)
         {
             base._Process(delta);
-            if (OwningSelectable.OwnerPlayer is HumanPlayer && PickingTargetLocation)//this is an UI thing. Is it wise to put it with the rest of the gameplay code?
+            if (OwningSelectable.OwnerPlayer is HumanPlayer human && PickingTargetLocation)//this is an UI thing. Is it wise to put it with the rest of the gameplay code?
             {
-                wireframe.Position = GetViewport().GetMousePosition();
+                wireframe.Position = human.camera.GetGlobalMousePosition();
                 if (BuildingFits(wireframe.Position))
                 {
-                    wireframe.Modulate = new(1, 1, 1);
+                    wireframe.Modulate = new(1, 1, 1,0.5f);
                 }
-                else wireframe.Modulate = new(1, 0.1f, 0.1f);
+                else wireframe.Modulate = new(1, 0.1f, 0.1f,0.5f);
             }
             if (OnTheWayToBuild && OwningSelectable.Position.DistanceTo(targetLocation) <= Range) { OnTargetReached(); }
         }

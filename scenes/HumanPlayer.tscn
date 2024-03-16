@@ -21,6 +21,10 @@ events = [SubResource("InputEventKey_1ktqu")]
 [node name="HumanPlayer" instance=ExtResource("1_t3lyo")]
 script = ExtResource("2_7rcui")
 ScrollSpeed = 5.0
+ZoomSnapAmmount = 1.1
+ZoomSpeed = 1.1
+ZoomSnap = false
+Team = 0
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 anchor_mode = 0
@@ -197,9 +201,14 @@ anchor_bottom = 1.0
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Camera2D/HUD/BottomBar/Minimap" index="0"]
+disable_3d = true
 handle_input_locally = false
 size = Vector2i(256, 170)
 render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="Camera2D/HUD/BottomBar/Minimap/SubViewport" index="0"]
+anchor_mode = 0
+zoom = Vector2(0.3, 0.3)
 
 [node name="VisualOverlay" type="Control" parent="Camera2D/HUD/BottomBar" index="4"]
 layout_mode = 1

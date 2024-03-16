@@ -33,7 +33,7 @@ namespace RTS.Gameplay
         [Export] public DamageType Damagetype { get; set; }
         public AnimationPlayer anim;
         public Area2D AttackRange;
-        public Target target;
+        public ITargetable target;
         public bool targetInRange = false;
         /// <summary>
         /// current time before next attack (set to Attack period going down to 0)
@@ -90,7 +90,7 @@ namespace RTS.Gameplay
 
                     AttackAnim(owner.Graphics.Direction);
                     cooldown = 0;
-                    Damageable damagableTarget = (Damageable)target.selectable;
+                    Damageable damagableTarget = (Damageable)target;//TODO is this correct?
                     damagableTarget.HP = (int)Math.Round(damagableTarget.HP - Damage);//Not the nicest but feels the correctest
                 }
             }
@@ -135,9 +135,8 @@ namespace RTS.Gameplay
         {
             if (target is null || owner.CurrentAction != Selectable.SelectableAction.Attack) return;
 
-            GD.Print(inrangee.Name, " entered and has type: ", inrangee.GetType());
-            if (inrangee is Selectable selectable
-                && selectable == target.selectable)
+            //GD.Print(inrangee.Name, " entered and has type: ", inrangee.GetType());
+            if (inrangee == target)
             {
                 targetInRange = true;
                 //GD.Print("Target in range!");
@@ -147,8 +146,7 @@ namespace RTS.Gameplay
         {
             if (target is null) return;
             //GD.Print(body.Name, " left");
-            if (target.type == Target.Type.Selectable && body is Selectable selectable
-            && selectable == target.selectable)
+            if (target == body )//target is Selectable s && body is Selectable selectable && selectable == s)
             {
                 targetInRange = false;
             }
@@ -158,11 +156,11 @@ namespace RTS.Gameplay
         /// Also checks if it is in range already
         /// </summary>
         /// <param name="target">new target</param>
-        public void Retarget(Target target)
+        public void Retarget(ITargetable target)
         {
             this.target = target;
-            //GD.Print("Retargetin! "+target);
-            if (target.type == Target.Type.Selectable && AttackRange.GetOverlappingBodies().Contains(target.selectable))
+            GD.Print("Retargetin! "+target);
+            if (target is Selectable s && AttackRange.GetOverlappingBodies().Contains(s))
                 targetInRange = true;
             else targetInRange = false;
         }
