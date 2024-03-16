@@ -204,7 +204,7 @@ namespace RTS.Gameplay
         {
             if (CurrentAction == SelectableAction.Dying) return;
             
-            if (following && CurrentAction != SelectableAction.Dying && NavAgent.TargetPosition.DistanceSquaredTo(target.Position) > 0.2f) NavAgent.TargetPosition = target.Position;
+            if (following && CurrentAction != SelectableAction.Dying && NavAgent.TargetPosition.DistanceSquaredTo(target.Position) > 1) NavAgent.TargetPosition = target.Position;
             if (
                 !NavAgent.IsNavigationFinished()
                 &&

@@ -9,7 +9,6 @@
 speed = 13.0
 MaxHP = 50
 SName = "King"
-ExportAbilities = []
 visionRange = 6.0
 
 [node name="UnitPortrait" parent="." index="1"]
@@ -32,9 +31,6 @@ offset_bottom = -22.0
 [node name="Attack" parent="Attacks" index="0" instance=ExtResource("3_w3g5v")]
 AttackSpeed = 1.0
 Damage = 5.0
-Ranged = false
-AoE = false
-Damagetype = 0
 range = 20.0
 
 [editable path="Graphics"]

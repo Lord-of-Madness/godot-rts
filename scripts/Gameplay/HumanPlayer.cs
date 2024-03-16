@@ -123,6 +123,10 @@ namespace RTS.Gameplay
             {
                 value = value.Clamp(MinZoom, MaxZoom);
                 camera.Zoom = value;
+                camera.Position = camera.Position.Clamp(//This just wants me to stab myslef
+                    new Vector2(0,0),
+                    new Vector2(camera.LimitWidth() - camera.GetViewportRect().Size.X/camera.Zoom.X,camera.LimitHeight()- camera.GetViewportRect().Size.Y / camera.Zoom.Y)
+                    );
             }
         }
         [ExportGroup("CameraProperties")]
@@ -135,12 +139,14 @@ namespace RTS.Gameplay
         float ZoomSpeed = 10;
         [Export]
         bool ZoomSnap = false;
-        private Vector2 TargetZoom;
+        private Vector2 tz;
+        private Vector2 TargetZoom { get => tz; set => tz = value.Clamp(MinZoom, MaxZoom); }
         private ITargetable hoveringOver;
         private HBoxContainer ResourceTab;
 
         public TargetedAbility HangingAbility = null;
         private ClickMode cm;
+        private Vector2 GetActualFuckingMousePosition { get => (camera.GetGlobalMousePosition() - camera.Position) * camera.Zoom; }
         /// <summary>
         /// Specifies what action are we currently giving the Selected Selectables.
         /// </summary>
@@ -209,10 +215,10 @@ namespace RTS.Gameplay
         {
             var mouseposition = GetViewport().GetMousePosition();
             var screenSize = GetViewport().GetVisibleRect().Size;
-            if (mouseposition.X >= screenSize.X - 1)
+            if (mouseposition.X >= screenSize.X - 1 && camera.Position.X+ camera.GetViewportRect().Size.X/camera.Zoom.X< camera.LimitRight)
             {
                 camera.Translate(Vector2.Right * ScrollSpeed /camera.Zoom);
-                camera.Position = new Vector2(Math.Min(camera.Position.X, camera.LimitRight - camera.GetViewportRect().Size.X), camera.Position.Y);
+                //camera.Position = new Vector2(Math.Min(camera.Position.X, camera.LimitRight - camera.GetViewportRect().Size.X), camera.Position.Y);
 
                 //This is so stupid. The events that I am getting are coming based off cameraNODE coordinates.
                 //These coordinates are being translated by pushing mouse to the sides of the screen.
@@ -331,9 +337,9 @@ namespace RTS.Gameplay
                     Clickmode = ClickMode.Attack;
                 }
             }
-            if (selectRectNode.dragging && @event is InputEventMouseMotion mousemotion)
+            if (selectRectNode.dragging && @event is InputEventMouseMotion)
             {
-                selectRectNode.UpdateStats(mousemotion.GlobalPosition);
+                selectRectNode.UpdateStats(GetActualFuckingMousePosition);
             }
         }
         public void SelectObjects(InputEventMouseButton mousebutton)
@@ -341,7 +347,7 @@ namespace RTS.Gameplay
             if (mousebutton.Pressed)//Just pressed
             {
                 selectRectNode.dragging = true;
-                selectRectNode.start = mousebutton.GlobalPosition;// mousebutton.Position;
+                selectRectNode.start = GetActualFuckingMousePosition;
                 if (Selection.Count > 0 && !Input.IsKeyPressed(Key.Shift))//TODO the shift key is kinda hardcoded perhaps change that later
                 {
                     foreach (Selectable selectable in Selection)
@@ -357,7 +363,7 @@ namespace RTS.Gameplay
             else if (selectRectNode.dragging)//Just released (The mouseevent triggers only when pressing/releasing this just ensures it was dragging before)
             {
                 selectRectNode.dragging = false;
-                var dragEnd = mousebutton.GlobalPosition;//mousebutton.Position;
+                var dragEnd = GetActualFuckingMousePosition;
                 selectRectNode.UpdateStats(dragEnd);
                 PhysicsShapeQueryParameters2D query = new()
                 {

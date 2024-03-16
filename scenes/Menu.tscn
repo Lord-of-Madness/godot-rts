@@ -83,7 +83,6 @@ layer_1/tile_data = PackedInt32Array(786470, 2293793, 2, 1376309, 2293793, 2, 85
 
 [node name="Player" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
-Team = 0
 
 [node name="Barrack" parent="Map/Player/Selectables" index="0" instance=ExtResource("4_bkxrf")]
 position = Vector2(113, 647)
@@ -143,15 +142,12 @@ ExportAbilities = [SubResource("Resource_2d8xx"), SubResource("Resource_44l7b")]
 
 [node name="Unit_Archer" parent="Map/Player2/Selectables" index="1" instance=ExtResource("10_oovjb")]
 position = Vector2(1039, 129)
-ExportAbilities = []
 
 [node name="Unit_Archer2" parent="Map/Player2/Selectables" index="2" instance=ExtResource("10_oovjb")]
 position = Vector2(1041, 203)
-ExportAbilities = []
 
 [node name="Unit_Archer3" parent="Map/Player2/Selectables" index="3" instance=ExtResource("10_oovjb")]
 position = Vector2(965, 117)
-ExportAbilities = []
 
 [node name="Player3" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
@@ -185,7 +181,6 @@ position = Vector2(752, 419)
 
 [node name="Player4" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
-Team = 0
 
 [node name="Barrack2" parent="Map/Player4/Selectables" index="0" instance=ExtResource("4_bkxrf")]
 position = Vector2(1068, 549)
@@ -194,15 +189,12 @@ ExportAbilities = [SubResource("Resource_ax5w5"), SubResource("Resource_vmlsm")]
 
 [node name="Unit King" parent="Map/Player4/Selectables" index="1" instance=ExtResource("9_275fg")]
 position = Vector2(981, 181)
-ExportAbilities = []
 
 [node name="Unit King2" parent="Map/Player4/Selectables" index="2" instance=ExtResource("9_275fg")]
 position = Vector2(987, 444)
-ExportAbilities = []
 
 [node name="Unit King3" parent="Map/Player4/Selectables" index="3" instance=ExtResource("9_275fg")]
 position = Vector2(946, 491)
-ExportAbilities = []
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

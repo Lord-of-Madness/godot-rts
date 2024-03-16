@@ -25,6 +25,8 @@ namespace RTS.Gameplay
             base._Ready();
             RallyPoint = this;
             Graphics.PathLine.GlobalPosition = Vector2.Zero;//So path doesn't move with the unit
+            Ground ground = OwnerPlayer.localLevel.GetNode<Ground>(nameof(Ground));// TODO: tainting the ground. Gotta build on a grid first (detecting overlapping cells is otherwise way too much of a bother)
+            //But The way it works now would weork wonders with creep and creeptumors (there are funcs for getting ajacent)
         }
 
         public override void CleanCommandQueue()

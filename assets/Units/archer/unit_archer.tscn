@@ -8,7 +8,6 @@
 speed = 4.0
 MaxHP = 11
 SName = "Archer"
-ExportAbilities = []
 visionRange = 4.0
 
 [node name="UnitPortrait" parent="." index="1"]

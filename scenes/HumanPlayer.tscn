@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://beoxgmnjp5qn8"]
+[gd_scene load_steps=15 format=3 uid="uid://beoxgmnjp5qn8"]
 
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="1_t3lyo"]
 [ext_resource type="Script" path="res://scripts/Gameplay/HumanPlayer.cs" id="2_7rcui"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/UI/UnitActions.cs" id="7_tqpuo"]
 [ext_resource type="Script" path="res://scripts/UI/UnitsSelected.cs" id="7_w6rp2"]
 [ext_resource type="Script" path="res://scripts/UI/UnitInfo.cs" id="9_bcci2"]
+[ext_resource type="Script" path="res://scenes/Minimap.cs" id="11_mas6b"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_1ktqu"]
 keycode = 4194305
@@ -24,7 +25,6 @@ ScrollSpeed = 5.0
 ZoomSnapAmmount = 1.1
 ZoomSpeed = 1.1
 ZoomSnap = false
-Team = 0
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 anchor_mode = 0
@@ -199,6 +199,7 @@ layout_mode = 0
 anchor_right = 0.2
 anchor_bottom = 1.0
 stretch = true
+script = ExtResource("11_mas6b")
 
 [node name="SubViewport" type="SubViewport" parent="Camera2D/HUD/BottomBar/Minimap" index="0"]
 disable_3d = true
