@@ -32,6 +32,11 @@ window/stretch/mode="viewport"
 project/assembly_name="Rts Zápočťák"
 project/assembly_reload_attempts=5
 
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
+
 [filesystem]
 
 import/blender/enabled=false

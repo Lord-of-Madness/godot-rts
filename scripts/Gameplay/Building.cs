@@ -31,7 +31,7 @@ namespace RTS.Gameplay
 
         public override void CleanCommandQueue()
         {
-            return;//Buildings don't have commmand queues
+            return;//Buildings don't have commmand queues....yet
             //TODO: Ponder moving CleanCommandQueue only to Unit away from Selectables
         }
 
@@ -44,7 +44,7 @@ namespace RTS.Gameplay
                     break;
             }
         }
-        public void SetRally(ITargetable target)
+        public void SetRally(ITargetable target)//TODO: Setting Rally is technicaly an ability
         {
             RallyPoint = target;
             if (target is Selectable selectable)
