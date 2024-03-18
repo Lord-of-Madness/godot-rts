@@ -29,3 +29,5 @@ Meaning if you let them out early you have expendable infantry and if you take t
 The faction that is INFRONT of the train I have some ideas about. I am imagining walking factories/giant 3Dprinters. They spew a lot of timed units with batteries on them. Once they expire they can be recharged but only by actual supply taking and kinda vulnerable workers (upgradable in defence etc.) So you have like these people who control this ancient batterypowered tech but don't really understand it.
 
 Have to make these factions more unique and not just copies of SC2, WC3 and Warhammer. But for the general idea thats where we stand now.
+
+Ratmen have Nydus-like lowhp "hatcheries" So you can summon it instead of building it and it works as a unit teleport. It doesn't have main base hp tho

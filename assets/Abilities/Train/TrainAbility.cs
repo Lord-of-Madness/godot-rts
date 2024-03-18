@@ -52,7 +52,7 @@ namespace RTS.Gameplay
             }
             else if (OwningSelectable is Unit unit)
             {
-                newUnit.Command(Player.ClickMode.Move, unit.target);
+                newUnit.Command(Player.ClickMode.Move, unit.Target);
                 //Might wanna use the same ClickMode as unit but Clickmode and SelectableAction aren't the same tho if we ever Change SelectableAction to Actions then it will be simpler
             }
         }

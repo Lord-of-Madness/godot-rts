@@ -115,7 +115,7 @@ namespace RTS.Gameplay
         private InfoContainer InfoContainer;
         private UnitActions UnitActions;
         private Vector2 MinZoom;
-        private Vector2 MaxZoom = new(3f, 3f);
+        private Vector2 MaxZoom = new(3f, 3f);//This is arbitrary but it looks reasonable
         private Vector2 Zoom
         {
             get => camera.Zoom;
@@ -263,7 +263,7 @@ namespace RTS.Gameplay
             CameraMovement();
             if(!ZoomSnap)
                 Zoom = Zoom.Lerp(TargetZoom, (float)delta*10);
-            InfoContainer.Update(Selection);
+            InfoContainer.Update(Selection);//This gets to happen a lot but it is safer cause we got no idea wherever things change. (Gotta be better with Events)
             //}
 
         }
@@ -335,6 +335,10 @@ namespace RTS.Gameplay
                 if (key.Keycode == Key.A)
                 {
                     Clickmode = ClickMode.Attack;
+                }
+                if(key.Keycode == Key.P)
+                {
+                    TogglePause(true);
                 }
             }
             if (selectRectNode.dragging && @event is InputEventMouseMotion)

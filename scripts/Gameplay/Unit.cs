@@ -37,16 +37,29 @@ namespace RTS.Gameplay
 
         public new UnitGraphics Graphics;
         public NavigationAgent2D NavAgent;
-        public ITargetable target;
+        private ITargetable target;
         public ITargetable Target
         {
             get => target; set
             {
                 if (target is not null)
                 {
+                    if (target is Selectable selectable)
+                    {
+                        selectable.TreeExiting -= Detarget;
+                    }
                     //disconect Detarget from previous
                 }
                 target = value;
+
+                if (target is not null)
+                {
+                    if (target is Selectable selectable)
+                    {
+                        selectable.TreeExiting += Detarget;
+                    }
+                    //disconect Detarget from previous
+                }
                 //connect Detarget to previous
             }
         }
@@ -82,6 +95,7 @@ namespace RTS.Gameplay
         public override void Command(Player.ClickMode clickMode, ITargetable target, Ability ability = null)
         //TODO: Consider that Move and Attack are also Abilities. So technicaly they aren't detached from Abilities themselves
         {
+            if (target == this && clickMode != Player.ClickMode.UseAbility) return;//Cannot attack or move to yourself. (Once we change the Commands to Abilities completely this has to be taken into consideration)
             //GD.Print(CurrentAction);
             if (CurrentAction == SelectableAction.Dying) return;
             if (target == this) return;
@@ -113,10 +127,12 @@ namespace RTS.Gameplay
         }
         private void GoIdle()
         {
+            if (CurrentAction == SelectableAction.Dying) return;
             CurrentAction = SelectableAction.Idle;
             //NavAgent.AvoidanceEnabled = false;
             NavAgent.TargetPosition = Position;
         }
+        /*
         private double timer = 0;//for debug purposes
         public override void _Process(double delta)
         {
@@ -134,7 +150,7 @@ namespace RTS.Gameplay
             //if (GetLastSlideCollision() is KinematicCollision2D collision && collision.GetCollider() == target) TargetReached();
 
 
-        }
+        }*/
         /// <summary>
         /// Gives the Navigation agent new target if target is a location.
         /// Otherwise moves to a unit.
@@ -143,7 +159,7 @@ namespace RTS.Gameplay
         public void MoveTo(ITargetable target)
         {
             CurrentAction = SelectableAction.Move;
-            this.target = target;
+            Target = target;
             if (target is Location l)
             {
                 NavAgent.TargetPosition = l;
@@ -151,12 +167,12 @@ namespace RTS.Gameplay
             else
             {
                 following = true;
-
+                /*
                 if (target is Damageable damageable)
                 {
                     damageable.SignalDead += Detarget;
                     //player.VisionArea.BodyExited += Detarget; //TODO when outside vision
-                }
+                }*/
             }
         }
         public override void TryAgro(Node2D node)
@@ -190,12 +206,11 @@ namespace RTS.Gameplay
             GoIdle();
             DetargetAttacks();
             //navAgent.TargetPosition = Position;
-            if (/*following &&*/ target is not null && (target is Damageable damageable))
+            /*if (/*following && Target is not null && (Target is Damageable damageable))
             {
-                //GD.Print("DETARGETING!");
                 damageable.SignalDead -= Detarget;
-            }
-            target = null;
+            }*/
+            Target = null;
             following = false;
 
         }
@@ -204,7 +219,7 @@ namespace RTS.Gameplay
         {
             if (CurrentAction == SelectableAction.Dying) return;
             
-            if (following && CurrentAction != SelectableAction.Dying && NavAgent.TargetPosition.DistanceSquaredTo(target.Position) > 1) NavAgent.TargetPosition = target.Position;
+            if (following && CurrentAction != SelectableAction.Dying && NavAgent.TargetPosition.DistanceSquaredTo(Target.Position) > 1) NavAgent.TargetPosition = Target.Position;
             if (
                 !NavAgent.IsNavigationFinished()
                 &&

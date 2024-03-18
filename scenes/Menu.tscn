@@ -181,6 +181,7 @@ position = Vector2(752, 419)
 
 [node name="Player4" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
+Team = 3
 
 [node name="Barrack2" parent="Map/Player4/Selectables" index="0" instance=ExtResource("4_bkxrf")]
 position = Vector2(1068, 549)

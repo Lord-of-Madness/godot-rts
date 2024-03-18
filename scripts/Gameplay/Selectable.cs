@@ -18,7 +18,8 @@ namespace RTS.Gameplay
     {
         Team1,
         Team2,
-        Team3
+        Team3,
+        Team4
     }
     public interface IHasAttack//Might come in handy
     {
