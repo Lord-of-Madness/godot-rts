@@ -71,7 +71,6 @@ namespace RTS.Physics
         ISubtractionOperators<Second, double, Second>,
         IComparable<Second>
     {
-        //private static PhysicsValues physicsValues;
         private readonly double value;
         public readonly double Value { get => value; }
         public Second(float value) { this.value = value; }
