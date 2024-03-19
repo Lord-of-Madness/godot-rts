@@ -21,6 +21,10 @@ run/main_scene="res://scenes/Menu.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://resources/icon.png"
 
+[autoload]
+
+GDpluginTest="res://scripts/GDpluginTest.gd"
+
 [display]
 
 window/size/viewport_width=1280

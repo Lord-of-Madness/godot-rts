@@ -262,6 +262,7 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_y1rvi"]
 
 [node name="Attack" type="Node2D"]
+editor_description = "Melee attack. "
 script = ExtResource("2_ppo7f")
 
 [node name="Graphic" type="Sprite2D" parent="."]
