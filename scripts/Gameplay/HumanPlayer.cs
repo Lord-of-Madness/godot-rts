@@ -340,6 +340,15 @@ namespace RTS.Gameplay
                 {
                     TogglePause(true);
                 }
+                if (key.Keycode == Key.S)
+                {
+                    GD.Print("Selection:");
+                    foreach (var item in Selection)
+                    {
+                        GD.Print(item);
+                    }
+                    GD.Print("-------");
+                }
             }
             if (selectRectNode.dragging && @event is InputEventMouseMotion)
             {
@@ -416,7 +425,10 @@ namespace RTS.Gameplay
         {
 
             selectable.SignalDisablingSelection -= DeselectObject;
-            GD.Print(Selection.Remove(selectable));
+            if (!Selection.Remove(selectable))
+            {
+                GD.PrintErr("unable to Remove selectable: ", selectable);
+            }
             selectable.Deselect();
             UpdateUnitGridAndPortrait();
         }

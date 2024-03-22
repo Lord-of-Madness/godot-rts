@@ -11,6 +11,7 @@ namespace RTS.Gameplay
     /// <remarks>
     /// Has general 
     /// </remarks>
+    [Tool]
     [GlobalClass]
     public partial class Attack : Node2D
     {
@@ -159,7 +160,7 @@ namespace RTS.Gameplay
         public void Retarget(ITargetable target)
         {
             this.target = target;
-            GD.Print("Retargetin! "+target);
+            //GD.Print("Retargetin! "+target);
             if (target is Selectable s && AttackRange.GetOverlappingBodies().Contains(s))
                 targetInRange = true;
             else targetInRange = false;
