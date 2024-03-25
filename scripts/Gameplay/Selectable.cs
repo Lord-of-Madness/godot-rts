@@ -27,6 +27,7 @@ namespace RTS.Gameplay
 
     }
     [GlobalClass]
+    [Tool]
     public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>, ITargetable
     {
         [Signal] public delegate void SignalDisablingSelectionEventHandler(Selectable selectable);//when dead, loss of control etc.
@@ -187,7 +188,7 @@ namespace RTS.Gameplay
         {
             if (Attacks is not null)
             {
-                foreach (var attack in Attacks)
+                foreach (Attack attack in Attacks)
                 {
                     attack.Detarget();
                 }
@@ -199,6 +200,7 @@ namespace RTS.Gameplay
 		/// </summary>
         public int CompareTo(Selectable other)
         {
+            if (other == this) return 0;
             if (other is Unit otherunit)
             {
                 if (this is Building) {
