@@ -11,7 +11,6 @@ namespace RTS.Gameplay
     /// <remarks>
     /// Has general 
     /// </remarks>
-    [Tool]
     [GlobalClass]
     public partial class Attack : Node2D
     {

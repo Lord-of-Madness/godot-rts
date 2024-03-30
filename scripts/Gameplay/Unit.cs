@@ -58,9 +58,8 @@ namespace RTS.Gameplay
                     {
                         selectable.TreeExiting += Detarget;
                     }
-                    //disconect Detarget from previous
+                    //connect Detarget to current
                 }
-                //connect Detarget to previous
             }
         }
         private bool following = false;
@@ -98,7 +97,6 @@ namespace RTS.Gameplay
             if (target == this && clickMode != Player.ClickMode.UseAbility) return;//Cannot attack or move to yourself. (Once we change the Commands to Abilities completely this has to be taken into consideration)
             //GD.Print(CurrentAction);
             if (CurrentAction == SelectableAction.Dying) return;
-            if (target == this) return;
             //NavAgent.AvoidanceEnabled = true;
            
 
