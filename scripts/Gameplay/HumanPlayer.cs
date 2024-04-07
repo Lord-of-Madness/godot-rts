@@ -146,7 +146,7 @@ namespace RTS.Gameplay
 
         public TargetedAbility HangingAbility = null;
         private ClickMode cm;
-        private Vector2 GetActualFuckingMousePosition { get => (camera.GetGlobalMousePosition() - camera.Position) * camera.Zoom; }
+        private Vector2 GetActualMousePosition { get => (camera.GetGlobalMousePosition() - camera.Position) * camera.Zoom; }
         /// <summary>
         /// Specifies what action are we currently giving the Selected Selectables.
         /// </summary>
@@ -352,7 +352,7 @@ namespace RTS.Gameplay
             }
             if (selectRectNode.dragging && @event is InputEventMouseMotion)
             {
-                selectRectNode.UpdateStats(GetActualFuckingMousePosition);
+                selectRectNode.UpdateStats(GetActualMousePosition);
             }
         }
         public void SelectObjects(InputEventMouseButton mousebutton)
@@ -360,7 +360,7 @@ namespace RTS.Gameplay
             if (mousebutton.Pressed)//Just pressed
             {
                 selectRectNode.dragging = true;
-                selectRectNode.start = GetActualFuckingMousePosition;
+                selectRectNode.start = GetActualMousePosition;
                 if (Selection.Count > 0 && !Input.IsKeyPressed(Key.Shift))//TODO the shift key is kinda hardcoded perhaps change that later
                 {
                     foreach (Selectable selectable in Selection)
@@ -376,7 +376,7 @@ namespace RTS.Gameplay
             else if (selectRectNode.dragging)//Just released (The mouseevent triggers only when pressing/releasing this just ensures it was dragging before)
             {
                 selectRectNode.dragging = false;
-                var dragEnd = GetActualFuckingMousePosition;
+                var dragEnd = GetActualMousePosition;
                 selectRectNode.UpdateStats(dragEnd);
                 PhysicsShapeQueryParameters2D query = new()
                 {
