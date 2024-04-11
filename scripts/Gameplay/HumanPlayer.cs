@@ -442,7 +442,7 @@ namespace RTS.Gameplay
             if (Selection.Count > 0)//this might be handled by the INFOCONTAINER TOO
             {
                 UnitPortrait.Texture = Selection.highlightedSelectable.GetNode<Sprite2D>(nameof(UnitPortrait)).Texture;//No need to have UnitPortrait as part of the unit itself. Can be external resource. THough maybe its safer?
-                UnitActions.FillGridButtons(Selection.highlightedSelectable.Abilities);
+                if(Selection.highlightedSelectable.team==Team)UnitActions.FillGridButtons(Selection.highlightedSelectable.Abilities);//we can show passives maybe
             }
             else
             {

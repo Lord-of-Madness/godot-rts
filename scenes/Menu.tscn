@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://biduocxnqdvun"]
+[gd_scene load_steps=25 format=3 uid="uid://biduocxnqdvun"]
 
 [ext_resource type="TileSet" uid="uid://dt7amgr7crygn" path="res://resources/Ash_tileset.tres" id="2"]
 [ext_resource type="Script" path="res://scripts/Gameplay/Map.cs" id="3_1njeh"]
 [ext_resource type="PackedScene" uid="uid://be7aym5fxoaaf" path="res://scenes/Player.tscn" id="3_la75w"]
+[ext_resource type="Script" path="res://scripts/Gameplay/Ground.cs" id="3_qf6px"]
 [ext_resource type="Script" path="res://scripts/Menu.cs" id="4"]
 [ext_resource type="PackedScene" uid="uid://cg1bn2ipijxef" path="res://assets/Buildings/Barack/Building_Barrack.tscn" id="4_bkxrf"]
 [ext_resource type="Script" path="res://scripts/Gameplay/BuildOrderPlayer.cs" id="5_5o60g"]
@@ -80,12 +81,13 @@ layer_0/tile_data = PackedInt32Array(0, 589857, 1, 1, 393249, 1, 65536, 786465, 
 layer_1/name = "Decor"
 layer_1/z_index = 1
 layer_1/tile_data = PackedInt32Array(786470, 2293793, 2, 1376309, 2293793, 2, 852035, 2293793, 2, 1507365, 2293793, 2, 1835068, 2293793, 2, 1441861, 2293793, 2, 2097195, 2162721, 3, 2162757, 2162721, 3)
+script = ExtResource("3_qf6px")
 
 [node name="Player" parent="Map" instance=ExtResource("3_la75w")]
 script = ExtResource("5_5o60g")
 
 [node name="Barrack" parent="Map/Player/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(113, 647)
+position = Vector2(96, 96)
 MaxHP = 9999
 ExportAbilities = [SubResource("Resource_rfn37")]
 
@@ -136,7 +138,7 @@ script = ExtResource("5_5o60g")
 Team = 1
 
 [node name="Barrack2" parent="Map/Player2/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(1178, 137)
+position = Vector2(1104, 672)
 MaxHP = 9999
 ExportAbilities = [SubResource("Resource_2d8xx"), SubResource("Resource_44l7b")]
 
@@ -154,7 +156,7 @@ script = ExtResource("5_5o60g")
 Team = 2
 
 [node name="Barrack2" parent="Map/Player3/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(221, 243)
+position = Vector2(1120, 112)
 MaxHP = 9999
 ExportAbilities = [SubResource("Resource_giijh")]
 
@@ -184,7 +186,7 @@ script = ExtResource("5_5o60g")
 Team = 3
 
 [node name="Barrack2" parent="Map/Player4/Selectables" index="0" instance=ExtResource("4_bkxrf")]
-position = Vector2(1068, 549)
+position = Vector2(64, 640)
 MaxHP = 9999
 ExportAbilities = [SubResource("Resource_ax5w5"), SubResource("Resource_vmlsm")]
 
