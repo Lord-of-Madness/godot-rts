@@ -31,3 +31,5 @@ The faction that is INFRONT of the train I have some ideas about. I am imagining
 Have to make these factions more unique and not just copies of SC2, WC3 and Warhammer. But for the general idea thats where we stand now.
 
 Ratmen have Nydus-like lowhp "hatcheries" So you can summon it instead of building it and it works as a unit teleport. It doesn't have main base hp tho
+
+Few missions after the big defense mission you need to bust the 3rd factions base and you let the ratmen loose on them.
