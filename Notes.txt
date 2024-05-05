@@ -1,1 +1,0 @@
-Visual studio is setup for hot-reload. If we thing we need more precise error messages the NativeCode debugging must be enabled

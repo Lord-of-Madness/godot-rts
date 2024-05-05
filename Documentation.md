@@ -6,6 +6,8 @@ RTS games in general have converged on some design principles which I tried to c
 ### Technology used
 This project is built using Godot Engine v4.2.1
 C# is used as a primary scripting language with C++ modules planned for the future.
+#### Note
+If using the .sln - Visual studio is setup for hot-reload. If more precise error messages are required then the NativeCode debugging must be enabled
 
 ## Features
 #### Godot scenes paired with C# scripts for:
