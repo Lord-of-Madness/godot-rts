@@ -21,11 +21,6 @@ namespace RTS.Gameplay
         Team3,
         Team4
     }
-    public interface IHasAttack//Might come in handy
-    {
-        public AttacksNode AttacksNode { get; set; }
-
-    }
     [GlobalClass]
     public abstract partial class Selectable : CharacterBody2D, IComparable<Selectable>, ITargetable
     {

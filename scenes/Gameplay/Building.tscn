@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/Gameplay/AttacksNode.cs" id="4_21pqh"]
 [ext_resource type="PackedScene" uid="uid://bgs4xv7mlphr3" path="res://scenes/Gameplay/DamagableGraphics.tscn" id="4_difxh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5uo6"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1nxod"]
 size = Vector2(64, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nwlgh"]
@@ -19,8 +19,8 @@ safe_margin = 10.0
 script = ExtResource("1_arpdc")
 
 [node name="CollisionShape2D" type="TileCollisionShape2D" parent="."]
-SizeInTiles = Vector2(4, 4)
-shape = SubResource("RectangleShape2D_g5uo6")
+SizeInTiles = Vector2i(4, 4)
+shape = SubResource("RectangleShape2D_1nxod")
 
 [node name="UnitPortrait" type="Sprite2D" parent="."]
 visible = false

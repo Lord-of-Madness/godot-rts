@@ -2,7 +2,7 @@ using Godot;
 using RTS.Gameplay;
 using System;
 
-namespace RTS.Gameplay
+namespace RTS.Demo
 {
 
 

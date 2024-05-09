@@ -23,7 +23,7 @@ namespace RTS.Gameplay
             get =>
                 range
                 + OwningSelectable.SizeRadious//adding size of the Selectable
-                + 14;//A hair extra so it works why fourteen? Cause 4 was not good enough and unit increases seemed too weak
+                + 14;//A hair extra so it works. Why fourteen you ask? Cause 4 was not good enough and unit increases seemed too weak
         }
         /// <summary>
         /// Triggered upon specifiing the target (Ability.OnClick has been triggered and then a Target has been given)
@@ -83,6 +83,9 @@ namespace RTS.Gameplay
             OnClickUI(button);
             BaseOnUse();
         }
+        /// <summary>
+        ///Note that this triggers even on cooldown
+        /// </summary>
         public virtual void OnClickUI(AbilityButton button) { }
         /// <summary>
         /// <para>Triggers upon pressing the button by the player (called from OnClickUI) or by various AI players</para>
